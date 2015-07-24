@@ -1,0 +1,23 @@
+{
+  "name": "Savvy",
+  "main": "index.js",
+  "version": "0.0.1",
+  "authors": [
+    "Sidhant Sharma [:TheTiger] <tigerkid001@gmail.com>"
+  ],
+  "description": "A Firefox add-on to make New Tab page more productive.",
+  "keywords": [
+    "new",
+    "tab",
+    "firefox",
+    "add-on"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
