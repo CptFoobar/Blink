@@ -4,6 +4,7 @@ const windowMediator = Cc["@mozilla.org/appshell/window-mediator;1"]
 const self = require('sdk/self');
 const services = require("sdk/preferences/service");
 const newTabURL = self.data.url("sources/tab.html");
+const helpTabUrl = self.data.url("sources/help.html");
 
 
 const setNewTabURL = function() {
@@ -20,6 +21,7 @@ const clearTabUrlbar = function() {
 	while (windows.hasMoreElements()) {
 		let window = windows.getNext();
 		window.gInitialPages.push(newTabURL);
+		window.gInitialPages.push(helpTabUrl);
 	}
 };
 

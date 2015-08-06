@@ -1,4 +1,6 @@
 #Savvy
-An add-on that makes the new tab much more productive.
+An add-on that makes that turns the new tab page into a tech news feed, with articles from tech websites and blogs like TechCrunch, Gizmodo, Engadget and LifeHacker.
 
-Thanks to CoDrops (http://tympanus.net/codrops/2015/02/26/inspiration-button-styles-effects/) for the awesome set of inspiring buttons.
+###
+Thanks to [CoDrops](http://tympanus.net/codrops/) for the awesome UI samples.
+Made with [Materialize](http://materializecss.com/).

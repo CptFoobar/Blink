@@ -2,6 +2,7 @@
 <head>
 	<title>Blink</title>
 	<meta charset="UTF-8" />
+
 	<link rel="stylesheet" type="text/css" href="css/tab.css" />
 	<link rel="stylesheet" type="text/css" href="css/fonts.css" />
 	<link rel="stylesheet" type="text/css" href="css/component.css" />
@@ -9,7 +10,6 @@
 	<link rel="stylesheet" type="text/css" href="materialize/css/materialize.css" />
 	<link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css" />
 
-	<script src="js/contentFiller.js"></script>
 	<script src="js/jquery-1.11.3.js"></script>
 	<script src="js/modernizr.custom.js"></script>
 	<script src="materialize/js/materialize.js"></script>
@@ -20,10 +20,10 @@
 		<nav class="st-menu st-effect-1" id="menu">
 			<h2 style="cursor: default;">Blink</h2>
 			<ul>
-				<li><a href="#" onclick="hideNavD()"><i class="fa fa-home fa-lg"></i>&nbsp;&nbsp;Home</a></li>
+				<li><a href="tab.html" onclick="hideNavD()"><i class="fa fa-home fa-lg"></i>&nbsp;&nbsp;Home</a></li>
 <!-- 				<li><a href="#" onclick="hideNavD()"><i class="fa fa-pencil fa-lg"></i>&nbsp;&nbsp;Edit Content</a></li> 
 				<li><a href="#" onclick="hideNavD()"><i class="fa fa-cogs fa-lg"></i>&nbsp;&nbsp;Settings</a></li> -->
-				<li><a href="help.html" onclick="hideNavD()"><i class="fa fa-question-circle fa-lg"></i>&nbsp;&nbsp;Help</a></li>
+				<li><a href="#" onclick="hideNavD()"><i class="fa fa-question-circle fa-lg"></i>&nbsp;&nbsp;Help</a></li>
 				<li><a href="#aboutModal" onclick="about()" class="modal-trigger"><i class="fa fa-info fa-lg"></i>&nbsp;&nbsp;About</a></li>
 			</ul>
 		</nav>
@@ -36,30 +36,40 @@
 						</span>
 						<span class="title-blink"> Blink </span>
 				</div><!-- /top -->
-				<!-- Cards: This is how we roll -->
-				<div class="row" id="cards-container">
-					<!-- Cards go here -->
-				</div> <!-- /Cards-->
-				<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-    			<a class="btn-floating btn-large red z-depth-2" id="toTop" href="#top" >
-      				<i class="fa fa-arrow-circle-o-up" style="font-size: 2.5em;"></i>
-   				 </a>
-			  </div>
+				<div class="row">
+					<div class="col s12 m12 l12">
+						<div class="card blue lighten-5">
+							<div class="card-content blue-grey-text text-darken-1" style="text-align: center;">
+								<span class="card-title flow-text blue-grey-text text-darken-3"
+								style="font-size: 35px;">Help</span>
+								<p class="flow-text"><br/>Blink is still Work-In-Progress. If you find any issues in the add-on, or want to suggest new features, open a ticket <a href="https://github.com/TigerKid001/Blink/issues">here</a>. Feel free to contribute to the project. If you like Blink (so far), write a nice review? ;)</p> <br/>
+								<p style="font-size: 17px; color: #616161;"> 
+								Made with &nbsp;<i class="fa fa-heart"></i>
+ 								</p>
+								</div>
+								<div class="card-action" style="text-align: center;">
+									<a href="tab.html" style=" color: #4527a0;">Home</a>
+									<a href="https://github.com/TigerKid001/Blink" style=" color: #4527a0;">Github</a>
+									<a href="// comment on addon" style=" color: #4527a0;">Review</a>
+								</div>
+							</div>
+						</div>
+					</div>
 			</div><!-- /st-content-inner -->
 		</div><!-- /st-content -->
 	</div> <!-- /st-container -->
 
-	<!-- Modal Structure -->
+	<!-- About Dialog -->
 	<div id="aboutModal" class="modal">
 		<div class="modal-content">
 			<h4>About Blink</h4>
 			<p style="font-size: 20px"> Blink is a new tab replacement add-on for Mozilla Firefox. It turns your dull boring new tab into a refreshing news feed. You can see articles from various tech blogs like TechCrunch, Engadget, Gizmodo and LifeHacker.
-			<p style="font-size: 17px"> This add-on a side-project by <a href="http://taleofatiger.blogspot.in/">Sidhant Sharma</a>. It's free and Open Source (check it out on <a href="https://github.com/TigerKid001/Blink">Github</a>).</p>
+			<p style="font-size: 17px"> This add-on a side-project by <a href="//Blog">Sidhant Sharma</a>. It's free and Open Source (check it out on <a href="https://github.com/TigerKid001/Blink">Github</a>).</p>
 			
 			<a href="http://madewithlove.org.in" target="blank" style="font-size:14px;">Made with <span style="color: #f7403a">&hearts;</span> in India</a>
 		</div>
 		<div class="modal-footer">
-			<a href="#top" class="waves-effect waves-green btn-flat orange-text text-darken-3" onclick="closeAbout()">Got It</a>
+			<a href="help.html" class="waves-effect waves-green btn-flat orange-text text-darken-3" onclick="closeAbout()">Got It</a>
 		</div>
 	</div>
 
@@ -67,13 +77,14 @@
 	<script src="js/classie.js"></script>
 	<script src="js/sidebarEffects.js"></script>
 	<script type="text/javascript">
-		$(function(){
-			console.log("Adding content..");
-  			addContent('http://feeds.feedburner.com/Techcrunch');
-  			addContent('http://feeds.gawker.com/gizmodo/full');
-  			addContent('http://www.engadget.com/rss.xml');
-  			addContent('http://feeds.gawker.com/lifehacker/vip');
-  		});
+		var about = function() { 
+			hideNavD();
+			$('#aboutModal').openModal();
+		}
+
+		var closeAbout = function() {
+			$('#aboutModal').closeModal();
+		}
 		$('a[href*=#]:not([href=#])').click(function() {
 			if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
 				var target = $(this.hash);
@@ -86,15 +97,6 @@
 				}
 			}
 		});
-		var about = function() { 
-			hideNavD();
-			$('#aboutModal').openModal();
-		}
-
-		var closeAbout = function() {
-			$('#aboutModal').closeModal();
-		}
-
   	</script>
 </body>
 </html>

@@ -1,10 +1,14 @@
 {
-  "title": "Savvy",
-  "name": "savvy",
-  "version": "0.0.1",
-  "description": "An add-on that makes the new tab much more productive.",
+  "title": "Blink",
+  "name": "blink",
+  "version": "0.1.0",
+  "description": "An add-on that makes the new tab much more interseting.",
   "main": "index.js",
   "author": "Sidhant Sharma",
+  "icon": {
+    "48": "resource://@blink/data/icons/blink-48.png", 
+    "64": "resource://@blink/data/icons/blink-64.png"  
+  },
   "engines": {
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
