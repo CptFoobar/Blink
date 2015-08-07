@@ -26,7 +26,7 @@ body {
 }
 
 .tinted-title {
-	background: -moz-linear-gradient(transparent, #2D2D2D);
+	background: -moz-linear-gradient(transparent 0%, #1F1F1F 100%);
 }
 
 .navButton {
@@ -40,4 +40,9 @@ body {
 	cursor: pointer;
 	float: left;
 	margin: 5px;
+}
+
+.blink-img {
+	background-size: cover;
+	height: 100% !important;
 }

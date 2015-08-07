@@ -1,6 +1,6 @@
 var CARD_TEMPLATE =     "<div class='card medium'>" +
                           "<div class='card-image'>" +
-                            "<img class='responsive-img' src='%imgsrc%'>" +
+                            "<img class='responsive-img blink-img' src='%imgsrc%'></img>" +
                             "<span class='card-title tinted-title'>%cardtitle%</span>" +
                           "</div>" +
                           "<div class='card-content'>" +
@@ -25,10 +25,10 @@ function addContent(url) {
         var contentSnippet = value.contentSnippet;
         var link = value.link;
         // create card
-        var cardsource = createCard(title, imageSource, contentSnippet, link);
+        var cardsource = newHope(title, imageSource, contentSnippet, link);
         var card = document.createElement('div');
         card.setAttribute("class", "col s12 m4");
-        card.innerHTML = cardsource;
+        card.appendChild(cardsource);
         container.appendChild(card);
       });
     }
@@ -39,9 +39,11 @@ function getImageSource(source) {
   var div = document.createElement("div");
   div.innerHTML = source;
   var imgsrc = div.getElementsByTagName('img')[0].src;
-  if(imgsrc.length > 5) 
-    return imgsrc;
-  else return "../icons/default_icon.jpg"
+  if(imgsrc.length > 5 && imgsrc.indexOf("rc.feedsportal.com") == -1) {
+      console.log(imgsrc);
+      return imgsrc;
+    }
+  else return "resource://@blink/data/icons/default_icon.jpg"
 }
 
 function getContentHeader(content) {
@@ -51,19 +53,26 @@ function getContentHeader(content) {
   return text;
 }
 
-function createCard(title, imageSource, contentSnippet, link) {
-  var cardSource = CARD_TEMPLATE;
-  cardSource = cardSource.replace("%cardtitle%", title);
-  cardSource = cardSource.replace("%imgsrc%", imageSource);
-  cardSource = cardSource.replace("%cardcontent%", contentSnippet);
-  cardSource = cardSource.replace("%cardlink%", link);
-  return cardSource;
-}
-
 /**
  * Capitalizes the first letter of any string variable
  * source: http://stackoverflow.com/a/1026087/477958
  */
 function capitaliseFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function newHope(title, imageSource, contentSnippet, link) {
+    var card = document.createElement('div');
+    card.setAttribute("class", "card medium");
+    var cardSource = CARD_TEMPLATE;
+    cardSource = cardSource.replace("%cardtitle%", title);
+    cardSource = cardSource.replace("%imgsrc%", imageSource);
+    cardSource = cardSource.replace("%cardcontent%", contentSnippet);
+    cardSource = cardSource.replace("%cardlink%", link);
+    var parser = new DOMParser(), 
+      doc = parser.parseFromString(cardSource, "text/html");
+    var x = doc.body.firstChild;
+    x.style.margin="-1px 0px 0px 0px";
+    card.appendChild(x);
+    return card;
 }
