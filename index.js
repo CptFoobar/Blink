@@ -7,6 +7,7 @@ const newTabURL = self.data.url("sources/tab.html");
 const helpTabUrl = self.data.url("sources/help.html");
 const { when: unload } = require("sdk/system/unload");
 const prefSet = require("sdk/simple-prefs");
+const browserWindows = require("sdk/windows").browserWindows;
 var oldNewTab = services.get("browser.newtab.url");
 var blinkEnable = prefSet.prefs.blinkEnable;
 
@@ -34,7 +35,6 @@ const clearTabUrlbar = function() {
 };
 
 const clearSettings = function() {
-	console.log("clearing");
 	services.set("browser.newtab.url", oldNewTab);
 	let windows = windowMediator.getEnumerator(null);
 	while (windows.hasMoreElements()) {
@@ -49,19 +49,13 @@ const clearSettings = function() {
 
 // define a generic prefs change callback
 function onPrefChange(prefName) {
-    console.log("The " + prefName + 
-        " preference changed, current value is: " + 
-        prefSet.prefs[prefName]
-    );
     if(prefName == "blinkEnable") {
-    	console.log("is blinkEnable");
     	blinkEnable = prefSet.prefs.blinkEnable;
     	if(blinkEnable)
     		blinkInit();
     	else
     		clearSettings();
     }
-
 }
  
 prefSet.on("blinkEnable", onPrefChange);
@@ -78,5 +72,7 @@ exports.onUnload = function (reason) {
 	}
 };
 
+// Init Blink
 blinkInit();
-
+// Init Blink on new windows when they open
+browserWindows.on("open", blinkInit);

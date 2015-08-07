@@ -161,3 +161,7 @@
 .st-effect-1.st-menu::after {
 	display: none;
 }
+
+.card .card-title {
+	width: 100%;
+}
