@@ -44,6 +44,7 @@ const clearSettings = function() {
 		if(window.gInitialPages.indexOf(helpTabUrl) > -1)
 			window.gInitialPages.splice(window.gInitialPages.indexOf(helpTabUrl), 1);
 	}
+	browserWindows.removeListener("open", blinkInit);
 }
 
 
