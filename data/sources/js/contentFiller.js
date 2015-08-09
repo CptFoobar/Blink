@@ -43,6 +43,7 @@ function getImageSource(source) {
   if(imgsrc.length > 5 && imgsrc.indexOf("rc.feedsportal.com") == -1) {
       return imgsrc;
     }
+    //feeds.feedburner.com/~r/lifehacker/vip/~4/
   else return "resource://@blink/data/icons/default_icon.jpg"
 }
 

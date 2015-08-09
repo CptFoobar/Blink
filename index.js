@@ -1,4 +1,4 @@
-const { Cc, Ci, Cu } = require("chrome");
+const { Cc, Ci} = require("chrome");
 const windowMediator = Cc["@mozilla.org/appshell/window-mediator;1"]
                      .getService(Ci.nsIWindowMediator);
 const self = require('sdk/self');
