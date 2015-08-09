@@ -40,13 +40,26 @@ function getImageSource(source) {
       doc = parser.parseFromString(source, "text/html");
   var div = doc.body;
   var imgsrc = div.getElementsByTagName('img')[0].src;
-  if(imgsrc.length > 5 && imgsrc.indexOf("rc.feedsportal.com") == -1) {
-      return imgsrc;
-    }
-    //feeds.feedburner.com/~r/lifehacker/vip/~4/
-  else return "resource://@blink/data/icons/default_icon.jpg"
+  if(imgsrc.length > 5 && notBlankImage(imgsrc))  return imgsrc;
+  else  return randomImage();//"resource://@blink/data/icons/default_icon.jpg"
 }
 
+function notBlankImage(imgsrc) {
+  // Kinda blacklisted urls. Source of incorrect cover images/ads/blank images go here
+  return imgsrc.indexOf("rc.feedsportal.com") == -1 && 
+            imgsrc.indexOf("feeds.feedburner.com/~r/lifehacker/vip/~4/") == -1;
+}
+
+var lastImgIndex = 0;
+function randomImage() {
+  // Randomize the cover for posts without a valid cover.
+  var index = Math.floor((Math.random() * 4));
+  if(index == lastImgIndex)
+    index = Math.floor((Math.random() * 4));
+  var image = "resource://@blink/data/icons/default_covers/default_icon_" + index + ".jpg";
+  lastImgIndex = index;
+  return image;
+}
 
 function newHope(title, imageSource, contentSnippet, link) {
     var card = document.createElement('div');
