@@ -53,9 +53,9 @@ function notBlankImage(imgsrc) {
 var lastImgIndex = 0;
 function randomImage() {
   // Randomize the cover for posts without a valid cover.
-  var index = Math.floor((Math.random() * 4));
-  if(index == lastImgIndex)
-    index = Math.floor((Math.random() * 4));
+  var index = Math.floor((Math.random() * 4) + 1);
+  while(index == lastImgIndex)
+    index = Math.floor((Math.random() * 4) + 1);
   var image = "resource://@blink/data/icons/default_covers/default_icon_" + index + ".jpg";
   lastImgIndex = index;
   return image;
