@@ -17,9 +17,6 @@ const blinkInit = function() {
 		services.set("browser.newtab.url", self.data.url("sources/tab.html"));
 		clearTabUrlbar();
 	}
-	/* TODO: Use better approach given here: 
-	https://mike.kaply.com/2012/06/21/best-practices-for-overriding-the-new-tab-page-with-your-extension/
-	*/
 };
 
 const clearTabUrlbar = function() {

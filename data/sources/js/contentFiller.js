@@ -1,15 +1,15 @@
-var CARD_TEMPLATE =     "<div class='card medium'>" +
-                          "<div class='card-image'>" +
-                            "<img class='responsive-img blink-img' src='%imgsrc%'></img>" +
-                            "<span class='card-title tinted-title'>%cardtitle%</span>" +
-                          "</div>" +
-                          "<div class='card-content'>" +
-                          "<p>%cardcontent%</p>" +
-                          "</div>" +
-                          "<div class='card-action'>" +
-                            "<a href='%cardlink%' target='_blank'>Read More</a>" +
-                          "</div>" +
-                        "</div>";
+var CARD_TEMPLATE = "<div class='card medium'>" +
+                      "<div class='card-image'>" +
+                        "<img class='responsive-img blink-img' src='%imgsrc%'></img>" +
+                        "<span class='card-title tinted-title'>%cardtitle%</span>" +
+                      "</div>" +
+                      "<div class='card-content'>" +
+                        "<p>%cardcontent%</p>" +
+                      "</div>" +
+                      "<div class='card-action'>" +
+                        "<a href='%cardlink%' target='_blank'>Read More</a>" +
+                      "</div>" +
+                    "</div>";
 
 function addContent(url) {
   console.log("Parsing feed from: " + url);
@@ -47,7 +47,8 @@ function getImageSource(source) {
 function notBlankImage(imgsrc) {
   // Kinda blacklisted urls. Source of incorrect cover images/ads/blank images go here
   return imgsrc.indexOf("rc.feedsportal.com") == -1 && 
-            imgsrc.indexOf("feeds.feedburner.com/~r/lifehacker/vip/~4/") == -1;
+            imgsrc.indexOf("feeds.feedburner.com/~r/lifehacker/vip/~4/") == -1 &&
+            	imgsrc.indexOf("feeds.feedburner.com/~ff/Techcrunch?d=") == -1;
 }
 
 var lastImgIndex = 0;
