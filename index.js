@@ -64,7 +64,7 @@ unload(function() {
 });
 
 exports.onUnload = function (reason) {
-	if (reason === "disable") {
+	if (reason === "disable" || reason === "uninstall") {
 		if(blinkEnable)
 			clearSettings();
 	}
