@@ -43,7 +43,7 @@
 				</div> <!-- /Cards-->
 				<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
     			<a class="btn-floating btn-large red z-depth-2" id="toTop" href="#top" >
-      				<i class="fa fa-arrow-circle-o-up" style="font-size: 2.5em;"></i>
+      				<i class="fa fa-arrow-up" style="font-size: 2em;"></i>
    				 </a>
 			  </div>
 			</div><!-- /st-content-inner -->
@@ -69,11 +69,15 @@
 	<script src="js/sidebarEffects.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			console.log("Adding content..");
-  			addContent('http://feeds.feedburner.com/Techcrunch');
-  			addContent('http://feeds.gawker.com/gizmodo/full');
-  			addContent('http://www.engadget.com/rss.xml');
-  			addContent('http://feeds.gawker.com/lifehacker/vip');
+  			addContent('http://feeds.feedburner.com/Techcrunch');	// TC
+  			addContent('http://feeds.gawker.com/gizmodo/full');		// Gizmodo
+  			addContent('http://www.engadget.com/rss.xml');			// Engadget
+  			addContent('http://feeds.gawker.com/lifehacker/vip');	// LifeHacker
+  			addContent('http://www.theverge.com/rss/index.xml');	// The Verge
+  			addContent('http://feeds.mashable.com/mashable/tech');	// Mashable
+  			addContent('http://feeds.wired.com/wired/index');		// Wired
+  			addContent('http://thenextweb.com/feed/');				// The Next Web
+  		  /*addContent('http://recode.net/feed/'); Re/Code RSS images not displaying*/
   		});
 		$('a[href*=#]:not([href=#])').click(function() {
 			if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
@@ -82,7 +86,7 @@
 				if (target.length) {
 					$('*').animate({
 						scrollTop: target.offset().top
-					}, 1500);
+					}, 2000);
 					return false;
 				}
 			}
