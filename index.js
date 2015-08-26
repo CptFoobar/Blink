@@ -45,6 +45,23 @@ const clearSettings = function() {
 }
 
 
+var feeds = ["http://feeds.feedburner.com/Techcrunch", 
+			 "http://feeds.gawker.com/gizmodo/full",
+			 "http://www.engadget.com/rss.xml",
+			 "http://feeds.gawker.com/lifehacker/vip",
+			 "http://www.theverge.com/rss/index.xml",
+			 "http://feeds.mashable.com/mashable/tech",
+			 "http://feeds.wired.com/wired/index",
+			 "http://thenextweb.com/feed/"];
+
+const pageMod = require("sdk/page-mod");
+pageMod.PageMod({
+	include: "resource://blink/data/sources/tab.html",
+	contentScriptFile: self.data.url("resource://blink/data/sources/js/feeder.js"),
+	contentScriptOptions: {"feeds": feeds},
+	contentScriptWhen: 'end'
+});
+
 // define a generic prefs change callback
 function onPrefChange(prefName) {
     if(prefName == "blinkEnable") {

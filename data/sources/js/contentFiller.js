@@ -31,6 +31,10 @@ function addContent(url) {
         card.appendChild(cardsource);
         container.appendChild(card);
       });
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log("jqXHR: " + JSON.stringify(jqXHR) + 
+                    "\nstatus: " + textStatus + "\nerror: " + errorThrown);
     }
   });
 }

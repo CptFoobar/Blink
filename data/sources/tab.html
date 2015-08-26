@@ -68,17 +68,6 @@
 	<script src="js/classie.js"></script>
 	<script src="js/sidebarEffects.js"></script>
 	<script type="text/javascript">
-		$(function(){
-  			addContent('http://feeds.feedburner.com/Techcrunch');	// TC
-  			addContent('http://feeds.gawker.com/gizmodo/full');		// Gizmodo
-  			addContent('http://www.engadget.com/rss.xml');			// Engadget
-  			addContent('http://feeds.gawker.com/lifehacker/vip');	// LifeHacker
-  			addContent('http://www.theverge.com/rss/index.xml');	// The Verge
-  			addContent('http://feeds.mashable.com/mashable/tech');	// Mashable
-  			addContent('http://feeds.wired.com/wired/index');		// Wired
-  			addContent('http://thenextweb.com/feed/');				// The Next Web
-  		  /*addContent('http://recode.net/feed/'); Re/Code RSS images not displaying*/
-  		});
 		$('a[href*=#]:not([href=#])').click(function() {
 			if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
 				var target = $(this.hash);
@@ -100,6 +89,11 @@
 			$('#aboutModal').closeModal();
 		}
 
+  	</script>
+  	<script type="text/javascript">
+		window.addEventListener('message', function(event) {
+    		addContent(event.data);
+      }, false);
   	</script>
 </body>
 </html>
