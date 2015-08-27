@@ -8,6 +8,7 @@ const helpTabUrl = self.data.url("sources/help.html");
 const contentTabUrl = self.data.url("sources/content.html");
 const { when: unload } = require("sdk/system/unload");
 const prefSet = require("sdk/simple-prefs");
+const pageMod = require("sdk/page-mod");
 const browserWindows = require("sdk/windows").browserWindows;
 var oldNewTab = services.get("browser.newtab.url");
 var blinkEnable = prefSet.prefs.blinkEnable;
@@ -96,25 +97,24 @@ var getFeeds = function() {
 		if(feedPrefs[i].wanted)
 			f.push(feedPrefs[i].link)
 	}
-	console.log("feeds are: " + f)
 	return f;
 }
 
 var feeds = getFeeds();
 
 var refreshFeeds = function(feedList) {
-	console.log("here");
 	feedPrefs = feedList;
-	console.log("updated: " + JSON.stringify(feedPrefs));
 	feeds = getFeeds();
 }
 
-const pageMod = require("sdk/page-mod");
 pageMod.PageMod({
 	include: "resource://blink/data/sources/tab.html",
 	contentScriptFile: self.data.url("resource://blink/data/sources/js/feeder.js"),
-	contentScriptOptions: {"feeds": feeds},
-	contentScriptWhen: 'end'
+//	contentScriptOptions: {"feeds": feeds},
+	contentScriptWhen: 'end',
+	onAttach: function(worker) {
+    	worker.port.emit("feedList", feeds);
+    }
 });
 
 pageMod.PageMod({
@@ -124,8 +124,8 @@ pageMod.PageMod({
 	contentScriptOptions: {"feedPrefs": feedPrefs},
 	contentScriptWhen: 'end',
 	onAttach: function(worker) {
-    worker.port.on("newFeedList", function(newFeeds) {
-      refreshFeeds(newFeeds)
+    	worker.port.on("newFeedList", function(newFeeds) {
+      	refreshFeeds(newFeeds)
     });
   }
 });
