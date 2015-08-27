@@ -5,6 +5,7 @@ const self = require('sdk/self');
 const services = require("sdk/preferences/service");
 const newTabURL = self.data.url("sources/tab.html");
 const helpTabUrl = self.data.url("sources/help.html");
+const contentTabUrl = self.data.url("sources/content.html");
 const { when: unload } = require("sdk/system/unload");
 const prefSet = require("sdk/simple-prefs");
 const browserWindows = require("sdk/windows").browserWindows;
@@ -28,6 +29,8 @@ const clearTabUrlbar = function() {
 			window.gInitialPages.push(newTabURL);
 		if(window.gInitialPages.indexOf(helpTabUrl) == -1)
 			window.gInitialPages.push(helpTabUrl);
+		if(window.gInitialPages.indexOf(contentTabUrl) == -1)
+			window.gInitialPages.push(contentTabUrl);
 	}
 };
 
@@ -40,19 +43,71 @@ const clearSettings = function() {
 			window.gInitialPages.splice(window.gInitialPages.indexOf(newTabURL), 1);
 		if(window.gInitialPages.indexOf(helpTabUrl) > -1)
 			window.gInitialPages.splice(window.gInitialPages.indexOf(helpTabUrl), 1);
+		if(window.gInitialPages.indexOf(contentTabUrl) > -1)
+			window.gInitialPages.splice(window.gInitialPages.indexOf(contentTabUrl), 1);
 	}
 	browserWindows.removeListener("open", blinkInit);
 }
 
+var feedPrefs = [{
+					"name" : "TechCrunch", 
+					"link" : "http://feeds.feedburner.com/Techcrunch",
+					"wanted" : true
+				 },
+				 {
+					"name" : "Gizmodo", 
+					"link" : "http://feeds.gawker.com/gizmodo/full",
+					"wanted" : true
+				 },
+				 {
+					"name" : "Engadget", 
+					"link" : "http://www.engadget.com/rss.xml",
+					"wanted" : true
+				 },
+				 {
+					"name" : "LifeHacker", 
+					"link" : "http://feeds.gawker.com/lifehacker/vip",
+					"wanted" : true
+				 },
+				 {
+					"name" : "The Verge", 
+					"link" : "http://www.theverge.com/rss/index.xml",
+					"wanted" : true
+				 },
+				 {
+					"name" : "Mashable", 
+					"link" : "http://feeds.mashable.com/mashable/tech",
+					"wanted" : true
+				 },
+				 {
+					"name" : "Wired", 
+					"link" : "http://feeds.wired.com/wired/index",
+					"wanted" : true
+				 },
+				 {
+					"name" : "The Next Web", 
+					"link" : "http://thenextweb.com/feed/",
+					"wanted" : true
+				 }];
 
-var feeds = ["http://feeds.feedburner.com/Techcrunch", 
-			 "http://feeds.gawker.com/gizmodo/full",
-			 "http://www.engadget.com/rss.xml",
-			 "http://feeds.gawker.com/lifehacker/vip",
-			 "http://www.theverge.com/rss/index.xml",
-			 "http://feeds.mashable.com/mashable/tech",
-			 "http://feeds.wired.com/wired/index",
-			 "http://thenextweb.com/feed/"];
+var getFeeds = function() {
+	var f = [];
+	for(var i = 0; i < feedPrefs.length; i++) {
+		if(feedPrefs[i].wanted)
+			f.push(feedPrefs[i].link)
+	}
+	console.log("feeds are: " + f)
+	return f;
+}
+
+var feeds = getFeeds();
+
+var refreshFeeds = function(feedList) {
+	console.log("here");
+	feedPrefs = feedList;
+	console.log("updated: " + JSON.stringify(feedPrefs));
+	feeds = getFeeds();
+}
 
 const pageMod = require("sdk/page-mod");
 pageMod.PageMod({
@@ -60,6 +115,19 @@ pageMod.PageMod({
 	contentScriptFile: self.data.url("resource://blink/data/sources/js/feeder.js"),
 	contentScriptOptions: {"feeds": feeds},
 	contentScriptWhen: 'end'
+});
+
+pageMod.PageMod({
+	include: "resource://blink/data/sources/content.html",
+	contentScriptFile: self.data.url("sources/js/feedListener.js"),
+	contentScript: 'window.postMessage(self.options.feedPrefs, "resource://blink/data/sources/content.html");',
+	contentScriptOptions: {"feedPrefs": feedPrefs},
+	contentScriptWhen: 'end',
+	onAttach: function(worker) {
+    worker.port.on("newFeedList", function(newFeeds) {
+      refreshFeeds(newFeeds)
+    });
+  }
 });
 
 // define a generic prefs change callback

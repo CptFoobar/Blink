@@ -46,3 +46,8 @@ body {
 	background-size: cover;
 	height: 100% !important;
 }
+
+.option {
+	height: 35px;
+	font-size: 1.5em !important;
+}
