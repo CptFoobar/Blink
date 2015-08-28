@@ -25,11 +25,13 @@ function addContent(url) {
         var contentSnippet = value.contentSnippet;
         var link = value.link;
         // create card
-        var cardsource = newHope(title, imageSource, contentSnippet, link);
-        var card = document.createElement('div');
-        card.setAttribute("class", "col s12 m4");
-        card.appendChild(cardsource);
-        container.appendChild(card);
+        if(title.length > 0 && link.length > 0) {
+          var cardsource = newHope(title, imageSource, contentSnippet, link);
+          var card = document.createElement('div');
+          card.setAttribute("class", "col s12 m4");
+          card.appendChild(cardsource);
+          container.appendChild(card);
+        }
       });
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -58,9 +60,9 @@ function notBlankImage(imgsrc) {
 var lastImgIndex = 0;
 function randomImage() {
   // Randomize the cover for posts without a valid cover.
-  var index = Math.floor((Math.random() * 4) + 1);
+  var index = Math.floor((Math.random() * 7) + 1);
   while(index == lastImgIndex)
-    index = Math.floor((Math.random() * 4) + 1);
+    index = Math.floor((Math.random() * 7) + 1);
   var image = "resource://@blink/data/icons/default_covers/default_icon_" + index + ".jpg";
   lastImgIndex = index;
   return image;
