@@ -29,6 +29,7 @@
     				newFeed.push(feedItem);
     			});
     			window.postMessage(newFeed, "resource://blink/data/sources/content.html");
+    			$(this).empty();
     			alert("Your preferences have been saved. Close this window and continue your browsing. Have a good day :)");
     		});
 		});
@@ -58,12 +59,12 @@
 				</div><!-- /top -->
 				<!-- Cards: This is how we roll -->
 				<div class="row">
-					<div class="col s12 m12 l12">
+					<div class="col offset-s3 offset-m3 offset-l3 s6 m6 l6">
 						<div class="card yellow lighten-5">
 							<div class="card-content blue-grey-text text-darken-1" style="text-align: center;">
 								<span class="card-title flow-text blue-grey-text text-darken-3"
 								style="font-size: 30px;"><i class="fa fa-pencil"></i>&nbsp;&nbsp;&nbsp;&nbsp;Manage your feed</span>
-								 <form id="checkboxes" style="margin-left: 250px;">
+								 <form id="checkboxes" style="padding-left: 150px;">
     								<br />
 								</form>
 							</div>

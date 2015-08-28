@@ -26,7 +26,7 @@ body {
 }
 
 .tinted-title {
-	background: -moz-linear-gradient(transparent 0%, #1F1F1F 100%);
+	background: -moz-linear-gradient(transparent 0%, #1F1F1F 150%);
 }
 
 .navButton {

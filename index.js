@@ -9,7 +9,10 @@ const contentTabUrl = self.data.url("sources/content.html");
 const { when: unload } = require("sdk/system/unload");
 const prefSet = require("sdk/simple-prefs");
 const pageMod = require("sdk/page-mod");
+const ss = require("sdk/simple-storage");
 const browserWindows = require("sdk/windows").browserWindows;
+const tabs = require("sdk/tabs")
+const defaultPrefs = require(self.data.url("sources/js/defaultConfig.js"));
 var oldNewTab = services.get("browser.newtab.url");
 var blinkEnable = prefSet.prefs.blinkEnable;
 
@@ -36,6 +39,7 @@ const clearTabUrlbar = function() {
 };
 
 const clearSettings = function() {
+	/* Clear the settings we changed */
 	services.set("browser.newtab.url", oldNewTab);
 	let windows = windowMediator.getEnumerator(null);
 	while (windows.hasMoreElements()) {
@@ -50,48 +54,18 @@ const clearSettings = function() {
 	browserWindows.removeListener("open", blinkInit);
 }
 
-var feedPrefs = [{
-					"name" : "TechCrunch", 
-					"link" : "http://feeds.feedburner.com/Techcrunch",
-					"wanted" : true
-				 },
-				 {
-					"name" : "Gizmodo", 
-					"link" : "http://feeds.gawker.com/gizmodo/full",
-					"wanted" : true
-				 },
-				 {
-					"name" : "Engadget", 
-					"link" : "http://www.engadget.com/rss.xml",
-					"wanted" : true
-				 },
-				 {
-					"name" : "LifeHacker", 
-					"link" : "http://feeds.gawker.com/lifehacker/vip",
-					"wanted" : true
-				 },
-				 {
-					"name" : "The Verge", 
-					"link" : "http://www.theverge.com/rss/index.xml",
-					"wanted" : true
-				 },
-				 {
-					"name" : "Mashable", 
-					"link" : "http://feeds.mashable.com/mashable/tech",
-					"wanted" : true
-				 },
-				 {
-					"name" : "Wired", 
-					"link" : "http://feeds.wired.com/wired/index",
-					"wanted" : true
-				 },
-				 {
-					"name" : "The Next Web", 
-					"link" : "http://thenextweb.com/feed/",
-					"wanted" : true
-				 }];
+// Feed sources with prefs
+var feedPrefs;
+
+if(self.loadReason == "install" || !ss.storage.feedprefs) {
+	feedPrefs = defaultPrefs.getDefaultPrefs();
+	ss.storage.feedprefs = feedPrefs;
+} else {
+	feedPrefs = ss.storage.feedprefs;
+}
 
 var getFeeds = function() {
+	/* Refresh feeds */
 	var f = [];
 	for(var i = 0; i < feedPrefs.length; i++) {
 		if(feedPrefs[i].wanted)
@@ -100,18 +74,20 @@ var getFeeds = function() {
 	return f;
 }
 
+ //feeds only
 var feeds = getFeeds();
 
 var refreshFeeds = function(feedList) {
+	/* Refresh feed prefs */
 	feedPrefs = feedList;
 	feeds = getFeeds();
+	ss.storage.feedprefs = feedList;
 }
 
 pageMod.PageMod({
 	include: "resource://blink/data/sources/tab.html",
 	contentScriptFile: self.data.url("resource://blink/data/sources/js/feeder.js"),
-//	contentScriptOptions: {"feeds": feeds},
-	contentScriptWhen: 'end',
+	contentScriptWhen: 'ready',
 	onAttach: function(worker) {
     	worker.port.emit("feedList", feeds);
     }
@@ -120,18 +96,17 @@ pageMod.PageMod({
 pageMod.PageMod({
 	include: "resource://blink/data/sources/content.html",
 	contentScriptFile: self.data.url("sources/js/feedListener.js"),
-	contentScript: 'window.postMessage(self.options.feedPrefs, "resource://blink/data/sources/content.html");',
-	contentScriptOptions: {"feedPrefs": feedPrefs},
-	contentScriptWhen: 'end',
+	contentScriptWhen: 'ready',
 	onAttach: function(worker) {
+		worker.port.emit("feedPrefs", feedPrefs);
     	worker.port.on("newFeedList", function(newFeeds) {
       	refreshFeeds(newFeeds)
     });
   }
 });
 
-// define a generic prefs change callback
 function onPrefChange(prefName) {
+	/* A generic prefs change callback */
     if(prefName == "blinkEnable") {
     	blinkEnable = prefSet.prefs.blinkEnable;
     	if(blinkEnable)
@@ -143,11 +118,14 @@ function onPrefChange(prefName) {
  
 prefSet.on("blinkEnable", onPrefChange);
 
+// Clear settings on Unload. (Redundant?)
 unload(function() {
 	if(blinkEnable)
 		clearSettings();
 });
 
+/* Clear settings on disable/uninstall. 
+ But due to bug https://bugzilla.mozilla.org/show_bug.cgi?id=627432#c12, uninstall is never called */
 exports.onUnload = function (reason) {
 	if (reason === "disable" || reason === "uninstall") {
 		if(blinkEnable)
