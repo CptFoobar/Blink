@@ -13,8 +13,15 @@ const ss = require("sdk/simple-storage");
 const browserWindows = require("sdk/windows").browserWindows;
 const tabs = require("sdk/tabs")
 const defaultPrefs = require(self.data.url("sources/js/defaultConfig.js"));
-var oldNewTab = services.get("browser.newtab.url");
+var oldNewTab;
 var blinkEnable = prefSet.prefs.blinkEnable;
+
+if(self.loadReason == "install") {
+	oldNewTab = services.get("browser.newtab.url");
+	ss.storage.originalNewTab = oldNewTab;
+} else {
+	oldNewTab = ss.storage.originalNewTab;
+}
 
 const blinkInit = function() {
 	/* Set new tab source */
@@ -86,8 +93,8 @@ var refreshFeeds = function(feedList) {
 
 pageMod.PageMod({
 	include: "resource://blink/data/sources/tab.html",
-	contentScriptFile: self.data.url("resource://blink/data/sources/js/feeder.js"),
-	contentScriptWhen: 'ready',
+	contentScriptFile: self.data.url("sources/js/feeder.js"),
+	contentScriptWhen: 'end',
 	onAttach: function(worker) {
     	worker.port.emit("feedList", feeds);
     }
@@ -96,7 +103,7 @@ pageMod.PageMod({
 pageMod.PageMod({
 	include: "resource://blink/data/sources/content.html",
 	contentScriptFile: self.data.url("sources/js/feedListener.js"),
-	contentScriptWhen: 'ready',
+	contentScriptWhen: 'end',
 	onAttach: function(worker) {
 		worker.port.emit("feedPrefs", feedPrefs);
     	worker.port.on("newFeedList", function(newFeeds) {
@@ -120,7 +127,7 @@ prefSet.on("blinkEnable", onPrefChange);
 
 // Clear settings on Unload. (Redundant?)
 unload(function() {
-	if(blinkEnable)
+//	if(blinkEnable)
 		clearSettings();
 });
 
@@ -128,7 +135,7 @@ unload(function() {
  But due to bug https://bugzilla.mozilla.org/show_bug.cgi?id=627432#c12, uninstall is never called */
 exports.onUnload = function (reason) {
 	if (reason === "disable" || reason === "uninstall") {
-		if(blinkEnable)
+//		if(blinkEnable)
 			clearSettings();
 	}
 };
