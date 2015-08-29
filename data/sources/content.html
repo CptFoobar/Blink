@@ -13,6 +13,37 @@
 	<script src="js/contentFiller.js"></script>
 	<script src="js/jquery-1.11.3.js"></script>
 	<script src="js/materialize.js"></script>
+	<script type="text/javascript">
+		var check = "checked='checked'";
+		var CB_TEMPLATE = "<p>" + 
+   							"<input type='checkbox' id='feed%index%' %chkd%/>" +
+   								"<label class='option blue-grey-text text-darken-1' " +
+   									"for='feed%index%' data-link='%link%' " + 
+   									"id='label%index%'>%name%</label>" + 
+   							"</p><br />"
+    	var SUBMIT_BUTTON = "<button class='btn waves-effect waves-light' " + 
+   								"type='submit' name='action' id='sbmt'>Looks Great!&nbsp;&nbsp;" + 
+   									"<i class='fa fa-paper-plane'></i>" + 
+ 								"</button>";
+
+ 		var totalFeeds = 0;
+
+ 		var getFeedItem = function(i, name, link, checked) {
+			var option = CB_TEMPLATE;
+			option = option.replace("%index%", i);
+			option = option.replace("%index%", i);
+			option = option.replace("%index%", i);
+			option = option.replace("%link%", link)
+			option = option.replace("%name%", name);
+			if(checked)
+				option = option.replace("%chkd%", check);
+			else
+				option = option.replace("%chkd%", "");
+			var doc = parser.parseFromString(option, "text/html");
+			return doc;
+ 		}
+	</script>
+
     <script type="text/javascript">
     	var newFeed = [];
     	$(function() { // wait for the DOM to be ready
@@ -33,6 +64,22 @@
     			alert("Your preferences have been saved. Close this window and continue your browsing. Have a good day :)");
     		});
 		});
+		var addNewFeed = function() {
+			var parser = new DOMParser();
+			var name = $("#feed_name").val();
+			var link = $("#feed_link").val();
+			if(!(name.trim() || link.trim())){
+				alert("Invalid feed name and link");
+				return;
+			}
+			var doc = getFeedItem(totalFeeds, name, link, true);
+			totalFeeds = totalFeeds + 1;
+			btn = $("#sbmt");
+			btn.before(doc.body.firstChild);
+			btn.before(document.createElement('br'));
+			$("#feed_name").val("");
+			$("#feed_link").val("");
+		}
     </script>
 
 </head>
@@ -67,6 +114,15 @@
 								 <form id="checkboxes" style="padding-left: 150px;">
     								<br />
 								</form>
+								<div class="input-field col s3" id="fname">
+          							<input id="feed_name" type="text" class="validate">
+          							<label for="feed_name">Feed Name</label>
+        						</div>
+        						<div class="input-field col s6" id="flinkl">
+          							<input id="feed_link" type="text" class="validate">
+          							<label for="feed_link">Feed Link</label>
+        						</div>
+        						<a class="waves-effect waves-light btn" style="margin-top: 15px;" onclick="addNewFeed()">Add Feed</a>
 							</div>
 						</div>
 					</div>
@@ -93,18 +149,6 @@
 	<script src="js/classie.js"></script>
 	<script src="js/sidebarEffects.js"></script>
 	<script type="text/javascript">
-		$('a[href*=#]:not([href=#])').click(function() {
-			if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-				var target = $(this.hash);
-				target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-				if (target.length) {
-					$('*').animate({
-						scrollTop: target.offset().top
-					}, 2000);
-					return false;
-				}
-			}
-		});
 		var about = function() { 
 			hideNavD();
 			$('#aboutModal').openModal();
@@ -115,35 +159,15 @@
 		}
   	</script>
 	<script type="text/javascript">
-			var check = "checked='checked'";
-			var CB_TEMPLATE = "<p>" + 
-    							"<input type='checkbox' id='feed%index%' %chkd%/>" +
-    								"<label class='option blue-grey-text text-darken-1' " +
-    									"for='feed%index%' data-link='%link%' id='label%index%'>%name%</label>" + 
-    							"</p><br />"
-
-    		var SUBMIT_BUTTON = "<button class='btn waves-effect waves-light' " + 
-    								"type='submit' name='action'>Looks Great!&nbsp;&nbsp;" + 
-    									"<i class='fa fa-paper-plane'></i>" + 
-  								"</button>";
 			var parser = new DOMParser();
 			var form = document.getElementById('checkboxes');
 			var addOptions = function(feedList) {	
 				for(var i = 0; i < feedList.length; i++) {
-					var option = CB_TEMPLATE;
-					option = option.replace("%index%", i);
-					option = option.replace("%index%", i);
-					option = option.replace("%index%", i);
-					option = option.replace("%link%", feedList[i].link)
-					option = option.replace("%name%", feedList[i].name);
-					if(feedList[i].wanted)
-						option = option.replace("%chkd%", check);
-					else
-						option = option.replace("%chkd%", "");
-					var doc = parser.parseFromString(option, "text/html");
+					var doc = getFeedItem(i, feedList[i].name, feedList[i].link, feedList[i].wanted);
 					form.appendChild(doc.body.firstChild);
 					form.appendChild(document.createElement('br'));
 				}
+				totalFeeds = feedList.length;
 			}
 			// Listen for feedPrefs
 			window.addEventListener('message', function(event) {
