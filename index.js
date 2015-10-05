@@ -13,22 +13,33 @@ const ss = require("sdk/simple-storage");
 const browserWindows = require("sdk/windows").browserWindows;
 const tabs = require("sdk/tabs")
 const defaultPrefs = require(self.data.url("sources/js/defaultConfig.js"));
+const NewTabURL = require('resource:///modules/NewTabURL.jsm').NewTabURL;
 var oldNewTab;
 var blinkEnable = prefSet.prefs.blinkEnable;
+var version = require("sdk/system").version;
 
-if(self.loadReason == "install") {
+// TODO: Code cleanup and restructuring. This can't be my code. It just can't be.
+
+if(self.loadReason == "install" || self.loadReason == "enable") {
 	oldNewTab = services.get("browser.newtab.url");
 	ss.storage.originalNewTab = oldNewTab;
 } else {
 	oldNewTab = ss.storage.originalNewTab;
 }
+if(oldNewTab == undefined)
+    oldNewTab = 'about:newtab';
 
 const blinkInit = function() {
 	/* Set new tab source */
 	if(blinkEnable) {
-		services.set("browser.newtab.url", self.data.url("sources/tab.html"));
-		clearTabUrlbar();
-	}
+        if(version >= 41.0) {
+            console.log("version: " + version + " type: " + typeof version)
+            NewTabURL.override(newTabURL);
+        } else {
+		    services.set("browser.newtab.url", self.data.url("sources/tab.html"));
+		    clearTabUrlbar();
+        }
+    }
 };
 
 const clearTabUrlbar = function() {
@@ -47,16 +58,21 @@ const clearTabUrlbar = function() {
 
 const clearSettings = function() {
 	/* Clear the settings we changed */
-	services.set("browser.newtab.url", oldNewTab);
-	let windows = windowMediator.getEnumerator(null);
-	while (windows.hasMoreElements()) {
+    if(version >= 41.0) {
+        console.log("Clearing from " + version);
+        NewTabURL.override(oldNewTab);
+    } else {
+	    services.set("browser.newtab.url", oldNewTab | "about:newtab");
+	    let windows = windowMediator.getEnumerator(null);
+	    while (windows.hasMoreElements()) {
 		let window = windows.getNext();
 		if(window.gInitialPages.indexOf(newTabURL) > -1)
-			window.gInitialPages.splice(window.gInitialPages.indexOf(newTabURL), 1);
+		    window.gInitialPages.splice(window.gInitialPages.indexOf(newTabURL), 1);
 		if(window.gInitialPages.indexOf(helpTabUrl) > -1)
-			window.gInitialPages.splice(window.gInitialPages.indexOf(helpTabUrl), 1);
+		    window.gInitialPages.splice(window.gInitialPages.indexOf(helpTabUrl), 1);
 		if(window.gInitialPages.indexOf(contentTabUrl) > -1)
-			window.gInitialPages.splice(window.gInitialPages.indexOf(contentTabUrl), 1);
+		    window.gInitialPages.splice(window.gInitialPages.indexOf(contentTabUrl), 1);
+        }
 	}
 	browserWindows.removeListener("open", blinkInit);
 }
@@ -122,7 +138,7 @@ function onPrefChange(prefName) {
     		clearSettings();
     }
 }
- 
+
 prefSet.on("blinkEnable", onPrefChange);
 
 // Clear settings on Unload. (Redundant?)
@@ -131,7 +147,7 @@ unload(function() {
 		clearSettings();
 });
 
-/* Clear settings on disable/uninstall. 
+/* Clear settings on disable/uninstall.
  But due to bug https://bugzilla.mozilla.org/show_bug.cgi?id=627432#c12, uninstall is never called */
 exports.onUnload = function (reason) {
 	if (reason === "disable" || reason === "uninstall") {
