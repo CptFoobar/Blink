@@ -15,15 +15,15 @@
 	<script src="js/materialize.js"></script>
 	<script type="text/javascript">
 		var check = "checked='checked'";
-		var CB_TEMPLATE = "<p>" + 
+		var CB_TEMPLATE = "<p>" +
    							"<input type='checkbox' id='feed%index%' %chkd%/>" +
    								"<label class='option blue-grey-text text-darken-1' " +
-   									"for='feed%index%' data-link='%link%' " + 
-   									"id='label%index%'>%name%</label>" + 
+   									"for='feed%index%' data-link='%link%' " +
+   									"id='label%index%'>%name%</label>" +
    							"</p><br />"
-    	var SUBMIT_BUTTON = "<button class='btn waves-effect waves-light' " + 
-   								"type='submit' name='action' id='sbmt'>Looks Great!&nbsp;&nbsp;" + 
-   									"<i class='fa fa-paper-plane'></i>" + 
+    	var SUBMIT_BUTTON = "<button class='btn waves-effect waves-light' " +
+   								"type='submit' name='action' id='sbmt'>Looks Great!&nbsp;&nbsp;" +
+   									"<i class='fa fa-paper-plane'></i>" +
  								"</button>";
 
  		var totalFeeds = 0;
@@ -89,7 +89,7 @@
 			<h2 style="cursor: default;">Blink</h2>
 			<ul>
 				<li><a href="tab.html" onclick="hideNavD()"><i class="fa fa-home fa-lg"></i>&nbsp;&nbsp;Home</a></li>
- 				<li><a href="#top" onclick="hideNavD()"><i class="fa fa-pencil fa-lg"></i>&nbsp;&nbsp;Edit Content</a></li> 
+ 				<li><a href="#top" onclick="hideNavD()"><i class="fa fa-pencil fa-lg"></i>&nbsp;&nbsp;Edit Content</a></li>
 <!--				<li><a href="#" onclick="hideNavD()"><i class="fa fa-cogs fa-lg"></i>&nbsp;&nbsp;Settings</a></li> -->
 				<li><a href="help.html" onclick="hideNavD()"><i class="fa fa-question-circle fa-lg"></i>&nbsp;&nbsp;Help</a></li>
 				<li><a href="#aboutModal" onclick="about()" class="modal-trigger"><i class="fa fa-info fa-lg"></i>&nbsp;&nbsp;About</a></li>
@@ -111,22 +111,26 @@
 							<div class="card-content blue-grey-text text-darken-1" style="text-align: center;">
 								<span class="card-title flow-text blue-grey-text text-darken-3"
 								style="font-size: 30px;"><i class="fa fa-pencil"></i>&nbsp;&nbsp;&nbsp;&nbsp;Manage your feed</span>
+								<p><br /></p>
+								<div>
+									<div class="input-field col s3" id="fname">
+										<input id="feed_name" type="text" class="validate">
+										<label for="feed_name">Feed Name</label>
+									</div>
+									<div class="input-field col s6" id="flinkl">
+										<input id="feed_link" type="text" class="validate">
+										<label for="feed_link">Feed Link</label>
+									</div>
+									<a class="waves-effect waves-light btn" style="margin-top: 15px;" onclick="addNewFeed()">Add Feed</a>
+									<p><br /><br /></p>
+								</div>
 								 <form id="checkboxes" style="padding-left: 150px;">
     								<br />
-								</form>
-								<div class="input-field col s3" id="fname">
-          							<input id="feed_name" type="text" class="validate">
-          							<label for="feed_name">Feed Name</label>
-        						</div>
-        						<div class="input-field col s6" id="flinkl">
-          							<input id="feed_link" type="text" class="validate">
-          							<label for="feed_link">Feed Link</label>
-        						</div>
-        						<a class="waves-effect waves-light btn" style="margin-top: 15px;" onclick="addNewFeed()">Add Feed</a>
-							</div>
+									</form>
+								</div>
 						</div>
 					</div>
-				</div> 
+				</div>
 			</div><!-- /st-content-inner -->
 		</div><!-- /st-content -->
 	</div> <!-- /st-container -->
@@ -137,7 +141,7 @@
 			<h4>About Blink</h4>
 			<p style="font-size: 20px"> Blink is a new tab replacement add-on for Mozilla Firefox. It turns your dull boring new tab into a refreshing news feed. You can see articles from various tech blogs like TechCrunch, Engadget, Gizmodo and LifeHacker.
 			<p style="font-size: 17px"> This add-on a side-project by <a href="http://taleofatiger.blogspot.in/" target="_blank">Sidhant Sharma</a>. It's free and Open Source (check it out on <a href="https://github.com/TigerKid001/Blink" target="_blank">Github</a>).</p>
-			
+
 			<a href="http://madewithlove.org.in" target="_blank" style="font-size:14px;">Made with <span style="color: #f7403a">&hearts;</span> in India</a>
 		</div>
 		<div class="modal-footer">
@@ -149,7 +153,7 @@
 	<script src="js/classie.js"></script>
 	<script src="js/sidebarEffects.js"></script>
 	<script type="text/javascript">
-		var about = function() { 
+		var about = function() {
 			hideNavD();
 			$('#aboutModal').openModal();
 		}
@@ -161,7 +165,7 @@
 	<script type="text/javascript">
 			var parser = new DOMParser();
 			var form = document.getElementById('checkboxes');
-			var addOptions = function(feedList) {	
+			var addOptions = function(feedList) {
 				for(var i = 0; i < feedList.length; i++) {
 					var doc = getFeedItem(i, feedList[i].name, feedList[i].link, feedList[i].wanted);
 					form.appendChild(doc.body.firstChild);
