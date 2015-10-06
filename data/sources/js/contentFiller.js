@@ -12,10 +12,10 @@ var CARD_TEMPLATE = "<div class='card medium'>" +
                     "</div>";
 
 function addContent(url) {
-  console.log("Parsing feed from: " + url);
+//  console.log("Parsing feed from: " + url);
   var container = document.getElementById('cards-container');
   $.ajax({
-    url:'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + 
+    url:'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' +
         encodeURIComponent(url),
     dataType: 'json',
     success: function(data) {
@@ -35,14 +35,14 @@ function addContent(url) {
       });
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      console.log("jqXHR: " + JSON.stringify(jqXHR) + 
-                    "\nstatus: " + textStatus + "\nerror: " + errorThrown);
+//      console.log("jqXHR: " + JSON.stringify(jqXHR) + 
+//                    "\nstatus: " + textStatus + "\nerror: " + errorThrown);
     }
   });
 }
 
 function getImageSource(source) {
-  var parser = new DOMParser(), 
+  var parser = new DOMParser(),
       doc = parser.parseFromString(source, "text/html");
   var div = doc.body;
   var imgsrc = div.getElementsByTagName('img')[0].src;
@@ -52,7 +52,7 @@ function getImageSource(source) {
 
 function notBlankImage(imgsrc) {
   // Kinda blacklisted urls. Source of incorrect cover images/ads/blank images go here
-  return imgsrc.indexOf("rc.feedsportal.com") == -1 && 
+  return imgsrc.indexOf("rc.feedsportal.com") == -1 &&
             imgsrc.indexOf("feeds.feedburner.com/~r/lifehacker/vip/~4/") == -1 &&
             	imgsrc.indexOf("feeds.feedburner.com/~ff/Techcrunch?d=") == -1;
 }
@@ -76,7 +76,7 @@ function newHope(title, imageSource, contentSnippet, link) {
     cardSource = cardSource.replace("%imgsrc%", imageSource);
     cardSource = cardSource.replace("%cardcontent%", contentSnippet);
     cardSource = cardSource.replace("%cardlink%", link);
-    var parser = new DOMParser(), 
+    var parser = new DOMParser(),
       doc = parser.parseFromString(cardSource, "text/html");
     var x = doc.body.firstChild;
     x.style.margin="-1px 0px 0px 0px";
