@@ -1,7 +1,7 @@
 {
   "title": "Blink",
   "name": "blink",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "An add-on that makes the new tab much more interesting.",
   "main": "index.js",
   "author": "Sidhant Sharma",
