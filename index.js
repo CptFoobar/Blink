@@ -29,11 +29,11 @@ if(self.loadReason == "install" || self.loadReason == "enable") {
 if(oldNewTab == undefined)
     oldNewTab = 'about:newtab';
 
+
 const blinkInit = function() {
 	/* Set new tab source */
 	if(blinkEnable) {
-        if(version >= 41.0) {
-//            console.log("version: " + version + " type: " + typeof version)
+        if(version >= "41.0") {
             NewTabURL.override(newTabURL);
         } else {
 		    services.set("browser.newtab.url", self.data.url("sources/tab.html"));
@@ -59,7 +59,6 @@ const clearTabUrlbar = function() {
 const clearSettings = function() {
 	/* Clear the settings we changed */
     if(version >= 41.0) {
-//        console.log("Clearing from " + version);
         NewTabURL.override(oldNewTab);
     } else {
 	    services.set("browser.newtab.url", oldNewTab | "about:newtab");
