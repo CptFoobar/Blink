@@ -17,7 +17,7 @@ const NewTabURL = require('resource:///modules/NewTabURL.jsm').NewTabURL;
 var oldNewTab;
 var blinkEnable = prefSet.prefs.blinkEnable;
 var version = require("sdk/system").version;
-
+var devlogs = false;              // set true to enable logging
 // TODO: Code cleanup and restructuring. This can't be my code. It just can't be.
 
 if(self.loadReason == "install" || self.loadReason == "enable") {
@@ -29,15 +29,18 @@ if(self.loadReason == "install" || self.loadReason == "enable") {
 if(oldNewTab == undefined)
     oldNewTab = 'about:newtab';
 
+if(devlogs) console.log(oldNewTab)
 
 const blinkInit = function() {
 	/* Set new tab source */
 	if(blinkEnable) {
         if(version >= "41.0") {
+            if(devlogs) console.log("Using new API")
             NewTabURL.override(newTabURL);
         } else {
-		    services.set("browser.newtab.url", self.data.url("sources/tab.html"));
-		    clearTabUrlbar();
+            if(devlogs) console.log("Using old API")
+		        services.set("browser.newtab.url", self.data.url("sources/tab.html"));
+		        clearTabUrlbar();
         }
     }
 };
@@ -58,20 +61,22 @@ const clearTabUrlbar = function() {
 
 const clearSettings = function() {
 	/* Clear the settings we changed */
-    if(version >= 41.0) {
+    if(version >= "41.0") {
+        if(devlogs) console.log("Clearing from " + version);
         NewTabURL.override(oldNewTab);
     } else {
-	    services.set("browser.newtab.url", oldNewTab | "about:newtab");
+      if(devlogs) console.log("Clearing from " + version + " the old way");
+	    services.set("browser.newtab.url", oldNewTab);
 	    let windows = windowMediator.getEnumerator(null);
 	    while (windows.hasMoreElements()) {
-		let window = windows.getNext();
-		if(window.gInitialPages.indexOf(newTabURL) > -1)
+		  let window = windows.getNext();
+		  if(window.gInitialPages.indexOf(newTabURL) > -1)
 		    window.gInitialPages.splice(window.gInitialPages.indexOf(newTabURL), 1);
-		if(window.gInitialPages.indexOf(helpTabUrl) > -1)
+		  if(window.gInitialPages.indexOf(helpTabUrl) > -1)
 		    window.gInitialPages.splice(window.gInitialPages.indexOf(helpTabUrl), 1);
-		if(window.gInitialPages.indexOf(contentTabUrl) > -1)
+		  if(window.gInitialPages.indexOf(contentTabUrl) > -1)
 		    window.gInitialPages.splice(window.gInitialPages.indexOf(contentTabUrl), 1);
-        }
+      }
 	}
 	browserWindows.removeListener("open", blinkInit);
 }
