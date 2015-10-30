@@ -1,10 +1,10 @@
 {
   "title": "Blink",
   "name": "blink",
-  "version": "0.3.1",
-  "description": "An add-on that makes the new tab much more interesting.",
+  "version": "0.5.0",
+  "description": "A beautiful New Tab replacement add-on.",
   "main": "index.js",
-  "author": "Sidhant Sharma",
+  "author": "Sidhant Sharma [:tk]",
   "icon": {
     "48": "resource://@blink/data/icons/blink-48.png",
     "64": "resource://@blink/data/icons/blink-64.png"
@@ -13,12 +13,5 @@
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
-  "preferences": [{
-        "name": "blinkEnable",
-        "title": "Make Blink my default New Tab",
-        "description": "Checking this makes Blink your default New Tab.",
-        "type": "bool",
-        "value": true
-    }],
   "license": "MIT"
 }

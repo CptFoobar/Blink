@@ -1,0 +1,23 @@
+{
+  "name": "blink",
+  "description": "A beautiful New Tab replacement add-on.",
+  "main": "index.js",
+  "authors": [
+    "Sidhant Sharma [:tk]"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "new-tab",
+    "add-on",
+    "firefox"
+  ],
+  "homepage": "",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
