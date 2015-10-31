@@ -1,0 +1,83 @@
+.custom-popup-wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    border: 1px solid #bbb;
+    padding: 0 0;
+}
+
+.custom-popup-wrapper > .dropdown-menu {
+    position: static;
+    float: none;
+    display: block;
+    min-width: 160px;
+    background-color: #f9f9f9;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#gsearch::-webkit-input-placeholder {
+    /* Chrome */
+    color: transparent;
+    text-indent: -9999px;
+    background-image: url("https://www.google.co.in/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
+    background-size: auto 100%;
+    background-position: 0 50%;
+    background-repeat: no-repeat;
+}
+
+#gsearch::-moz-placeholder {
+    /* Firefox */
+    color: transparent;
+    background-image: url("../icons/google_logo.png");
+    background-size: auto 45%;
+    background-position: 12px 55%;
+    background-repeat: no-repeat;
+}
+
+.clocky {
+    font-family: district_prothin;
+}
+
+.clocky .time {
+    font-size: 15vmax;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clocky .greet {
+    font-size: 4vmax;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clocky .day {
+    font-size: 2vmax;
+    font-weight: 0.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-device-width: 320px) {
+    .clocky .time {
+        font-size: 13vmax;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .clocky .day {
+        font-size: 3vmax;
+        font-weight: 0.1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

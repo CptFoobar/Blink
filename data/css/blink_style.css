@@ -1,0 +1,59 @@
+/* Blink main stylesheet */
+
+
+/* Required */
+
+.nav,
+.pagination,
+.carousel,
+.panel-title a {
+    cursor: pointer;
+}
+
+
+/* Padding */
+
+.vert-pad-1 {
+    height: 3vmax;
+}
+
+.vert-pad-2 {
+    height: 4.5vmax;
+}
+
+.vert-pad-3 {
+    height: 6.75vmax;
+}
+
+.vert-pad-rsp-1 {
+    height: 0vmax;
+}
+
+.vert-pad-rsp-2 {
+    height: 0vmax;
+}
+
+.vert-pad-rsp-3 {
+    height: 0vmax;
+}
+
+@media (max-device-width: 320px) {
+    .vert-pad-1 {
+        height: 4vmax;
+    }
+    .vert-pad-2 {
+        height: 6vmax;
+    }
+    .vert-pad-3 {
+        height: 9vmax;
+    }
+    .vert-pad-rsp-1 {
+        height: 4vmax;
+    }
+    .vert-pad-rsp-2 {
+        height: 6vmax;
+    }
+    .vert-pad-rsp-3 {
+        height: 8vmax;
+    }
+}
