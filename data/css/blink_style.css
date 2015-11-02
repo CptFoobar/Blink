@@ -84,6 +84,39 @@
     outline: none;
 }
 
+.fab-menu-icon {
+    line-height: inherit;
+}
+
+.fab-icon {
+    font-size: 1.75em;
+    text-align: center;
+}
+
+.fa-rss-square {
+    color: orange;
+}
+
+.fa-cog {
+    color: #727272;
+}
+
+.fa-question {
+    color: green;
+}
+
+.fa-heart {
+    color: red;
+}
+
+.fa-info {
+    color: #03A9F4;
+}
+
+.fab-tooltip {
+    color: #111;
+}
+
 .menu-item {
     font-size: 1.25em;
 }
@@ -123,21 +156,6 @@
     color: #fafafa;
 }
 
-.fa-rss-square {
-    color: orange;
-}
-
-.fa-cog {
-    color: gray;
-}
-
-.fa-question {
-    color: green;
-}
-
-.fa-heart {
-    color: red;
-}
 
 @media (max-device-width: 992px) {
     .bl-icon {
