@@ -1,47 +1,30 @@
-<link rel="stylesheet" type="text/css" href="css/home.css">
-
-
-<div class="col-xs-12 vert-pad-2"></div>
 <div class="col-xs-12 vert-pad-3"></div>
 <div class="col-xs-12 vert-pad-rsp-1"></div>
 
 <div class="row">
-    <div class="column" flex>
-        <script type="text/ng-template" id="autoSuggest.html">
-            <div class="col-sm-12">
-                <div class="custom-popup-wrapper col-sm-12"
-                 style="display: block;"
-                 ng-show="isOpen() && !moveInProgress"
-                 aria-hidden="{{!isOpen()}}">
-                    <ul class="dropdown-menu" role="listbox">
-                        <li ng-repeat="match in matches track by $index"
-                         ng-class="{active: isActive($index) }"
-                         ng-mouseenter="selectActive($index)"
-                         ng-click="selectMatch($index)"
-                         role="option" id="{{::match.id}}">
-                            <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>
-                        </li>
-                    </ul>
-                </div>
+    <script type="text/ng-template" id="autoSuggest.html">
+        <div class="col-sm-12">
+            <div class="custom-popup-wrapper col-sm-12" style="display: block;" ng-show="isOpen() && !moveInProgress" aria-hidden="{{!isOpen()}}">
+                <ul class="dropdown-menu" role="listbox">
+                    <li ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="{{::match.id}}">
+                        <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>
+                    </li>
+                </ul>
             </div>
-        </script>
+        </div>
+    </script>
 
-        <div class="col-xs-11 col-sm-6 col-sm-push-3">
-            <form>
-            <input type="search" ng-model="asyncSelected"
-             placeholder="Google Search"
-             uib-typeahead="suggestion for suggestion in getSuggestions($viewValue)"
-             typeahead-popup-template-url="autoSuggest.html" class="form-control"
-             id="gsearch"
-             ng-keyup="$event.keyCode == 13 && google($viewValue, asyncSelected)"
-             typeahead-focus-first="false"
-             />
-             </form>
-         </div>
+    <div class="col-md-10 col-md-push-1 col-lg-8 col-lg-push-2">
+        <form class="form-group form-group-sm">
+            <input type="search" ng-model="asyncSelected" placeholder="Google Search" uib-typeahead="suggestion for suggestion in getSuggestions($viewValue)" typeahead-popup-template-url="autoSuggest.html" class="form-control searchbar" id="gsearch" ng-keyup="$event.keyCode == 13 && google($viewValue, asyncSelected)"
+            typeahead-focus-first="false" />
+        </form>
     </div>
 </div>
 
-<div class="col-xs-12 vert-pad-3"></div>
+<div class="col-xs-12 vert-pad-2"></div>
+<div class="col-xs-12 vert-pad-2"></div>
+<div class="col-xs-12 vert-pad-rsp-2"></div>
 <div class="col-xs-12 vert-pad-rsp-2"></div>
 <div class="col-xs-12 vert-pad-rsp-2"></div>
 

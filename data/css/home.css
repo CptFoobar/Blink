@@ -25,7 +25,7 @@
     /* Chrome */
     color: transparent;
     text-indent: -9999px;
-    background-image: url("https://www.google.co.in/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png");
+    background-image: url("../icons/google_logo.png");
     background-size: auto 100%;
     background-position: 0 50%;
     background-repeat: no-repeat;
@@ -45,28 +45,28 @@
 }
 
 .clocky .time {
-    font-size: 15vmax;
+    font-size: 12.75vmax;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .clocky .greet {
-    font-size: 4vmax;
+    font-size: 3.5vmax;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .clocky .day {
-    font-size: 2vmax;
+    font-size: 1.75vmax;
     font-weight: 0.1em;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-@media (max-device-width: 320px) {
+@media (max-device-width: 992px) {
     .clocky .time {
         font-size: 13vmax;
         display: flex;
@@ -80,4 +80,8 @@
         align-items: center;
         justify-content: center;
     }
+}
+
+.searchbar {
+    font-size: 100% !important;
 }
