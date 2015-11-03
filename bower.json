@@ -9,6 +9,9 @@
   "keywords": [
     "new-tab",
     "add-on",
+    "feed",
+    "news",
+    "rss",
     "firefox"
   ],
   "homepage": "",
@@ -18,7 +21,8 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "data/libs"
   ],
   "dependencies": {
     "angular": "~1.4.7",

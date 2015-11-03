@@ -13,5 +13,8 @@
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
+  "permissions": {
+  "cross-domain-content": ["https://cloud.feedly.com/"]
+  },
   "license": "MIT"
 }

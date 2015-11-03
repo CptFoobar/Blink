@@ -35,7 +35,7 @@
     <md-content flex layout="column" layout-fill ng-controller="MainController as main" style="overflow-x: hidden;" ng-cloak>
         <div flex class="container-fluid col-md-12" layout="column" layout-padding>
             <div class="row">
-                <md-fab-speed-dial ng-hide="false" md-direction="up" md-open="main.isOpen" class="md-scale md-fab-bottom-left" ng-class="{ 'md-hover-full': false }" ng-mouseenter="main.isOpen=true" ng-mouseleave="main.isOpen=false" ng-click="toggleMenu()" >
+                <md-fab-speed-dial md-direction="up" md-open="main.isOpen" class="md-scale md-fab-bottom-left" ng-class="{ 'md-hover-full': false }" ng-mouseenter="main.isOpen=true" ng-mouseleave="main.isOpen=false" ng-click="toggleMenu()">
                     <md-fab-trigger>
                         <md-button aria-label="menu" class="md-fab md-warn">
                             <md-tooltip md-direction="right" class="fab-tooltip">{{ main.Menu.label }}</md-tooltip>
@@ -63,7 +63,6 @@
                 <ng-view flex layout="column"></ng-view>
             </div>
         </div>
-
     </md-content>
 </body>
 
