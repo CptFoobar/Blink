@@ -1,6 +1,7 @@
 (function() {
 
-    var app = angular.module('blink', ['ngAnimate', 'ngRoute', 'ngMaterial', 'ui.bootstrap']);
+    var app = angular.module('blink', ['ngAnimate', 'ngMaterial',
+                                'ngPostMessage', 'ngRoute', 'ui.bootstrap']);
     // TODO: Set theme as per user setting
     var dark = true;
 

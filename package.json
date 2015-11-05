@@ -1,7 +1,7 @@
 {
   "title": "Blink",
   "name": "blink",
-  "version": "0.5.0",
+  "version": "0.9.0",
   "description": "A beautiful New Tab replacement add-on.",
   "main": "index.js",
   "author": "Sidhant Sharma [:tk]",
@@ -16,5 +16,12 @@
   "permissions": {
   "cross-domain-content": ["https://cloud.feedly.com/"]
   },
+  "preferences": [{
+       "name": "blinkEnable",
+       "title": "Make Blink my default New Tab",
+       "description": "Checking this makes Blink your default New Tab.",
+       "type": "bool",
+       "value": true
+   }],
   "license": "MIT"
 }
