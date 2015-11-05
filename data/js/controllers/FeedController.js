@@ -1,23 +1,29 @@
 (function() {
 
     var app = angular.module('blink');
+    var TAG = "BLINK: ";
     var FeedController = function($scope) {
-        console.log("Blink: Messaging");
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
-            if(data.target == "FeedController"){
-                // Handle Feed
+            if(data.target == "FeedController") {
+                console.log(TAG + "message for FC");
+                switch (data.intent) {
+                    case "feedEntries":
+                        alert(JSON.stringify(data.data));
+                }
             }
         });
-        $scope.sendMessage = function() {
+        $scope.fetchAllFeed = function() {
             $scope.$emit(
                 '$messageOutgoing',
                 angular.toJson({
-                    "target" : "FeedHandler"
+                    target : "FeedHandler",
+                    intent : "fetch",
+                    data : {}
                 })
             );
         };
-        $scope.sendMessage();
+        $scope.fetchAllFeed();
     };
 
     app.controller('FeedController', ['$scope', FeedController]);
