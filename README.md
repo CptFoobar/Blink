@@ -22,7 +22,8 @@ List of targets for v1:
    - ~~Clock~~
    - ~~Greeting~~
    - Weather
-   - ~~Nav, FAB~~
+   - ~~Nav~~
+   - FAB
 
 
 * Feed
@@ -52,3 +53,4 @@ List of targets for v1:
    - _Help_ : How to use Blink
    - _About_ : About Blink (ahem, and me)
    - _Support_: $$$ = <3
+   - _FAB_ : Make the button icon morph (see [Delightful details](https://www.google.co.in/design/spec/animation/delightful-details.html))
