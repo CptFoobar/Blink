@@ -2,7 +2,7 @@
 
     var app = angular.module('blink', ['ngAnimate', 'ngMaterial',
                                 'ngPostMessage', 'ngRoute', 'ui.bootstrap']);
-    // TODO: Set theme as per user setting
+    // TODO: Set theme as per user setting (?)
     var dark = true;
 
     var routingTable = [

@@ -1,0 +1,69 @@
+<div layout="row" flex>
+    <div layout="column" flex="33">
+        <!-- Cards -->
+        <md-card class="card card-material" ng-repeat="entry in entryList" ng-if="$index % 3 == 0">
+            <div>
+                <img ng-src="{{ entry.coverUrl }}" class="card-img" />
+                <span class="card-header">
+                    <!-- TODO: set logo button image and link to feed origin -->
+                    <md-button class="md-fab md-primary" aria-label="TC" ng-style="{'background-image': 'url({{ entry.coverUrl }})', 'background-size' : '4.25vw auto'}" ng-href="{{ entry.entryUrl }}">
+                    </md-button>
+                </span>
+            </div>
+            <md-card-content class="card-content">
+                <h2 class="md-title">{{ entry.entryTitle }}</h2>
+                <p> {{ entry.contentSnippet }} </p>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <md-button ng-href="{{ entry.entryUrl }}" target="_blank" class="md-warn md-icon-button launch" title="Read More..." aria-label="Read More...">
+                    <md-icon md-font-icon="fa-paper-plane" class="fa fa-fw fa-2x md-warn save-icon"></md-icon>
+                </md-button>
+                <!--<md-button>Read More...</md-button>-->
+            </div>
+        </md-card>
+    </div>
+    <div layout="column" flex="33">
+        <!-- Cards -->
+        <md-card class="card card-material" ng-repeat="entry in entryList" ng-if="$index % 3 == 1">
+            <div>
+                <img ng-src="{{ entry.coverUrl }}" class="card-img" />
+                <span class="card-header">
+                    <md-button class="md-fab md-primary" aria-label="TC" ng-style="{'background-image': 'url({{ entry.coverUrl }})', 'background-size' : '4.25vw auto'}">
+                    </md-button>
+                </span>
+            </div>
+            <md-card-content class="card-content">
+                <h2 class="md-title">{{ entry.entryTitle }}</h2>
+                <p> {{ entry.contentSnippet }} </p>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <md-button ng-href="{{ entry.entryUrl }}" target="_blank" class="md-warn md-icon-button launch" title="Read More..." aria-label="Read More...">
+                    <md-icon md-font-icon="fa-paper-plane" class="fa fa-fw fa-2x md-warn save-icon"></md-icon>
+                </md-button>
+                <!--<md-button>Read More...</md-button>-->
+            </div>
+        </md-card>
+    </div>
+    <div layout="column" flex="33">
+        <!-- Cards -->
+        <md-card class="card card-material" ng-repeat="entry in entryList" ng-if="$index % 3 == 2">
+            <div>
+                <img ng-src="{{ entry.coverUrl }}" class="card-img" />
+                <span class="card-header">
+                    <md-button class="md-fab md-primary" aria-label="TC" ng-style="{'background-image': 'url({{ entry.coverUrl }})', 'background-size' : '4.25vw auto'}">
+                    </md-button>
+                </span>
+            </div>
+            <md-card-content class="card-content">
+                <h2 class="md-title">{{ entry.entryTitle }}</h2>
+                <p> {{ entry.contentSnippet }} </p>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <md-button ng-href="{{ entry.entryUrl }}" target="_blank" class="md-warn md-icon-button launch" title="Read More..." aria-label="Read More...">
+                    <md-icon md-font-icon="fa-paper-plane" class="fa fa-fw fa-2x md-warn save-icon"></md-icon>
+                </md-button>
+                <!--<md-button>Read More...</md-button>-->
+            </div>
+        </md-card>
+    </div>
+</div>

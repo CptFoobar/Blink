@@ -1,0 +1,40 @@
+.card {
+    color: #2e2e2e;
+    border-radius: 3px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    position: relative;
+}
+.card-content {
+    background-color: #fefefe;
+    color: #2e2e2e;
+    padding-bottom: 0 !important;
+}
+.card-img {
+    border-radius: 3px 3px 0 0;
+}
+.md-actions {
+    background-color: #fefefe;
+    border-radius: 0 0 3px 3px;
+    color: #222;
+}
+
+.card-header {
+    position: absolute;
+    z-index: 2500;
+    margin-top: -2.65vw;
+}
+
+.md-button .md-fab {
+    line-height: 4.25vw;
+    min-width: 0;
+    width: 4.25vw;
+    height: 4.25vw;
+    border-radius: 50%;
+}
+
+.save-icon {
+    vertical-align: middle;
+    line-height: 0.85em !important;
+    text-align: center;
+    display: inline-block;
+}

@@ -9,8 +9,9 @@
     var feedHandler = (function() {
 
         var streamUrlPrefix = "https://cloud.feedly.com/v3/mixes/contents?streamId=";
-        // TODO: Make this user defined (?)
-        var entryCount = "&count=10";
+        // TODO: Make this user defined (?) (must be multiple of 3 for better
+        // placement of cards)
+        var entryCount = "&count=9";
 
         /* Fetch all feed */
         var fetchAll = function(feedList) {
@@ -52,17 +53,34 @@
                     entryUrl: feedObject.items[i].originId,
                     timestamp: feedObject.items[i].published,
                     coverUrl: feedObject.items[i].visual.url,
-                    contentSnippet: feedObject.items[i].summary.content.replace(/(<([^>]+)>)/ig, "")
+                    contentSnippet: getContentSnippet(feedObject.items[i].summary.content)
                 });
             }
 
             return parsedFeed;
         };
 
+        /* Make the content summary readable */
+        var getContentSnippet = function(snippet) {
+            // Remove HTML tags
+            snippet = snippet.replace(/(<([^>]+)>)/ig, "");
+            // Remove \r and \n occurences
+            snippet = snippet.replace(/\r?\n/g, "");
+            // Replace &quot; with ""
+            snippet = snippet.replace(/&quot;/g,'"');
+            // Replace all occurences of 'Read More'
+            var regex = new RegExp("Read More", 'g');
+            snippet = snippet.replace(regex, '');
+            if(snippet.length > 120)
+                snippet = snippet.substring(0, 120);
+            snippet += "...";
+            return snippet;
+        }
+
         /* Expose only selected functions */
         return {
             fetchAll: fetchAll,
-            fetchById : fetchById
+            fetchById : fetchById   // FFT: Is there a need to expose this one?
         };
     }());
 
