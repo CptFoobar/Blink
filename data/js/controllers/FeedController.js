@@ -9,7 +9,8 @@
                 console.log(TAG + "message for FC");
                 switch (data.intent) {
                     case "feedEntries":
-                        alert(JSON.stringify(data.data));
+                        // TODO: Handle feedEntries
+                        alert(data.payload.entries.length);
                 }
             }
         });
@@ -19,7 +20,7 @@
                 angular.toJson({
                     target : "FeedHandler",
                     intent : "fetch",
-                    data : {}
+                    payload : {}
                 })
             );
         };

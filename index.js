@@ -17,19 +17,20 @@ const NewTabURL = require('resource:///modules/NewTabURL.jsm').NewTabURL;
 
 var oldNewTab;
 var blinkEnable = prefSet.prefs.blinkEnable;
-var version = require("sdk/system").version;
 var devlogs = true; // set true to enable logging
+var feedList = [];
+
+const useNewAPI = require("sdk/system").version >= "41.0";
 
 var newTabURL = data.url("blink_shell.html");
 // TODO: Add other urls to be hidden into a list
-
-const useNewAPI = version >= "41.0";
 
 // Get and save original new tab
 oldNewTab = getOriginalNewTab();
 
 // Init Blink
 blinkInit();
+
 // Init Blink on new windows when they open
 browserWindows.on("open", blinkInit);
 
@@ -45,9 +46,8 @@ unload(function() {
    But due to bug https://bugzilla.mozilla.org/show_bug.cgi?id=627432#c12,
    uninstall is never called */
 exports.onUnload = function(reason) {
-    if (reason === "disable" || reason === "uninstall") {
+    if (reason === "disable" || reason === "uninstall")
         clearSettings();
-    }
 };
 
 /* Returns original new tab. If none found, returns default new tab */
@@ -62,7 +62,7 @@ function getOriginalNewTab() {
 
     ont = ont ? ont : "about:newtab";
 
-    if (devlogs) console.log("oldNewTab: " + ont);
+    Log("oldNewTab: " + ont);
 
     return ont;
 };
@@ -71,18 +71,24 @@ function getOriginalNewTab() {
 function blinkInit() {
     if (blinkEnable) {
         if (useNewAPI) {
-            if (devlogs) console.log("Using new API")
+            Log("Using new API")
             NewTabURL.override(newTabURL);
         } else {
-            if (devlogs) console.log("Using old API")
+            Log("Using old API")
             fx38.setNewTabUrl(newTabURL);
         }
+
+        initConfig();
 
         // Set PageMod
         pageMod.PageMod({
             include: "resource://blink/data/blink_shell.html",
             contentScriptFile: data.url("js/feedHandler.js"),
-            contentScriptWhen: 'end'
+            contentScriptWhen: 'end',
+            onAttach: function(worker) {
+                worker.port.emit("feedList", feedList);
+                console.log("emmitting");
+            }
         });
     }
 };
@@ -90,10 +96,10 @@ function blinkInit() {
 /* Clear the settings we changed */
 function clearSettings() {
     if (useNewAPI) {
-        if (devlogs) console.log("Clearing from " + version);
+        Log("Clearing the new way");
         NewTabURL.override(oldNewTab);
     } else {
-        if (devlogs) console.log("Clearing from " + version + " the old way");
+        Log("Clearing the old way");
         fx38.reset(oldNewTab);
     }
     browserWindows.removeListener("open", blinkInit);
@@ -109,3 +115,20 @@ function onPrefChange(prefName) {
             clearSettings();
     }
 };
+
+/* Initialise configuration with user-set preferences and feed list */
+function initConfig() {
+    // TODO: Use simple storage to store feeds
+    // TODO: Add icon and feed name into objects in this list.
+    // NOTE: haven't been able to get feeds/:feed_id to work
+    feedList = [{
+        streamId : "feed/http://www.engadget.com/rss-full.xml"
+    },{
+        streamId : "feed/http://feeds.feedburner.com/Techcrunch"
+    }];
+}
+
+/* util for debugging */
+function Log(log) {
+    if (devlogs) console.log(log);
+}
