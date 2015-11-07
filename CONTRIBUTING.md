@@ -1,6 +1,6 @@
 ## Contributing
 
-There's a lot to be done in this project, a rough draft for the v1 targets an be
+There's a lot to be done in this project, a rough draft for the v1 targets can be
  found in the README of the v1 branch. Feel free to suggest more (open a ticket).
 
 #### Settings things up
