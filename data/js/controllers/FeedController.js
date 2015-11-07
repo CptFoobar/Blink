@@ -37,10 +37,8 @@
             );
             console.log("called fetchAllFeed.");
         };
+
         $scope.fetchAllFeed();
-
-        // TODO: call fetchAllFeed on refresh
-
     };
 
     app.controller('FeedController', ['$scope', FeedController]);

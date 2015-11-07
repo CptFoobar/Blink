@@ -83,8 +83,9 @@ function blinkInit() {
         // Set PageMod
         pageMod.PageMod({
             include: "resource://blink/data/*",
-            contentScriptFile: data.url("js/feedHandler.js"),
-            contentScriptWhen: 'end',
+            contentScriptFile: [data.url("js/feedHandler.js"),
+                                    data.url("js/feedManager.js")],
+            contentScriptWhen: 'ready',
             onAttach: function(worker) {
                 worker.port.on("getFeed", function(nothing){
                     worker.port.emit("feedList", feedList);
