@@ -1,6 +1,5 @@
 /* Blink main stylesheet */
 
-
 /* Required */
 
 .nav,
@@ -8,6 +7,16 @@
 .carousel,
 .panel-title a {
     cursor: pointer;
+}
+
+/* Nav */
+
+.blink-nav {
+    position: fixed;
+    padding: 0.75em;
+    background-color: #37474F;
+    z-index: 3000;
+    overflow: hidden;
 }
 
 /* Padding */

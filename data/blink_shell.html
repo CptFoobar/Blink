@@ -35,26 +35,26 @@
 <body ng-app="blink">
     <md-content flex layout="column" layout-fill ng-controller="MainController as main" style="overflow-x: hidden;" ng-cloak>
         <div flex class="container-fluid col-md-12" layout="column" layout-padding>
-            <div class="row">
-                <md-fab-speed-dial md-direction="up" md-open="main.isOpen" class="md-scale md-fab-bottom-left" ng-class="{ 'md-hover-full': false }" ng-mouseenter="main.isOpen=true" ng-mouseleave="main.isOpen=false" ng-click="toggleMenu()" style="position: fixed;">
-                    <md-fab-trigger>
-                        <md-button aria-label="menu" class="md-fab md-warn">
-                            <md-tooltip md-direction="right" class="fab-tooltip">{{ main.Menu.label }}</md-tooltip>
-                            <i class="fa {{ main.Menu.icon }} fa-2x fa-fw fab-menu-icon"></i>
-                        </md-button>
-                    </md-fab-trigger>
-                    <md-fab-actions>
-                        <div ng-repeat="item in main.items">
-                            <md-button aria-label="{{ item.name }}" class="md-fab md-raised md-mini" ng-click="onClick(item.target)">
-                                <md-tooltip md-direction="{{item.direction}}" md-autohide="false" class="fab-tooltip">
-                                    {{ item.name }}
-                                </md-tooltip>
-                                <i class="fa {{ item.icon }} fa-lg fab-icon"></i>
-                            </md-button>
-                        </div>
-                    </md-fab-actions>
-                </md-fab-speed-dial>
 
+            <md-fab-speed-dial md-direction="up" md-open="main.isOpen" class="md-scale md-fab-bottom-left" ng-class="{ 'md-hover-full': false }" ng-mouseenter="main.isOpen=true" ng-mouseleave="main.isOpen=false" ng-click="toggleMenu()" style="position: fixed;">
+                <md-fab-trigger>
+                    <md-button aria-label="menu" class="md-fab md-warn">
+                        <md-tooltip md-direction="right" class="fab-tooltip">{{ main.Menu.label }}</md-tooltip>
+                        <i class="fa {{ main.Menu.icon }} fa-2x fa-fw fab-menu-icon"></i>
+                    </md-button>
+                </md-fab-trigger>
+                <md-fab-actions>
+                    <div ng-repeat="item in main.items">
+                        <md-button aria-label="{{ item.name }}" class="md-fab md-raised md-mini" ng-click="onClick(item.target)">
+                            <md-tooltip md-direction="{{item.direction}}" md-autohide="false" class="fab-tooltip">
+                                {{ item.name }}
+                            </md-tooltip>
+                            <i class="fa {{ item.icon }} fa-lg fab-icon"></i>
+                        </md-button>
+                    </div>
+                </md-fab-actions>
+            </md-fab-speed-dial>
+            <div class="row navbar-fixed-top blink-nav">
                 <a href="#/recent"><i class="fa fa-clock-o icon noselect bl-icon"></i></a>
                 <a href="#/bookmarks"><i class="fa fa-bookmark-o icon noselect bl-icon"></i></a>
                 <a href="#/feed"><i class="fa fa-newspaper-o icon noselect bl-icon"></i></a>

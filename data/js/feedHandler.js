@@ -1,14 +1,25 @@
 (function() {
-
+    var count = 0;
+    /*
+    console.log("In feedHandler");
+    setInterval(function(){ console.log("In feedHandler " + count); count+=1;}, 3000);
+    */
     var feedList= [];
     self.port.on("feedList", function(feed) {
         feedList = feed;
+        console.log("got feedlist");
     });
 
-    /* FeedHandler to, well, handle feeds. */
-    var feedHandler = (function() {
+    if(feedList.length == 0 ){
+        self.port.emit("getFeed", {});
+        console.log("requesting feedlist");
+    }
 
-        var streamUrlPrefix = "https://cloud.feedly.com/v3/mixes/contents?streamId=";
+    /* FeedHandler to, well, handle feeds. */
+    // TODO: Move handler into another module. Clear things up over here
+    var feedHandler = (function() {
+        // TODO: For showing trending feed, use 'mixes' instead of 'streams'
+        var streamUrlPrefix = "https://cloud.feedly.com/v3/streams/contents?streamId=";
         // TODO: Make this user defined (?) (must be multiple of 3 for better
         // placement of cards)
         var entryCount = "&count=9";
@@ -16,21 +27,23 @@
         /* Fetch all feed */
         var fetchAll = function(feedList) {
             // FIXME: This might very soon start returning 429 (too many requests)
-            // Request only 2 streams at a time (and use 'Load More' loader?)
+            // Request only 2 streams (or limited entries) at a time (and use
+            // 'Load More' loader)
+            console.log("fetching all...");
             for (i = 0; i < feedList.length; i++) {
-                fetchById(feedList[i].streamId);
+                fetchById(feedList[i]);
             }
         };
 
         /* Fetch feed by streamId */
-        var fetchById = function(streamId) {
+        var fetchById = function(feedItem) {
             var request = new XMLHttpRequest();
-            request.open("GET", streamUrlPrefix + streamId + entryCount, true);
+            request.open("GET", streamUrlPrefix + feedItem.streamId + entryCount, true);
             request.onload = function() {
                 window.postMessage({
                     target: "FeedController",
                     intent: "feedEntries",
-                    payload: parseFeed(request.responseText)
+                    payload: parseFeed(request.responseText, feedItem)
                 }, "resource://blink/data/blink_shell.html#/feed");
             };
             // TODO: request.onerror
@@ -38,12 +51,15 @@
         };
 
         /* Create usable object from feed json */
-        var parseFeed = function(feedJson) {
+        var parseFeed = function(feedJson, feedItem) {
             var feedObject = JSON.parse(feedJson);
             // TODO: can use keywords later for suggesting posts
+            var hash = hashCode(feedObject.title)
             var parsedFeed = {
-                title: feedObject.title,
-                siteUrl: feedObject.alternate.href,
+                title : feedObject.title,
+                siteUrl : feedItem.websiteUrl,
+                iconUrl : feedItem.icon,
+                hashCode : hash,
                 entries: []
             };
 
@@ -53,10 +69,11 @@
                     entryUrl: feedObject.items[i].originId,
                     timestamp: feedObject.items[i].published,
                     coverUrl: feedObject.items[i].visual.url,
-                    contentSnippet: getContentSnippet(feedObject.items[i].summary.content)
+                    contentSnippet: getContentSnippet(feedObject.items[i].summary.content),
+                    sourceHash : hash
                 });
             }
-
+            //console.log("returned object");
             return parsedFeed;
         };
 
@@ -77,22 +94,53 @@
             return snippet;
         }
 
+        var hashCode = function(s){
+        	var hash = 0;
+        	if (s.length == 0) return hash;
+        	for (i = 0; i < s.length; i++) {
+        		char = s.charCodeAt(i);
+        		hash = ((hash<<5)-hash)+char;
+        		hash = hash & hash; // Convert to 32bit integer
+        	}
+        	return hash;
+        }
+
+
+
         /* Expose only selected functions */
         return {
             fetchAll: fetchAll,
-            fetchById : fetchById   // FFT: Is there a need to expose this one?
+            fetchById : fetchById   // NOTE: Is there a need to expose this one?
         };
     }());
+
+
+    var fetchFeed = function(timeout) {
+        // Wait for `timeout` secs before decaring 'fetch failure'
+        if(timeout == 0 && feedList.length == 0) {
+            console.log("Failed to retrieve feedList.");
+            return;
+        }
+
+        if(feedList.length == 0) {
+            setTimeout(function() {
+                fetchFeed(timeout - 1);
+            }, 1000);
+        } else {
+        //console.log("Fetching all feed...: " + feedList.length);
+        feedHandler.fetchAll(feedList);
+        }
+    }
 
     /* Listen for window message events, and process accordingly. */
     window.addEventListener('message', function(event) {
         var message = JSON.parse(event.data);
         if (message.target == "FeedHandler") {
+            console.log("Got message for handler");
             var intent = message.intent;
             switch (intent) {
                 case "fetch":
-                    console.log("Fetching all feed...: " + feedList.length);
-                    feedHandler.fetchAll(feedList);
+                    fetchFeed(3);
                     break;
                 case "fetchById":
                     var data = JSON.parse(message.data);

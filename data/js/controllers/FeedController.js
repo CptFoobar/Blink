@@ -6,6 +6,7 @@
     var FeedController = function($scope) {
 
         $scope.entryList = [];
+        $scope.feedMap = {};
 
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
@@ -13,7 +14,14 @@
                 console.log(TAG + "message for FC");
                 switch (data.intent) {
                     case "feedEntries":
+                        console.log("adding entries");
+                        $scope.feedMap[data.payload.hashCode] = {
+                            title : data.payload.title,
+                            siteUrl : data.payload.siteUrl,
+                            iconUrl : data.payload.iconUrl
+                        };
                         $scope.entryList.push.apply($scope.entryList, data.payload.entries);
+                        break;
                 }
             }
         });
@@ -27,6 +35,7 @@
                     payload : {}
                 })
             );
+            console.log("called fetchAllFeed.");
         };
         $scope.fetchAllFeed();
 

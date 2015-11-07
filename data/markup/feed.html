@@ -1,4 +1,8 @@
-<div layout="row" flex>
+<!-- TODO: Add preloader -->
+<!-- FIXME: DRY with 3 columns -->
+<div class="col-xs-12 vert-pad-1"></div>
+<div layout="row">
+    <!-- TODO: Shuffle feed? -->
     <div layout="column" flex="33">
         <!-- Cards -->
         <md-card class="card card-material" ng-repeat="entry in entryList" ng-if="$index % 3 == 0">
@@ -6,7 +10,7 @@
                 <img ng-src="{{ entry.coverUrl }}" class="card-img" />
                 <span class="card-header">
                     <!-- TODO: set logo button image and link to feed origin -->
-                    <md-button class="md-fab md-primary" aria-label="TC" ng-style="{'background-image': 'url({{ entry.coverUrl }})', 'background-size' : '4.25vw auto'}" ng-href="{{ entry.entryUrl }}">
+                    <md-button class="md-fab md-primary" target="_blank" title="{{ feedMap[entry.sourceHash].title }}" aria-label="{{ feedMap[entry.sourceHash].title }}" ng-style="{'background-image': 'url({{ feedMap[entry.sourceHash].iconUrl }})', 'background-size' : 'cover'}" ng-href="{{ feedMap[entry.sourceHash].siteUrl }}">
                     </md-button>
                 </span>
             </div>
@@ -28,7 +32,7 @@
             <div>
                 <img ng-src="{{ entry.coverUrl }}" class="card-img" />
                 <span class="card-header">
-                    <md-button class="md-fab md-primary" aria-label="TC" ng-style="{'background-image': 'url({{ entry.coverUrl }})', 'background-size' : '4.25vw auto'}">
+                    <md-button class="md-fab md-primary" target="_blank" title="{{ feedMap[entry.sourceHash].title }}" aria-label="{{ feedMap[entry.sourceHash].title }}" ng-style="{'background-image': 'url({{ feedMap[entry.sourceHash].iconUrl }})', 'background-size' : 'cover'}" ng-href="{{ feedMap[entry.sourceHash].siteUrl }}">
                     </md-button>
                 </span>
             </div>
@@ -50,7 +54,7 @@
             <div>
                 <img ng-src="{{ entry.coverUrl }}" class="card-img" />
                 <span class="card-header">
-                    <md-button class="md-fab md-primary" aria-label="TC" ng-style="{'background-image': 'url({{ entry.coverUrl }})', 'background-size' : '4.25vw auto'}">
+                    <md-button class="md-fab md-primary" target="_blank" title="{{ feedMap[entry.sourceHash].title }}" aria-label="{{ feedMap[entry.sourceHash].title }}" ng-style="{'background-image': 'url({{ feedMap[entry.sourceHash].iconUrl }})', 'background-size' : 'cover'}" ng-href="{{ feedMap[entry.sourceHash].siteUrl }}">
                     </md-button>
                 </span>
             </div>
@@ -62,7 +66,6 @@
                 <md-button ng-href="{{ entry.entryUrl }}" target="_blank" class="md-warn md-icon-button launch" title="Read More..." aria-label="Read More...">
                     <md-icon md-font-icon="fa-paper-plane" class="fa fa-fw fa-2x md-warn save-icon"></md-icon>
                 </md-button>
-                <!--<md-button>Read More...</md-button>-->
             </div>
         </md-card>
     </div>

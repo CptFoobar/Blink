@@ -82,12 +82,14 @@ function blinkInit() {
 
         // Set PageMod
         pageMod.PageMod({
-            include: "resource://blink/data/blink_shell.html",
+            include: "resource://blink/data/*",
             contentScriptFile: data.url("js/feedHandler.js"),
             contentScriptWhen: 'end',
             onAttach: function(worker) {
-                worker.port.emit("feedList", feedList);
-                console.log("emmitting");
+                worker.port.on("getFeed", function(nothing){
+                    worker.port.emit("feedList", feedList);
+                    console.log("emmitting feedlist");
+                })
             }
         });
     }
@@ -119,16 +121,23 @@ function onPrefChange(prefName) {
 /* Initialise configuration with user-set preferences and feed list */
 function initConfig() {
     // TODO: Use simple storage to store feeds
-    // TODO: Add icon and feed name into objects in this list.
-    // NOTE: haven't been able to get feeds/:feed_id to work
+    /* Structure of feedPref item:
+       title, websiteUrl, streamId, icon, featured, tags
+    */
     feedList = [{
         title : "Engadget",
-        icon : "http://storage.googleapis.com/site-assets/4i-1vhCwmRRLfmB7ypTnMh-ZKSvsz6Rgf0lfR0WWb0w_visual-150719f6d2d", 
-        streamId : "feed/http://www.engadget.com/rss-full.xml"
+        websiteUrl : "http://www.engadget.com",
+        streamId : "feed/http://www.engadget.com/rss-full.xml",
+        icon : "http://storage.googleapis.com/site-assets/4i-1vhCwmRRLfmB7ypTnMh-ZKSvsz6Rgf0lfR0WWb0w_visual-150719f6d2d",
+        fetured : true,
+        tags : ["tech"]
     },{
         title : "Techcrunch",
+        websiteUrl: "http://techcrunch.com",
+        streamId :  "feed/http://feeds.feedburner.com/Techcrunch",
         icon : "http://storage.googleapis.com/site-assets/Xne8uW_IUiZhV1EuO2ZMzIrc2Ak6NlhGjboZ-Yk0rJ8_visual-14e42a4d997",
-        streamId : "feed/http://feeds.feedburner.com/Techcrunch"
+        featured : true,
+        tags : ["tech"]
     }];
 }
 
