@@ -2,7 +2,7 @@
 <!-- FIXME: DRY with 3 columns -->
 <div class="col-xs-12 vert-pad-1"></div>
 <div layout="row">
-    <!-- TODO: Shuffle feed? -->
+    <!-- TODO: Shuffle feed? Yes -->
     <div layout="column" flex="33">
         <!-- Cards -->
         <md-card class="card card-material" ng-repeat="entry in entryList" ng-if="$index % 3 == 0">
@@ -20,7 +20,7 @@
             </md-card-content>
             <div class="md-actions" layout="row" layout-align="end center">
                 <md-button ng-href="{{ entry.entryUrl }}" target="_blank" class="md-warn md-icon-button launch" title="Read More..." aria-label="Read More...">
-                    <md-icon md-font-icon="fa-paper-plane" class="fa fa-fw fa-2x md-warn save-icon"></md-icon>
+                    <md-icon md-font-icon="fa-external-link" class="fa fa-fw fa-2x md-warn save-icon"></md-icon>
                 </md-button>
                 <!--<md-button>Read More...</md-button>-->
             </div>
@@ -42,7 +42,7 @@
             </md-card-content>
             <div class="md-actions" layout="row" layout-align="end center">
                 <md-button ng-href="{{ entry.entryUrl }}" target="_blank" class="md-warn md-icon-button launch" title="Read More..." aria-label="Read More...">
-                    <md-icon md-font-icon="fa-paper-plane" class="fa fa-fw fa-2x md-warn save-icon"></md-icon>
+                    <md-icon md-font-icon="fa-external-link" class="fa fa-fw fa-2x md-warn save-icon"></md-icon>
                 </md-button>
                 <!--<md-button>Read More...</md-button>-->
             </div>
@@ -64,7 +64,7 @@
             </md-card-content>
             <div class="md-actions" layout="row" layout-align="end center">
                 <md-button ng-href="{{ entry.entryUrl }}" target="_blank" class="md-warn md-icon-button launch" title="Read More..." aria-label="Read More...">
-                    <md-icon md-font-icon="fa-paper-plane" class="fa fa-fw fa-2x md-warn save-icon"></md-icon>
+                    <md-icon md-font-icon="fa-external-link" class="fa fa-fw fa-2x md-warn save-icon"></md-icon>
                 </md-button>
             </div>
         </md-card>

@@ -23,7 +23,7 @@
 
         if(feedList.length == 0) {
             setTimeout(function() {
-                fetchFeed(timeout - 1);
+                fetchAllFeed(timeout - 1);
             }, 1000);
         } else {
         feedHandler.fetchAll(feedList);

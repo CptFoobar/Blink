@@ -130,13 +130,20 @@ function initConfig() {
         websiteUrl : "http://www.engadget.com",
         streamId : "feed/http://www.engadget.com/rss-full.xml",
         icon : "http://storage.googleapis.com/site-assets/4i-1vhCwmRRLfmB7ypTnMh-ZKSvsz6Rgf0lfR0WWb0w_visual-150719f6d2d",
-        fetured : true,
+        featured : true,
         tags : ["tech"]
     },{
         title : "Techcrunch",
         websiteUrl: "http://techcrunch.com",
         streamId :  "feed/http://feeds.feedburner.com/Techcrunch",
         icon : "http://storage.googleapis.com/site-assets/Xne8uW_IUiZhV1EuO2ZMzIrc2Ak6NlhGjboZ-Yk0rJ8_visual-14e42a4d997",
+        featured : true,
+        tags : ["tech"]
+    },{
+        title : "Gizmodo",
+        websiteUrl : "http://gizmodo.com",
+        streamId : "feed/http://feeds.gawker.com/gizmodo/full",
+        icon : "http://storage.googleapis.com/site-assets/YgTD2rF1XSAfR77lKtxrTwuR-azzbzQhUxfiRyg1u0w_icon-14cde04613e",
         featured : true,
         tags : ["tech"]
     }];

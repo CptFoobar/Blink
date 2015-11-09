@@ -1,6 +1,6 @@
 /* FeedHandler to, well, handle feeds. */
 (function() {
-    
+
     // TODO: For showing trending feed, use 'mixes' instead of 'streams'
     var streamUrlPrefix = "https://cloud.feedly.com/v3/streams/contents?streamId=";
     // TODO: Make this user defined (?) (must be multiple of 3 for better
@@ -36,8 +36,16 @@
     /* Create usable object from feed json */
     var parseFeed = function(feedJson, feedItem) {
         var feedObject = JSON.parse(feedJson);
+        var urlRegex = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?");
         // TODO: can use keywords later for suggesting posts
-        var hash = hashCode(feedObject.title)
+        var hash = hashCode(feedObject.title);
+
+        var entryUrl = function(link, alt) {
+            if(urlRegex.test(link))
+                return link;
+            else return alt;
+        };
+
         var parsedFeed = {
             title : feedObject.title,
             siteUrl : feedItem.websiteUrl,
@@ -49,7 +57,7 @@
         for (i = 0; i < feedObject.items.length; i++) {
             parsedFeed.entries.push({
                 entryTitle: feedObject.items[i].title,
-                entryUrl: feedObject.items[i].originId,
+                entryUrl: entryUrl(feedObject.items[i].originId, feedObject.items[i].alternate[0].href),
                 timestamp: feedObject.items[i].published,
                 coverUrl: feedObject.items[i].visual.url,
                 contentSnippet: getContentSnippet(feedObject.items[i].summary.content),

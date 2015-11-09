@@ -8,19 +8,45 @@
         $scope.entryList = [];
         $scope.feedMap = {};
 
+        var addEntries = function(entries) {
+            $scope.entryList.push.apply($scope.entryList, entries);
+            $scope.entryList = shuffle($scope.entryList);
+        }
+
+        var shuffle = function(array) {
+            var currentIndex = array.length,
+                temporaryValue, randomIndex;
+
+            // While there remain elements to shuffle...
+            while (0 !== currentIndex) {
+
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+
+                // And swap it with the current element.
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+
+            return array;
+        }
+
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
-            if(data.target == "FeedController") {
+            if (data.target == "FeedController") {
                 console.log(TAG + "message for FC");
                 switch (data.intent) {
                     case "feedEntries":
                         console.log("adding entries");
                         $scope.feedMap[data.payload.hashCode] = {
-                            title : data.payload.title,
-                            siteUrl : data.payload.siteUrl,
-                            iconUrl : data.payload.iconUrl
+                            title: data.payload.title,
+                            siteUrl: data.payload.siteUrl,
+                            iconUrl: data.payload.iconUrl
                         };
-                        $scope.entryList.push.apply($scope.entryList, data.payload.entries);
+                        addEntries(data.payload.entries);
+                        //$scope.entryList.push.apply($scope.entryList, data.payload.entries);
                         break;
                 }
             }
@@ -30,9 +56,9 @@
             $scope.$emit(
                 '$messageOutgoing',
                 angular.toJson({
-                    target : "FeedHandler",
-                    intent : "fetch",
-                    payload : {}
+                    target: "FeedHandler",
+                    intent: "fetch",
+                    payload: {}
                 })
             );
             console.log("called fetchAllFeed.");
