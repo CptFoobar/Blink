@@ -4,7 +4,7 @@
     var TAG = "BLINK: ";
 
     var FeedController = function($scope) {
-
+        // TODO: Move entrylist and feedmap into a service
         $scope.entryList = [];
         $scope.feedMap = {};
 

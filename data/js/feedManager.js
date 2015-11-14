@@ -33,7 +33,7 @@
     /* Listen for window message events, and process accordingly. */
     window.addEventListener('message', function(event) {
         var message = JSON.parse(event.data);
-        if (message.target == "FeedHandler") {
+        if (message.target && message.target == "FeedHandler") {
             console.log("Got message for handler");
             var intent = message.intent;
             switch (intent) {
@@ -43,6 +43,10 @@
                 case "fetchById":
                     var data = JSON.parse(message.data);
                     feedHandler.fetchById(data.streamId);
+                    break;
+                case "searchContent ":
+                    var data = JSON.parse(message.data);
+                    contentHandler.search(data.query);
                     break;
             }
         }
