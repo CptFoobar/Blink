@@ -6,66 +6,107 @@
     <title> New Tab </title>
     <meta charset="utf-8">
 
-    <!-- Library Stylesheets -->
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="libs/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="libs/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="libs/bootswatch_bootstrap_paper/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
 
-    <!-- Blink Stylesheets -->
-    <link rel="stylesheet" type="text/css" href="css/fonts.css">
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
-
-    <!-- Library Scripts -->
     <script src="libs/angular/angular.min.js"></script>
-    <script src="libs/angular-animate/angular-animate.min.js"></script>
-    <script src="libs/angular-aria/angular-aria.min.js"></script>
     <script src="libs/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="libs/angular-material/angular-material.min.js"></script>
     <script src="libs/angular-route/angular-route.min.js"></script>
-    <script src="libs/angular-post-message/dist/angular-post-message.min.js"></script>
+    <script src="libs/angular-animate/angular-animate.min.js"></script>
+    <script src="libs/angular-post-message/angular-post-message.min.js"></script>
 
-    <!-- Blink Scripts -->
-    <script src="js/app.js"></script>
-    <script src="js/controller/ContentController.js"></script>
-    <script src="js/controllers/HomeController.js"></script>
-    <script src="js/controllers/FeedController.js"></script>
-    <script src="js/controllers/MainController.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <script src="js/app.js" charset="utf-8"></script>
+    <script src="js/controllers/HomeController.js" charset="utf-8"></script>
+    <script src="js/controllers/NavController.js" charset="utf-8"></script>
 
 </head>
 
 <body ng-app="blink">
-    <md-content flex layout="column" layout-fill ng-controller="MainController as main" style="overflow-x: hidden;" ng-cloak>
-        <div flex class="container-fluid col-md-12" layout="column" layout-padding>
 
-            <md-fab-speed-dial md-direction="up" md-open="main.isOpen" class="md-scale md-fab-bottom-left" ng-class="{ 'md-hover-full': false }" ng-mouseenter="main.isOpen=true" ng-mouseleave="main.isOpen=false" ng-click="toggleMenu()" style="position: fixed;">
-                <md-fab-trigger>
-                    <md-button aria-label="menu" class="md-fab md-warn">
-                        <md-tooltip md-direction="right" class="fab-tooltip">{{ main.Menu.label }}</md-tooltip>
-                        <i class="fa {{ main.Menu.icon }} fa-2x fa-fw fab-menu-icon"></i>
-                    </md-button>
-                </md-fab-trigger>
-                <md-fab-actions>
-                    <div ng-repeat="item in main.items">
-                        <md-button aria-label="{{ item.name }}" class="md-fab md-raised md-mini" ng-click="onClick(item.target)">
-                            <md-tooltip md-direction="{{item.direction}}" md-autohide="false" class="fab-tooltip">
-                                {{ item.name }}
-                            </md-tooltip>
-                            <i class="fa {{ item.icon }} fa-lg fab-icon"></i>
-                        </md-button>
-                    </div>
-                </md-fab-actions>
-            </md-fab-speed-dial>
-            <div class="row navbar-fixed-top blink-nav">
-                <a href="#/recent"><i class="fa fa-clock-o icon noselect bl-icon"></i></a>
-                <a href="#/bookmarks"><i class="fa fa-bookmark-o icon noselect bl-icon"></i></a>
-                <a href="#/feed"><i class="fa fa-newspaper-o icon noselect bl-icon"></i></a>
-                <a href="#/home"><i class="fa fa-home icon noselect bl-icon"></i></a>
+    <nav class="navbar navbar-transparent navbar-fixed-top" role="navigation" ng-controller="NavController">
+        <script type="text/ng-template" id="autoSuggest.html">
+            <div class="custom-popup-wrapper col-sm-12" style="display: block;" ng-show="isOpen() && !moveInProgress" aria-hidden="{{!isOpen()}}">
+                <ul class="dropdown-menu" role="listbox">
+                    <li ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="{{::match.id}}">
+                        <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>
+                    </li>
+                </ul>
             </div>
-            <div class="container">
-                <ng-view flex layout="column"></ng-view>
-            </div>
+        </script>
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <a class="navbar-brand" href="#/home">B</a>
         </div>
-    </md-content>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#/feed">
+                        <i class="fa fa-rss fa-fw fa-lg nav-icon" style="color: #ff9900;"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/bookmarks">
+                        <i class="fa fa-bookmark fa-fw fa-lg nav-icon" style="color: #ccfc49;"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/recent">
+                        <i class="fa fa-clock-o fa-fw fa-lg nav-icon" style="color: #1cfffb;"></i>
+                    </a>
+                </li>
+                <li class="dropdown" uib-dropdown="">
+                    <a href="#/main" class="dropdown-toggle" uib-dropdown-toggle="" data-toggle="dropdown" style="margin-right: 10px;">
+                        <i class="fa fa-ellipsis-v fa-fw fa-lg"></i>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#/content">
+                                <i class="fa fa-pencil fa-fw fa-lg"></i>       Content
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/settings">
+                                <i class="fa fa-cog fa-fw fa-lg"></i>       Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/help">
+                                <i class="fa fa-question fa-fw fa-lg"></i>       Help
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/about">
+                                <i class="fa fa-info fa-fw fa-lg"></i>       About
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/main">
+                                <i class="fa fa-heart fa-fw fa-lg"></i>       Support
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-right" role="search">
+                <button type="submit" class="btn btn-search" ng-mouseover="searchbarOpen=true" ng-class="{btnActive: searchbarOpen}"></button>
+                <div class="form-group searchbar" ng-show="searchbarOpen">
+                    <input ng-model="asyncSelected" uib-typeahead="suggestion for suggestion in getSuggestions($viewValue)" type="text" class="form-control" placeholder="Google Search..." focus-me="searchbarOpen" ng-keyup="$event.keyCode == 13 && google($viewValue, asyncSelected)"
+                    typeahead-focus-first="false" typeahead-popup-template-url="autoSuggest.html" />
+                </div>
+            </form>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+
+    <div ng-view ng-cloak></div>
+
 </body>
 
 </html>

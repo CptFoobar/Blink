@@ -1,87 +1,21 @@
-.custom-popup-wrapper {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 1000;
-    display: none;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    border: 1px solid #bbb;
-    padding: 0 0;
-}
-
-.custom-popup-wrapper > .dropdown-menu {
-    position: static;
-    float: none;
-    display: block;
-    min-width: 160px;
-    background-color: #f9f9f9;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-}
-
-#gsearch::-webkit-input-placeholder {
-    /* Chrome */
-    color: transparent;
-    text-indent: -9999px;
-    background-image: url("../icons/google_logo.png");
-    background-size: auto 100%;
-    background-position: 0 50%;
-    background-repeat: no-repeat;
-}
-
-#gsearch::-moz-placeholder {
-    /* Firefox */
-    color: transparent;
-    background-image: url("../icons/google_logo.png");
-    background-size: auto 45%;
-    background-position: 12px 55%;
-    background-repeat: no-repeat;
-}
-
 .clocky {
-    font-family: district_prothin;
+    font-family: work_sans_thin, 'Helvetica', serif;
 }
 
 .clocky .time {
-    font-size: 12.75vmax;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.clocky .greet {
-    font-size: 3.5vmax;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 10em;
+    font-family: work_sans_hairline;
 }
 
 .clocky .day {
-    font-size: 1.75vmax;
-    font-weight: 0.1em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 2.25em;
 }
 
-@media (max-device-width: 992px) {
-    .clocky .time {
-        font-size: 13vmax;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .clocky .day {
-        font-size: 3vmax;
-        font-weight: 0.1em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+
+.clocky .greeting {
+    font-size: 3em;
 }
 
-.searchbar {
-    font-size: 100% !important;
+.space {
+    height:  12.5vh;
 }

@@ -1,9 +1,7 @@
 (function() {
 
-    var app = angular.module('blink', ['ngAnimate', 'ngMaterial',
-                                'ngPostMessage', 'ngRoute', 'ui.bootstrap']);
-    // TODO: Set theme as per user setting (?)
-    var dark = true;
+    var app = angular.module('blink', ['ngAnimate', 'ngPostMessage',
+                                            'ngRoute', 'ui.bootstrap']);
 
     var routingTable = [
         {
@@ -38,16 +36,7 @@
         }
     ];
 
-    app.config(function($routeProvider, $mdThemingProvider) {
-        /* Set theme */
-        $mdThemingProvider.theme('default')
-            .primaryPalette('purple')
-            .accentPalette('pink')
-            .warnPalette('red')
-            .backgroundPalette('blue-grey');
-        /* Set theme dark if required */
-        if (dark)
-            $mdThemingProvider.theme('default').dark();
+    app.config(function($routeProvider) {
 
         /* Add routes */
         angular.forEach(routingTable, function(route){
@@ -59,5 +48,27 @@
 
         /* Default route */
         $routeProvider.otherwise({ redirectTo: "/home"});
+
+    });
+
+    app.directive('focusMe', function($timeout, $parse) {
+        return {
+            //scope: true,   // optionally create a child scope
+            link: function(scope, element, attrs) {
+                var model = $parse(attrs.focusMe);
+                scope.$watch(model, function(value) {
+                    if (value === true) {
+                        $timeout(function() {
+                            element[0].focus();
+                        });
+                    }
+                });
+                // to address @blesh's comment, set attribute value to 'false'
+                // on blur event:
+                element.bind('blur', function() {
+                    scope.$apply(model.assign(scope, false));
+                });
+            }
+        };
     });
 }());
