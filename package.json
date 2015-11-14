@@ -6,8 +6,8 @@
   "main": "index.js",
   "author": "Sidhant Sharma [:tk]",
   "icon": {
-    "48": "resource://@blink/data/icons/blink-48.png",
-    "64": "resource://@blink/data/icons/blink-64.png"
+    "48": "resource://@blink/data/img/blink-48.png",
+    "64": "resource://@blink/data/img/blink-64.png"
   },
   "engines": {
     "firefox": ">=38.0a1",

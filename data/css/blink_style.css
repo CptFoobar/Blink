@@ -120,6 +120,8 @@ nav.navbar.navbar-transparent {
     background-size: auto 100%;
     filter: grayscale(75%);
     -webkit-filter: grayscale(75%);
+    -webkit-transition: all ease-out 0.65s;
+    transition: all ease-out 0.65s;
     height: 23px;
     padding-right: 5px;
     border: none;
