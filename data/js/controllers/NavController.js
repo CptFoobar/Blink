@@ -25,7 +25,9 @@
 
                 }
             }).then(function(response) {
-            console.log("response: " + JSON.stringify(response.data[1]));
+                for(i = 0; i < response.data[1].length; i++)
+                    if(response.data[1][i].length >= 50)
+                        response.data[1][i] = response.data[1][i].substring(0, 47) + "...";
                 return response.data[1];
             });
             //TODO: Succes and Error checking

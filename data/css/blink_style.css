@@ -106,7 +106,7 @@ nav.navbar.navbar-transparent {
 .searchbar {
     -webkit-transition: all ease-out 0.65s;
     transition: all ease-out 0.65s;
-    width: 200px;
+    width: 300px;
     opacity: 1;
 }
 .searchbar.ng-hide {
@@ -115,7 +115,7 @@ nav.navbar.navbar-transparent {
 }
 .btn-search {
     background-color: transparent;
-    background-image: url("../icons/google_g.png");
+    background-image: url("../img/google_g.png");
     background-repeat: no-repeat;
     background-size: auto 100%;
     filter: grayscale(75%);
@@ -141,7 +141,7 @@ nav.navbar.navbar-transparent {
     outline: none;
 }
 .custom-popup-wrapper {
-    max-width: 200px;
+    max-width: 300px;
     position: absolute;
     top: 100%;
     z-index: 1000;
@@ -152,7 +152,7 @@ nav.navbar.navbar-transparent {
     padding: 0 0;
 }
 .custom-popup-wrapper > .dropdown-menu {
-    max-width: 200px;
+    max-width: 300px;
     position: static;
     float: none;
     display: block;

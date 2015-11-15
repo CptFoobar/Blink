@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/fonts.css">
-    
+
     <script src="js/app.js" charset="utf-8"></script>
     <script src="js/controllers/HomeController.js" charset="utf-8"></script>
     <script src="js/controllers/NavController.js" charset="utf-8"></script>
@@ -99,7 +99,7 @@
                 <button type="submit" class="btn btn-search" ng-mouseover="searchbarOpen=true" ng-class="{btnActive: searchbarOpen}"></button>
                 <div class="form-group searchbar" ng-show="searchbarOpen">
                     <input ng-model="asyncSelected" uib-typeahead="suggestion for suggestion in getSuggestions($viewValue)" type="text" class="form-control" placeholder="Google Search..." focus-me="searchbarOpen" ng-keyup="$event.keyCode == 13 && google($viewValue, asyncSelected)"
-                    typeahead-focus-first="false" typeahead-popup-template-url="autoSuggest.html" />
+                    typeahead-focus-first="false" typeahead-popup-template-url="autoSuggest.html" style="width: 300px;"/>
                 </div>
             </form>
         </div>
