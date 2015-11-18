@@ -1,5 +1,37 @@
-<div class="container">
+<div class="container" scroll>
     <div class="row">
-        
+        <div class="column col-md-4" ng-repeat="i in [] | range:3">
+            <div class="bl-cardbox" ng-repeat="entry in entryList" ng-if="$index % 3 == i">
+                <div class="bl-card">
+                    <div class="bl-banner">
+                        <span class="blur-filter"></span>
+                        <img class="banner-image noselect" ng-src="{{ entry.coverUrl }}"/>
+                        <span class="banner-button btn-read-more"><a role="button" class="btn btn-default banner-hover-button" href="{{ entry.entryUrl }}">Read More</a></span>
+                        <h4><span class="label label-danger bl-flames noselect"><i class="octicon octicon-flame" ng-repeat="n in [] | range:entry.flames"></i></span></h4>
+                        <span class="banner-button share-buttons">
+                             <div class="btn-group btn-group-justified" role="group" aria-label="Share">
+                            <div class="btn-group" role="group">
+                                <a type="button" class="btn btn-default share-fb" ng-href="https://www.facebook.com/sharer/sharer.php?u={{ entry.entryUrl }}" target="_blank"><i class="fa fa-facebook fa-lg"></i></a>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <a type="button" class="btn btn-default share-twitter" ng-href="https://twitter.com/intent/tweet?status={{ entry.entryTitle }}+{{ entry.entryUrl }}" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <a type="button" class="btn btn-default share-google-plus" ng-href="https://plus.google.com/share?url={{ entry.entryUrl }}" target="_blank"><i class="fa fa-google-plus fa-lg"></i></a>
+                            </div>
+                        </div>
+                        </span>
+                    </div>
+                    <div class="bl-content">
+                        <a ng-href="{{ feedMap[entry.sourceHash].siteUrl }}" alt="{{ feedMap[entry.sourceHash].title }}" class="source"> {{ feedMap[entry.sourceHash].title }} </a>
+                        <div class="title">{{ entry.entryTitle }}</div>
+                        <div class="snippet">{{ entry.contentSnippet }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="scroller">
+        <a role="button" class="btn btn-default btn-to-top" aria-label="Scroll to Top" title="Scroll to Top" ng-click="toTheTop()" ng-show="showTopButton"><i class="mega-octicon octicon-chevron-up"></i></a>
     </div>
 </div>

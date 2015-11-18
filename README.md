@@ -3,7 +3,7 @@ An add-on that makes that turns the new tab page into an interesting news feed
 from various websites and blogs of your choice. Blink can display any feed, as
 long as it is indexed by [Feedly](feedly.com).
 
-This branch is specifically for v1.0 of Blink. Bug fixes to current
+This branch is specificallyMaterial for v1.0 of Blink. Bug fixes to current
 version (0.3.1 as of Nov 4, 2015) must be based on develop or master branch.
 
 List of targets for v1:
@@ -11,11 +11,11 @@ List of targets for v1:
 * UI Overhaul
 
    Four pages, _Home_, _Feed_, _Recent_ and _Bookmarks_
-   - ~~_Home_: Mimimal home screen~~
-   - _Feed_: Cards layout for feed
+   - ~~_Home_: Minimal home screen~~
+   - ~~_Feed_: Cards layout for feed~~
    - _Recent_: Show top visited sites
    - _Bookmarks_: Show Bookmarks
-   - Material(-ish) design
+   - ~~Flat-Material(-ish) design~~
 
 
 * Home
@@ -23,14 +23,11 @@ List of targets for v1:
    - ~~Greeting~~
    - Weather
    - ~~Nav~~
-   - FAB
 
 
 * Feed
-   - _Cards_ : Create cars for feed entries
-   - _Save_ :  Save feed entry for reading later
-   - _Sidebar_ : Show icon for saved feeds, suggested streams
-   - _Saved Feeds_ : Show Cards for saved feed entries
+   - ~~_Cards_ : Create cars for feed entries~~
+   - ~~Share : Social buttons~~
 
 
 * Settings Options
@@ -53,4 +50,3 @@ List of targets for v1:
    - _Help_ : How to use Blink
    - _About_ : About Blink (ahem, and me)
    - _Support_: $$$ = <3
-   - _FAB_ : Make the button icon morph (see [Delightful details](https://www.google.co.in/design/spec/animation/delightful-details.html))

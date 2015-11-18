@@ -59,8 +59,9 @@
                 entryTitle: feedObject.items[i].title,
                 entryUrl: entryUrl(feedObject.items[i].originId, feedObject.items[i].alternate[0].href),
                 timestamp: feedObject.items[i].published,
-                coverUrl: feedObject.items[i].visual.url,
+                coverUrl: getVisualUrl(feedObject.items[i].visual.url),
                 contentSnippet: getContentSnippet(feedObject.items[i].summary.content),
+                flames: getFlames(feedObject.items[i].engagementRate),
                 sourceHash : hash
             });
         }
@@ -80,9 +81,21 @@
         var regex = new RegExp("Read More", 'g');
         snippet = snippet.replace(regex, '');
         if(snippet.length > 120)
-            snippet = snippet.substring(0, 120);
+            snippet = snippet.substring(0, 148);
         snippet += "...";
         return snippet;
+    }
+
+    var getFlames = function(er) {
+        if(er < 5) return 0;
+        else if(er > 5 && er < 10) return 1;
+        else return 2;
+    };
+
+    var getVisualUrl = function(img) {
+        if(img === undefined || img === 'none')
+            return "https://unsplash.it/600/480/?random";
+        else return img;
     }
 
     /* Generate hash code for given string */

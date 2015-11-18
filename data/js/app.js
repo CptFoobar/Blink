@@ -1,45 +1,39 @@
 (function() {
 
-    var app = angular.module('blink', ['ngAnimate', 'ngPostMessage',
-                                            'ngRoute', 'ui.bootstrap']);
+    var app = angular.module('blink', ['duScroll', 'ngAnimate', 'ngPostMessage',
+        'ngRoute', 'ui.bootstrap'
+    ]);
 
-    var routingTable = [
-        {
-            target: "/home",
-            url: "markup/home.html",
-            controller: "HomeController"
-        },
-        {
-            target: "/feed",
-            url: "markup/feed.html",
-            controller: "FeedController"
-        },
-        {
-            target: "/recent",
-            url: "markup/recent.html",
-            controller: "RecentController"
-        },
-        {
-            target: "/bookmarks",
-            url: "markup/bookmarks.html",
-            controller: "BookmarkController"
-        },
-        {
-            target: "/blink/settings",
-            url: "markup/settings.html",
-            controller: "SettingsController"
-        },
-        {
-            target: "/blink/content",
-            url: "markup/content.html",
-            controller: "ContentController"
-        }
-    ];
+    var routingTable = [{
+        target: "/home",
+        url: "markup/home.html",
+        controller: "HomeController"
+    }, {
+        target: "/feed",
+        url: "markup/feed.html",
+        controller: "FeedController"
+    }, {
+        target: "/recent",
+        url: "markup/recent.html",
+        controller: "RecentController"
+    }, {
+        target: "/bookmarks",
+        url: "markup/bookmarks.html",
+        controller: "BookmarkController"
+    }, {
+        target: "/blink/settings",
+        url: "markup/settings.html",
+        controller: "SettingsController"
+    }, {
+        target: "/blink/content",
+        url: "markup/content.html",
+        controller: "ContentController"
+    }];
 
     app.config(function($routeProvider) {
 
         /* Add routes */
-        angular.forEach(routingTable, function(route){
+        angular.forEach(routingTable, function(route) {
             $routeProvider.when(route.target, {
                 templateUrl: route.url,
                 controller: route.controller
@@ -47,7 +41,9 @@
         });
 
         /* Default route */
-        $routeProvider.otherwise({ redirectTo: "/home"});
+        $routeProvider.otherwise({
+            redirectTo: "/home"
+        });
 
     });
 
@@ -71,4 +67,26 @@
             }
         };
     });
+
+    app.filter('range', function() {
+        return function(input, total) {
+            total = parseInt(total);
+            for (var i = 0; i < total; i++)
+                input.push(i);
+            return input;
+        };
+    });
+
+    app.directive("scroll", function ($window) {
+    return function(scope, element, attrs) {
+        angular.element($window).bind("scroll", function() {
+             if (this.pageYOffset >= 50) {
+                 scope.showTopButton = true;
+             } else {
+                 scope.showTopButton = false;
+             }
+            scope.$apply();
+        });
+    };
+});
 }());

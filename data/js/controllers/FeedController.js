@@ -3,16 +3,21 @@
     var app = angular.module('blink');
     var TAG = "BLINK: ";
 
-    var FeedController = function($scope) {
+    var FeedController = function($scope, $document) {
         // TODO: Move entrylist and feedmap into a service
         $scope.entryList = [];
         $scope.feedMap = {};
-
+        $scope.showTopButton = false;
         var addEntries = function(entries) {
             $scope.entryList.push.apply($scope.entryList, entries);
             $scope.entryList = shuffle($scope.entryList);
-        }
+        };
 
+        $scope.toTheTop = function() {
+            $document.scrollTopAnimated(0, 1750);
+        };
+
+        /*  Fischer-Yates aka Knuth shuffle */
         var shuffle = function(array) {
             var currentIndex = array.length,
                 temporaryValue, randomIndex;
@@ -31,7 +36,7 @@
             }
 
             return array;
-        }
+        };
 
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
@@ -67,6 +72,6 @@
         $scope.fetchAllFeed();
     };
 
-    app.controller('FeedController', ['$scope', FeedController]);
+    app.controller('FeedController', ['$scope', '$document', FeedController]);
 
 }());
