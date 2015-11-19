@@ -23,6 +23,7 @@ var feedList = [];
 const useNewAPI = require("sdk/system").version >= "41.0";
 
 var newTabURL = data.url("blink_shell.html");
+newTabURL = newTabURL + "#/home";
 // TODO: Add other urls to be hidden into a list
 
 // Get and save original new tab
@@ -121,32 +122,39 @@ function onPrefChange(prefName) {
 
 /* Initialise configuration with user-set preferences and feed list */
 function initConfig() {
-    // TODO: Use simple storage to store feeds
-    /* Structure of feedPref item:
-       title, websiteUrl, streamId, icon, featured, tags
-    */
-    feedList = [{
+    if(self.loadReason == "install" || !ss.storage.feedList) {
+    	feedList = ["alpha"];
+    	ss.storage.feedList = feedList;
+    } else {
+    	feedList = ss.storage.feedList;
+    }
+}
+
+// For testing only.
+updateFeed([{
         title : "Engadget",
         websiteUrl : "http://www.engadget.com",
         streamId : "feed/http://www.engadget.com/rss-full.xml",
         icon : "http://storage.googleapis.com/site-assets/4i-1vhCwmRRLfmB7ypTnMh-ZKSvsz6Rgf0lfR0WWb0w_visual-150719f6d2d",
-        featured : true,
         tags : ["tech"]
     },{
         title : "Techcrunch",
         websiteUrl: "http://techcrunch.com",
         streamId :  "feed/http://feeds.feedburner.com/Techcrunch",
         icon : "http://storage.googleapis.com/site-assets/Xne8uW_IUiZhV1EuO2ZMzIrc2Ak6NlhGjboZ-Yk0rJ8_visual-14e42a4d997",
-        featured : true,
         tags : ["tech"]
     },{
         title : "Gizmodo",
         websiteUrl : "http://gizmodo.com",
         streamId : "feed/http://feeds.gawker.com/gizmodo/full",
         icon : "http://storage.googleapis.com/site-assets/YgTD2rF1XSAfR77lKtxrTwuR-azzbzQhUxfiRyg1u0w_icon-14cde04613e",
-        featured : true,
         tags : ["tech"]
-    }];
+    }]);
+
+function updateFeed(newFeedList) {
+    feedList = newFeedList;
+    ss.storage.feedList = feedList;
+    Log("Updated feed. feedList.length: " + ss.storage.feedList.length);
 }
 
 /* util for debugging */

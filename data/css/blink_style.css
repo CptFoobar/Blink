@@ -87,8 +87,9 @@ nav.navbar.navbar-transparent {
 .navbar-brand:hover {
     color: rgba(255, 255, 255, 1);
 }
-.navbar-brand:focus {
+.navbar-brand:focus, .navbar-brand:active, .navbar-brand:hover:active {
     color: rgba(255, 255, 255, 1);
+    outline: none;
 }
 .nav-icon {
     filter: grayscale(85%);

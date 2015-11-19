@@ -10,43 +10,43 @@ List of targets for v1:
 
 * UI Overhaul
 
-   Four pages, _Home_, _Feed_, _Recent_ and _Bookmarks_
-   - ~~_Home_: Minimal home screen~~
-   - ~~_Feed_: Cards layout for feed~~
-   - _Recent_: Show top visited sites
-   - _Bookmarks_: Show Bookmarks
-   - ~~Flat-Material(-ish) design~~
+    Four pages, _Home_, _Feed_, _Recent_ and _Bookmarks_
+    - ~~_Home_: Minimal home screen~~
+    - ~~_Feed_: Cards layout for feed~~
+    - _Recent_: Show top visited sites
+    - _Bookmarks_: Show Bookmarks
+    - ~~Flat-Material(-ish) design~~
 
 
 * Home
-   - ~~Clock~~
-   - ~~Greeting~~
-   - Weather
-   - ~~Nav~~
+    - ~~Clock~~
+    - ~~Greeting~~
+    - Weather
+    - ~~Nav~~
 
 
 * Feed
-   - ~~_Cards_ : Create cars for feed entries~~
-   - ~~Share : Social buttons~~
+    - ~~_Cards_ : Create cars for feed entries~~
+    - ~~Share : Social buttons~~
 
 
 * Settings Options
-   - _Name_ : Input user name for greeting
-   - _Location_ : Use automatic/manual location  
-   - _Weather_ : C/F
-   - ~~(?) _Theme_ : Set dark/light theme~~
+    - _Name_ : Input user name for greeting
+    - _Location_ : Use automatic/manual location  
+    - _Weather_ : C/F
+    - ~~(?) _Theme_ : Set dark/light theme~~
 
 
 * Content
 
-   Using feedly API
-   - _Add_ :  Add content from feedly
-   - _Remove_ : Remove feeds from feed list
-   - _Search_ : Search for streams
+    => Using feedly API
+    - _Add_ :  Add content from feedly
+    - _Remove_ : Remove feeds from feed list
+    - _Search_ : Search for streams
     indexed by feedly
 
 
 * Other Views
-   - _Help_ : How to use Blink
-   - _About_ : About Blink (ahem, and me)
-   - _Support_: $$$ = <3
+    - _Help_ : How to use Blink
+    - _About_ : About Blink (ahem, and me)
+    - _Support_: $$$ = <3
