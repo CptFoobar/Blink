@@ -34,7 +34,7 @@ List of targets for v1:
    - _Name_ : Input user name for greeting
    - _Location_ : Use automatic/manual location  
    - _Weather_ : C/F
-   - (?) _Theme_ : Set dark/light theme
+   - ~~(?) _Theme_ : Set dark/light theme~~
 
 
 * Content

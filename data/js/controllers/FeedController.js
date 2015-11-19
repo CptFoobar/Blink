@@ -8,6 +8,9 @@
         $scope.entryList = [];
         $scope.feedMap = {};
         $scope.showTopButton = false;
+        var fbPrefix = "https://www.facebook.com/sharer/sharer.php?u=";
+        var twitterPrefix = "https://twitter.com/intent/tweet?status=";
+        var googleplusPrefix = "https://plus.google.com/share?url=";
         var addEntries = function(entries) {
             $scope.entryList.push.apply($scope.entryList, entries);
             $scope.entryList = shuffle($scope.entryList);
@@ -17,7 +20,34 @@
             $document.scrollTopAnimated(0, 1750);
         };
 
-        /*  Fischer-Yates aka Knuth shuffle */
+        // Open popup window. Code adopted from:
+        // http://www.nigraphic.com/blog/java-script/how-open-new-window-popup-center-screen
+        $scope.popup = function popupCenter(sharePoint, suffix) {
+            console.log("Opening popup ");
+            var url, title;
+            switch (sharePoint) {
+                case 'f':
+                    url = fbPrefix;
+                    title = "Share on Facebook";
+                    break;
+                case 't':
+                    url = twitterPrefix;
+                    title = "Share on Twitter";
+                    break;
+                case 'g':
+                    url = googleplusPrefix;
+                    title = "Share on Google+";
+                    break;
+            }
+            url = url + suffix;
+            console.log("Opening popup for: " + url);
+            var h = 500, w = 500;
+            var left = (screen.width / 2) - (w / 2);
+            var top = (screen.height / 2) - (h / 2);
+            return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+        }
+
+        /* Fischer-Yates aka Knuth shuffle */
         var shuffle = function(array) {
             var currentIndex = array.length,
                 temporaryValue, randomIndex;
