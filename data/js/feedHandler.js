@@ -3,25 +3,44 @@
 
     // TODO: For showing trending feed, use 'mixes' instead of 'streams'
     var streamUrlPrefix = "https://cloud.feedly.com/v3/streams/contents?streamId=";
+    // Mix in some trending news
+    var trendingUrlPrefix = "https://cloud.feedly.com/v3/mixes/contents?streamId=";
     // TODO: Make this user defined (?) (must be multiple of 3 for better
     // placement of cards)
-    var entryCount = "&count=9";
+    var streamCount = "&count=9";
+    var trendingCount = "&count=6"
 
-    /* Fetch all feed */
     var fetchAll = function(feedList) {
+        fetchAllStreams(feedList);
+        fetchAllTrending(feedList);
+    }
+
+    /* Fetch all feed streams */
+    var fetchAllStreams = function(feedList) {
         // FIXME: This might very soon start returning 429 (too many requests)
         // Request only 2 streams (or limited entries) at a time (and use
         // 'Load More' loader)
-        console.log("fetching all...");
+        console.log("fetching streams...");
         for (i = 0; i < feedList.length; i++) {
-            fetchById(feedList[i]);
+            fetchById(feedList[i], streamUrlPrefix, streamCount);
+        }
+    };
+
+    /* Fetch all feed trending */
+    var fetchAllTrending = function(feedList) {
+        // FIXME: This might very soon start returning 429 (too many requests)
+        // Request only 2 streams (or limited entries) at a time (and use
+        // 'Load More' loader)
+        console.log("fetching trends...");
+        for (i = 0; i < feedList.length; i++) {
+            fetchById(feedList[i], trendingUrlPrefix, trendingCount);
         }
     };
 
     /* Fetch feed by streamId */
-    var fetchById = function(feedItem) {
+    var fetchById = function(feedItem, urlPrefix, count) {
         var request = new XMLHttpRequest();
-        request.open("GET", streamUrlPrefix + feedItem.streamId + entryCount, true);
+        request.open("GET", urlPrefix + feedItem.streamId + count, true);
         request.onload = function() {
             window.postMessage({
                 target: "FeedController",
@@ -87,8 +106,8 @@
     }
 
     var getFlames = function(er) {
-        if(er < 5) return 0;
-        else if(er > 5 && er < 10) return 1;
+        if(er < 3.5) return 0;
+        else if(er > 3.5 && er < 8) return 1;
         else return 2;
     };
 
