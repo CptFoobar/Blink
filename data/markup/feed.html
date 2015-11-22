@@ -25,7 +25,7 @@
                     <div class="bl-content">
                         <a ng-href="{{ feedMap[entry.sourceHash].siteUrl }}" alt="{{ feedMap[entry.sourceHash].title }}" class="source"> {{ feedMap[entry.sourceHash].title }} </a>
                         <div class="title">{{ entry.entryTitle }}</div>
-                        <div class="snippet">{{ entry.contentSnippet }}</div>
+                        <div class="snippet" ng-if="entry.contentSnippet">{{ entry.contentSnippet }}</div>
                     </div>
                 </div>
             </div>

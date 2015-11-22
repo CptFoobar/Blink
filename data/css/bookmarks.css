@@ -43,11 +43,11 @@
 }
 
 .bm-link {
-    color: rgba(221, 221, 221, 0.9);
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .bm-link:hover, .bm-link:active, .bm-link:focus {
     text-decoration: none;
-    color: rgba(221, 221, 221, 1);
+    color: rgba(255, 255, 255, 1);
     outline: none;
 }

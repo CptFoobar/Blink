@@ -100,12 +100,14 @@
         snippet = snippet.replace(regex, '');
         if(snippet.length > 120)
             snippet = snippet.substring(0, 148);
-        snippet += "...";
+        if(snippet.length === 0)
+            snippet = "";
+        else snippet += "...";
         return snippet;
     }
 
     var getFlames = function(er) {
-        if(er < 3.5) return 0;
+        if(!er || er < 3.5) return 0;
         else if(er > 3.5 && er < 8) return 1;
         else return 2;
     };

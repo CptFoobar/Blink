@@ -88,31 +88,8 @@ function blinkInit() {
 
         initConfig();
 
-        // Set PageMod
-        pageMod.PageMod({
-            include: "resource://blink/data/*",
-            contentScriptFile: [data.url("js/feedHandler.js"),
-                                data.url("js/feedManager.js")],
-            contentScriptWhen: 'ready',
-            onAttach: function(worker) {
-                worker.port.on("getFeed", function(nothing) {
-                    worker.port.emit("feedList", feedList);
-                    Log("Emmitting feedlist");
-                });
-            }
-        });
-
-        pageMod.PageMod({
-            include: "resource://blink/data/*",
-            contentScriptFile: data.url("js/bookmarksManager.js"),
-            contentScriptWhen: 'ready',
-            onAttach: function(worker) {
-                worker.port.on("getBookmarks", function(nothing) {
-                    worker.port.emit("bookmarks", bookmarksTree);
-                    Log("Emmitting bookmarks");
-                });
-            }
-        });
+        // Set PageMods
+        setPageMods();
     }
 };
 
@@ -138,6 +115,36 @@ function onPrefChange(prefName) {
             clearSettings();
     }
 };
+
+/* Set PageMods */
+function setPageMods() {
+    // PageMod for feed page
+    pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: [data.url("js/feedHandler.js"),
+                            data.url("js/feedManager.js")],
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getFeed", function(nothing) {
+                worker.port.emit("feedList", feedList);
+                Log("Emmitting feedlist");
+            });
+        }
+    });
+
+    // PageMod for bookmarks
+    pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: data.url("js/bookmarksManager.js"),
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getBookmarks", function(nothing) {
+                worker.port.emit("bookmarks", bookmarksTree);
+                Log("Emmitting bookmarks");
+            });
+        }
+    });
+}
 
 /* Initialise configuration with user-set preferences and feed list */
 function initConfig() {
@@ -169,6 +176,12 @@ updateFeed([{
     streamId: "feed/http://feeds.gawker.com/gizmodo/full",
     icon: "http://storage.googleapis.com/site-assets/YgTD2rF1XSAfR77lKtxrTwuR-azzbzQhUxfiRyg1u0w_icon-14cde04613e",
     tags: ["tech"]
+}, {
+    title: "Dribbble",
+    websiteUrl: "https://dribbble.com/",
+    streamId: "feed/http://dribbble.com/shots/popular.rss",
+    icon: "http://storage.googleapis.com/site-assets/BnJ8HLdN6KkB0LbmwfVmx3aWGMAdrc5NScyF4JLTJnM_visual-14a5c737fe2",
+    tags: ["art"]
 }]);
 
 /* Update feed with a new feed list */

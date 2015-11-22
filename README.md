@@ -35,6 +35,8 @@ List of targets for v1:
     - _Location_ : Use automatic/manual location  
     - _Weather_ : C/F
     - ~~(?) _Theme_ : Set dark/light theme~~
+    - _Feed type_ :
+        <-- Latest only -- Latest > Trending -- Balanced -- Trending > Latest -- Trending only -->
 
 
 * Content
