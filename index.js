@@ -5,11 +5,16 @@ const pageMod = require("sdk/page-mod");
 const tabs = require("sdk/tabs");
 
 // Storage and permissions
-const {when: unload} = require("sdk/system/unload");
+const {
+    when: unload
+} = require("sdk/system/unload");
 const prefSet = require("sdk/simple-prefs");
 const ss = require("sdk/simple-storage");
 const services = require("sdk/preferences/service");
 const browserWindows = require("sdk/windows").browserWindows;
+const {
+    search
+} = require("sdk/places/bookmarks");
 
 // For  setting new tab URL
 const fx38 = require(data.url("js/fx38.js"));
@@ -19,6 +24,8 @@ var oldNewTab;
 var blinkEnable = prefSet.prefs.blinkEnable;
 var devlogs = true; // set true to enable logging
 var feedList = [];
+var bookmarksTree = [];
+var bookmarks = [];
 
 const useNewAPI = require("sdk/system").version >= "41.0";
 
@@ -85,13 +92,25 @@ function blinkInit() {
         pageMod.PageMod({
             include: "resource://blink/data/*",
             contentScriptFile: [data.url("js/feedHandler.js"),
-                                    data.url("js/feedManager.js")],
+                                data.url("js/feedManager.js")],
             contentScriptWhen: 'ready',
             onAttach: function(worker) {
-                worker.port.on("getFeed", function(nothing){
+                worker.port.on("getFeed", function(nothing) {
                     worker.port.emit("feedList", feedList);
-                    console.log("emmitting feedlist");
-                })
+                    Log("Emmitting feedlist");
+                });
+            }
+        });
+
+        pageMod.PageMod({
+            include: "resource://blink/data/*",
+            contentScriptFile: data.url("js/bookmarksManager.js"),
+            contentScriptWhen: 'ready',
+            onAttach: function(worker) {
+                worker.port.on("getBookmarks", function(nothing) {
+                    worker.port.emit("bookmarks", bookmarksTree);
+                    Log("Emmitting bookmarks");
+                });
             }
         });
     }
@@ -122,39 +141,75 @@ function onPrefChange(prefName) {
 
 /* Initialise configuration with user-set preferences and feed list */
 function initConfig() {
-    if(self.loadReason == "install" || !ss.storage.feedList) {
-    	feedList = ["alpha"];
-    	ss.storage.feedList = feedList;
+    if (self.loadReason == "install" || !ss.storage.feedList) {
+        feedList = ["alpha"];
+        ss.storage.feedList = feedList;
     } else {
-    	feedList = ss.storage.feedList;
+        feedList = ss.storage.feedList;
     }
+    getBookmarks();
 }
 
 // For testing only.
 updateFeed([{
-        title : "Engadget",
-        websiteUrl : "http://www.engadget.com",
-        streamId : "feed/http://www.engadget.com/rss-full.xml",
-        icon : "http://storage.googleapis.com/site-assets/4i-1vhCwmRRLfmB7ypTnMh-ZKSvsz6Rgf0lfR0WWb0w_visual-150719f6d2d",
-        tags : ["tech"]
-    },{
-        title : "Techcrunch",
-        websiteUrl: "http://techcrunch.com",
-        streamId :  "feed/http://feeds.feedburner.com/Techcrunch",
-        icon : "http://storage.googleapis.com/site-assets/Xne8uW_IUiZhV1EuO2ZMzIrc2Ak6NlhGjboZ-Yk0rJ8_visual-14e42a4d997",
-        tags : ["tech"]
-    },{
-        title : "Gizmodo",
-        websiteUrl : "http://gizmodo.com",
-        streamId : "feed/http://feeds.gawker.com/gizmodo/full",
-        icon : "http://storage.googleapis.com/site-assets/YgTD2rF1XSAfR77lKtxrTwuR-azzbzQhUxfiRyg1u0w_icon-14cde04613e",
-        tags : ["tech"]
-    }]);
+    title: "Engadget",
+    websiteUrl: "http://www.engadget.com",
+    streamId: "feed/http://www.engadget.com/rss-full.xml",
+    icon: "http://storage.googleapis.com/site-assets/4i-1vhCwmRRLfmB7ypTnMh-ZKSvsz6Rgf0lfR0WWb0w_visual-150719f6d2d",
+    tags: ["tech"]
+}, {
+    title: "Techcrunch",
+    websiteUrl: "http://techcrunch.com",
+    streamId: "feed/http://feeds.feedburner.com/Techcrunch",
+    icon: "http://storage.googleapis.com/site-assets/Xne8uW_IUiZhV1EuO2ZMzIrc2Ak6NlhGjboZ-Yk0rJ8_visual-14e42a4d997",
+    tags: ["tech"]
+}, {
+    title: "Gizmodo",
+    websiteUrl: "http://gizmodo.com",
+    streamId: "feed/http://feeds.gawker.com/gizmodo/full",
+    icon: "http://storage.googleapis.com/site-assets/YgTD2rF1XSAfR77lKtxrTwuR-azzbzQhUxfiRyg1u0w_icon-14cde04613e",
+    tags: ["tech"]
+}]);
 
+/* Update feed with a new feed list */
 function updateFeed(newFeedList) {
     feedList = newFeedList;
     ss.storage.feedList = feedList;
     Log("Updated feed. feedList.length: " + ss.storage.feedList.length);
+}
+
+/* fetch bookmarks */
+function getBookmarks() {
+    Log("Getting bookmarks");
+    // TODO: Bookmarks caching
+    search({
+        query: ""
+    }).on("end", function(bookmarks) {
+        Log("Processing bookmarks");
+        // FIXME: Nested groups will be flattened this way.
+        var BMGroups = {};
+        for (let i = 0; i < bookmarks.length; i++) {
+            var bm = bookmarks[i];
+            var bookmark = {};
+            bookmark.title = bm.title;
+            bookmark.url = bm.url;
+
+            if (BMGroups[bm.group.id]) {
+                BMGroups[bm.group.id].children.push(bookmark);
+            } else {
+                BMGroups[bm.group.id] = {
+                    title: bm.group.title,
+                    children: [bookmark]
+                };
+            }
+        }
+
+        for (var key in BMGroups) {
+            if (BMGroups.hasOwnProperty(key)) {
+                bookmarksTree.push(BMGroups[key]);
+            }
+        }
+    });
 }
 
 /* util for debugging */

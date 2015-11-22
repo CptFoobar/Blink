@@ -1,7 +1,6 @@
 /* FeedHandler to, well, handle feeds. */
 (function() {
 
-    // TODO: For showing trending feed, use 'mixes' instead of 'streams'
     var streamUrlPrefix = "https://cloud.feedly.com/v3/streams/contents?streamId=";
     // Mix in some trending news
     var trendingUrlPrefix = "https://cloud.feedly.com/v3/mixes/contents?streamId=";

@@ -1,7 +1,7 @@
 (function() {
 
     var app = angular.module('blink', ['duScroll', 'ngAnimate', 'ngPostMessage',
-        'ngRoute', 'ui.bootstrap'
+        'ngRoute', 'ui.bootstrap', 'vAccordion'
     ]);
 
     var routingTable = [{
