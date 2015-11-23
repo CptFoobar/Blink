@@ -1,25 +1,28 @@
 <div class="container" scroll>
     <div class="row">
+        <!-- TODO: Add preloader -->
         <div class="column col-md-4" ng-repeat="i in [] | range:3">
             <div class="bl-cardbox" ng-repeat="entry in entryList" ng-if="$index % 3 == i">
                 <div class="bl-card">
                     <div class="bl-banner">
                         <span class="blur-filter"></span>
-                        <img class="banner-image noselect" ng-src="{{ entry.coverUrl }}"/>
+                        <img class="banner-image noselect" ng-src="{{ entry.coverUrl }}" />
                         <span class="banner-button btn-read-more"><a role="button" class="btn btn-default banner-hover-button" href="{{ entry.entryUrl }}" target="_blank">Read More</a></span>
-                        <h4><span class="label label-danger bl-flames noselect"><i class="octicon octicon-flame" ng-repeat="n in [] | range:entry.flames"></i></span></h4>
+                        <h4>
+                            <span class="label label-danger bl-flames noselect"><i class="octicon octicon-flame" ng-repeat="n in [] | range:entry.flames"></i></span>
+                        </h4>
                         <span class="banner-button share-buttons">
                             <div class="btn-group btn-group-justified" role="group" aria-label="Share">
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default share-fb" ng-click="popup('f', entry.entryUrl)"><i class="fa fa-facebook fa-lg"></i></button>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default share-fb" ng-click="popup('f', entry.entryUrl)"><i class="fa fa-facebook fa-lg"></i></button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default share-twitter" ng-click="popup('t', entry.entryTitle + '+' + entry.entryUrl)"><i class="fa fa-twitter fa-lg"></i></button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default share-google-plus" ng-click="popup('g', entry.entryUrl)"><i class="fa fa-google-plus fa-lg"></i></button>
+                                </div>
                             </div>
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default share-twitter" ng-click="popup('t', entry.entryTitle + '+' + entry.entryUrl)"><i class="fa fa-twitter fa-lg"></i></button>
-                            </div>
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default share-google-plus" ng-click="popup('g', entry.entryUrl)"><i class="fa fa-google-plus fa-lg"></i></button>
-                            </div>
-                        </div>
                         </span>
                     </div>
                     <div class="bl-content">

@@ -5,16 +5,11 @@ const pageMod = require("sdk/page-mod");
 const tabs = require("sdk/tabs");
 
 // Storage and permissions
-const {
-    when: unload
-} = require("sdk/system/unload");
+const { when: unload } = require("sdk/system/unload");
 const prefSet = require("sdk/simple-prefs");
 const ss = require("sdk/simple-storage");
 const services = require("sdk/preferences/service");
 const browserWindows = require("sdk/windows").browserWindows;
-const {
-    search
-} = require("sdk/places/bookmarks");
 
 // For  setting new tab URL
 const fx38 = require(data.url("js/fx38.js"));
@@ -155,6 +150,7 @@ function initConfig() {
         feedList = ss.storage.feedList;
     }
     getBookmarks();
+    getHistory();
 }
 
 // For testing only.
@@ -193,6 +189,7 @@ function updateFeed(newFeedList) {
 
 /* fetch bookmarks */
 function getBookmarks() {
+    const { search } = require("sdk/places/bookmarks");
     Log("Getting bookmarks");
     // TODO: Bookmarks caching
     search({
@@ -222,6 +219,35 @@ function getBookmarks() {
                 bookmarksTree.push(BMGroups[key]);
             }
         }
+    });
+}
+
+
+function getHistory() {
+    var history = [];
+    pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: data.url("js/historyManager.js"),
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getHistory", function(nothing) {
+                worker.port.emit("history", history);
+                Log("Emmitting history");
+            });
+        }
+    });
+    const { search } = require("sdk/places/history");
+    // Simple query
+    Log("Getting history");
+    search(
+      { url: "" },
+      { count: 1000,
+        sort: "visitCount",
+        descending: true
+      }
+    ).on("end", function (results) {
+        Log("Got history");
+        history = results;
     });
 }
 

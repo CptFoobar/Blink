@@ -2,7 +2,6 @@
 (function() {
 
     var bookmarks = [];
-    var firstRequest = true;
     self.port.on("bookmarks", function(bookmarksTree) {
         bookmarks = bookmarksTree;
     });

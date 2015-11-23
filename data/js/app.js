@@ -14,8 +14,8 @@
         controller: "FeedController"
     }, {
         target: "/recent",
-        url: "markup/recent.html",
-        controller: "RecentController"
+        url: "markup/history.html",
+        controller: "HistoryController"
     }, {
         target: "/bookmarks",
         url: "markup/bookmarks.html",

@@ -59,29 +59,31 @@
         var hash = hashCode(feedObject.title);
 
         var entryUrl = function(link, alt) {
-            if(urlRegex.test(link))
+            if (urlRegex.test(link))
                 return link;
             else return alt;
         };
 
         var parsedFeed = {
-            title : feedObject.title,
-            siteUrl : feedItem.websiteUrl,
-            iconUrl : feedItem.icon,
-            hashCode : hash,
+            title: feedObject.title,
+            siteUrl: feedItem.websiteUrl,
+            iconUrl: feedItem.icon,
+            hashCode: hash,
             entries: []
         };
 
         for (i = 0; i < feedObject.items.length; i++) {
-            parsedFeed.entries.push({
-                entryTitle: feedObject.items[i].title,
-                entryUrl: entryUrl(feedObject.items[i].originId, feedObject.items[i].alternate[0].href),
-                timestamp: feedObject.items[i].published,
-                coverUrl: getVisualUrl(feedObject.items[i].visual.url),
-                contentSnippet: getContentSnippet(feedObject.items[i].summary.content),
-                flames: getFlames(feedObject.items[i].engagementRate),
-                sourceHash : hash
-            });
+            if (usefulEntry(feedObject.items[i].title, feedObject.items[i].summary.content)) {
+                parsedFeed.entries.push({
+                    entryTitle: feedObject.items[i].title,
+                    entryUrl: entryUrl(feedObject.items[i].originId, feedObject.items[i].alternate[0].href),
+                    timestamp: feedObject.items[i].published,
+                    coverUrl: getVisualUrl(feedObject.items[i].visual.url),
+                    contentSnippet: getContentSnippet(feedObject.items[i].summary.content),
+                    flames: getFlames(feedObject.items[i].engagementRate),
+                    sourceHash: hash
+                });
+            }
         }
         //console.log("returned object");
         return parsedFeed;
@@ -94,46 +96,54 @@
         // Remove \r and \n occurences
         snippet = snippet.replace(/\r?\n/g, "");
         // Replace &quot; with ""
-        snippet = snippet.replace(/&quot;/g,'"');
+        snippet = snippet.replace(/&quot;/g, '"');
         // Replace all occurences of 'Read More'
         var regex = new RegExp("Read More", 'g');
         snippet = snippet.replace(regex, '');
-        if(snippet.length > 120)
+        if (snippet.length > 120)
             snippet = snippet.substring(0, 148);
-        if(snippet.length === 0)
+        if (snippet.length === 0)
             snippet = "";
         else snippet += "...";
         return snippet;
     }
 
     var getFlames = function(er) {
-        if(!er || er < 3.5) return 0;
-        else if(er > 3.5 && er < 8) return 1;
+        if (!er || er < 3.5) return 0;
+        else if (er > 3.5 && er < 8) return 1;
         else return 2;
     };
 
+    var usefulEntry = function(title, snippet) {
+        if (title.length === 0 && snippet.length === 0)
+            return false;
+        else return true;
+    }
+
     var getVisualUrl = function(img) {
-        if(img === undefined || img === 'none')
+        if (img === undefined || img === 'none')
             return "https://unsplash.it/600/480/?random";
         else return img;
     }
 
     /* Generate hash code for given string */
-    var hashCode = function(s){
+    var hashCode = function(s) {
         var hash = 0;
         if (s.length == 0) return hash;
         for (i = 0; i < s.length; i++) {
             char = s.charCodeAt(i);
-            hash = ((hash<<5)-hash)+char;
+            hash = ((hash << 5) - hash) + char;
             hash = hash & hash; // Convert to 32bit integer
         }
         return hash;
     }
 
     var feedHandler = {
-        fetchAll : fetchAll,
-        fetchById : fetchById,
-        ping : function(){console.log("Ping received at feedHandler");}
+        fetchAll: fetchAll,
+        fetchById: fetchById,
+        ping: function() {
+            console.log("Ping received at feedHandler");
+        }
     };
 
     // HACK: Shouldn't set feedHandler as a window attribute (or should we?)
