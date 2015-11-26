@@ -52,3 +52,6 @@ List of targets for v1:
     - _Help_ : How to use Blink
     - _About_ : About Blink (ahem, and me)
     - _Support_: $$$ = <3
+
+* Misc
+    - [Isotope and packery](http://desandro.com/masonry)

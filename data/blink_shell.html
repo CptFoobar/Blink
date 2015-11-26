@@ -27,6 +27,7 @@
     <script src="js/controllers/HistoryController.js" charset="utf-8"></script>
     <script src="js/controllers/HomeController.js" charset="utf-8"></script>
     <script src="js/controllers/NavController.js" charset="utf-8"></script>
+    <script src="js/controllers/ContentController.js" charset="utf-8"></script>
 
 </head>
 
@@ -74,7 +75,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li>
-                            <a href="#/content">
+                            <a href="#/blink/content">
                                 <i class="fa fa-pencil fa-fw fa-lg"></i>       Content
                             </a>
                         </li>
@@ -104,8 +105,10 @@
             <form class="navbar-form navbar-right" role="search">
                 <button type="submit" class="btn btn-search" ng-mouseover="searchbarOpen=true" ng-class="{btnActive: searchbarOpen}"></button>
                 <div class="form-group searchbar" ng-show="searchbarOpen">
-                    <input ng-model="asyncSelected" uib-typeahead="suggestion for suggestion in getSuggestions($viewValue)" type="text" class="form-control" placeholder="Google Search..." focus-me="searchbarOpen" ng-keyup="$event.keyCode == 13 && google($viewValue, asyncSelected)"
-                    typeahead-focus-first="false" typeahead-popup-template-url="autoSuggest.html" style="width: 300px;"/>
+                    <input ng-model="asyncSelected" uib-typeahead="suggestion for suggestion in getSuggestions($viewValue)"
+                      type="text" class="form-control" placeholder="Google Search..." focus-me="searchbarOpen" typeahead-focus-first="false"
+                      ng-keyup="$event.keyCode == 13 && google($viewValue, asyncSelected)"  typeahead-on-select="google($viewValue, asyncSelected)"
+                      typeahead-popup-template-url="autoSuggest.html" style="width: 300px;"/>
                 </div>
             </form>
         </div>

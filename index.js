@@ -139,6 +139,19 @@ function setPageMods() {
             });
         }
     });
+
+    // PageMod for content
+    pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: data.url("js/contentManager.js"),
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getContentList", function(nothing) {
+                worker.port.emit("contentList", feedList);
+                Log("Emmitting contentlist");
+            });
+        }
+    });
 }
 
 /* Initialise configuration with user-set preferences and feed list */
@@ -159,25 +172,33 @@ updateFeed([{
     websiteUrl: "http://www.engadget.com",
     streamId: "feed/http://www.engadget.com/rss-full.xml",
     icon: "http://storage.googleapis.com/site-assets/4i-1vhCwmRRLfmB7ypTnMh-ZKSvsz6Rgf0lfR0WWb0w_visual-150719f6d2d",
-    tags: ["tech"]
+    description: "lorem ipsum dolor set amit",
+    tags: ["tech"],
+    wanted: true
 }, {
     title: "Techcrunch",
     websiteUrl: "http://techcrunch.com",
     streamId: "feed/http://feeds.feedburner.com/Techcrunch",
     icon: "http://storage.googleapis.com/site-assets/Xne8uW_IUiZhV1EuO2ZMzIrc2Ak6NlhGjboZ-Yk0rJ8_visual-14e42a4d997",
-    tags: ["tech"]
+    description: "lorem ipsum dolor set amit",
+    tags: ["tech"],
+    wanted: true
 }, {
     title: "Gizmodo",
     websiteUrl: "http://gizmodo.com",
     streamId: "feed/http://feeds.gawker.com/gizmodo/full",
-    icon: "http://storage.googleapis.com/site-assets/YgTD2rF1XSAfR77lKtxrTwuR-azzbzQhUxfiRyg1u0w_icon-14cde04613e",
-    tags: ["tech"]
+    icon: "http://storage.googleapis.com/site-assets/YgTD2rF1XSAfR77lKtxrTwuR-azzbzQhUxfiRyg1u0w_visual-14cde04613e",
+    description: "lorem ipsum dolor set amit",
+    tags: ["tech"],
+    wanted: true
 }, {
     title: "Dribbble",
     websiteUrl: "https://dribbble.com/",
     streamId: "feed/http://dribbble.com/shots/popular.rss",
     icon: "http://storage.googleapis.com/site-assets/BnJ8HLdN6KkB0LbmwfVmx3aWGMAdrc5NScyF4JLTJnM_visual-14a5c737fe2",
-    tags: ["art"]
+    description: "lorem ipsum dolor set amit",
+    tags: ["art"],
+    wanted: true
 }]);
 
 /* Update feed with a new feed list */
