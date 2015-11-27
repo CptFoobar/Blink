@@ -164,3 +164,44 @@ nav.navbar.navbar-transparent {
     border-radius: 0;
     box-shadow: none;
 }
+
+
+.navbar-collapse-transparent {
+    max-height: 600px !important;
+    float: right;
+    min-width: 350px;
+}
+
+.add-border {
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+.responsive-bg {}
+
+@media screen and (max-width: 768px) {
+    .responsive-bg {
+        background-color: rgba(73, 61, 96, 0.96);
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.175);
+        border: 1px solid rgba(91,80,112,1);
+    }
+
+    .responsive-bg > ul > li > a:hover {
+        background-color: #5B5070;
+    }
+
+    .responsive-bg > ul > li > .dropdown-menu > li {
+        padding-left: 25px;
+    }
+
+    .responsive-bg > form:hover {
+        background-color: #5B5070;
+    }
+}
+
+.responsive-search {}
+
+@media screen and (max-width: 768px) {
+    .responsive-search {
+        display: inline-block;
+    }
+}

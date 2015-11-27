@@ -43,6 +43,10 @@
             else window.location = "https://www.google.com/search?q=" +
                 encodeURIComponent(selection);
         };
+
+        $scope.toggleSearchbar = function() {
+            $scope.searchbarOpen= !$scope.searchbarOpen;
+        };
     };
 
     app.controller('NavController', ['$scope', '$http', NavController]);
