@@ -71,12 +71,12 @@
             <p class="tip">Click the 'Add Content' on the bottom-right of the page to get started</p>
         </span>
     </div>
-    <div class="row text-center alert-wrapper">
+    <div class="row text-center alert-wrapper" ng-if="alerts[0]">
         <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="5000"> {{ alert.msg }}</uib-alert>
     </div>
     <div class="row" ng-if="items[0]">
-        <div class="column col-xs-4 col-sm-3 col-md-2 col-md-push-2 content-wrapper" ng-repeat="i in [] | range:4">
-            <div class="item-container noselect" ng-repeat="src in items" ng-if="$index % 4 === i">
+        <div class="column col-xs-8 col-sm-3 col-md-2 col-md-push-1 content-wrapper" ng-repeat="i in [] | range:getColumns()">
+            <div class="item-container noselect" ng-repeat="src in items" ng-if="$index % getColumns() === i">
                 <span>
                     <h5><span class="delete-button" ng-click="promptDelete($index)"><i class="fa fa-trash fa-fw fa-lg"></i></span></h5>
                 <img ng-src="{{ src.icon }}" class="feed-icon" />

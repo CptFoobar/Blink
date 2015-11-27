@@ -68,6 +68,13 @@
             return array;
         };
 
+        $scope.columns = function() {
+            var w = window.innerWidth;
+            if (w > 1000) return 3;
+            else if (w < 1000 && w > 420) return 2;
+            else return 1;
+        };
+
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
             if (data.target == "FeedController") {

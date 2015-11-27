@@ -1,13 +1,12 @@
 .bl-cardbox {
     margin-bottom: 40px;
-    max-width: 320px;
+    max-width: 90%;
 }
 
 .bl-card {
     display: block;
     overflow: auto;
     background-color: #fdfdfd;
-    max-width: 320px;
     border-radius: 7px;
     box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.4);
     position: relative;

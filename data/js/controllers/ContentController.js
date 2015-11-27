@@ -83,6 +83,16 @@
             console.log("called getContentList.");
         };
 
+
+        $scope.getColumns = function() {
+            var w = window.innerWidth;
+            if(w > 1300) return 5
+            else if(w < 1300 && w > 1000) return 4;
+            else if(w < 1000 && w > 600) return 3;
+            else if(w < 600 && w > 400) return 2;
+            else return 1;
+        }
+
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
             if (data.target == "ContentController") {
