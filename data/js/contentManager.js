@@ -36,6 +36,24 @@
         }
     };
 
+    var getAutocompleteSuggestions = function(query) {
+        var request = new XMLHttpRequest();
+        var completeQuery = "https://cloud.feedly.com/v3/search/feeds?q="
+                                + query + "&count=8";
+        console.log("Getting auto-complete suggestions");
+        request.open("GET", completeQuery, true);
+        request.onload = function() {
+            console.log("Got autocomplete list");
+            window.postMessage({
+                target: "ContentController",
+                intent: "suggestionList",
+                payload: JSON.parse(request.responseText).results
+            }, "resource://blink/data/blink_shell.html#/blink/content");
+        };
+        // TODO: request.onerror
+        request.send();
+    };
+
 
     /* Listen for window message events, and process accordingly. */
     window.addEventListener('message', function(event) {
@@ -46,6 +64,10 @@
             switch (intent) {
                 case "fetch":
                     fetchContentList(3);
+                    break;
+                case "search":
+                    console.log("search request");
+                    getAutocompleteSuggestions(message.payload.query);
                     break;
             }
         }

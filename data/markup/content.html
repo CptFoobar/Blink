@@ -15,7 +15,7 @@
     <a>
         <div class="media">
             <div class="media-left">
-                <img class="media-object" ng-src="{{match.model.icon}}" style=" width: 64px; padding-top: 2px">
+                <img class="media-object" ng-src="{{match.model.visualUrl}}" style=" width: 64px; padding-top: 2px">
             </div>
             <div class="media-body">
                 <span class="media-heading suggestion-title">{{ match.model.title }}</span><br />
@@ -57,6 +57,7 @@
                   type="text" class="form-control" placeholder="Search for feeds..." ng-keyup="$event.keyCode == 13 && addSource(asyncSelected)"
                   typeahead-on-select="addSource(asyncSelected)" typeahead-popup-template-url="autoSuggestSource.html"
                   typeahead-template-url="suggestedSource.html" autofocus/>
+                <uib-progressbar class="progress-striped active" value="dynamic" type="success" ng-show="showProgressbar"></uib-progressbar>
             </div>
         </form>
     </div>

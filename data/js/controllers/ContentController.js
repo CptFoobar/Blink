@@ -1,4 +1,6 @@
 (function() {
+    'use strict'
+    // ^ since we cannot (yet) use classes without strict mode
 
     var app = angular.module('blink');
 
@@ -23,7 +25,10 @@
             var index = $scope.items.indexOf(item);
             if (index >= 0) {
                 $scope.items.splice(index, 1);
-                $scope.alerts.push({type:"danger", msg:"Deleted '" + item.title + "' from your feed list."});
+                $scope.alerts.push({
+                    type: "danger",
+                    msg: "Deleted '" + item.title + "' from your feed list."
+                });
             }
         }
 
@@ -35,6 +40,7 @@
 
             var modalInstance = $uibModal.open({
                 animation: true,
+                size: 'lg',
                 templateUrl: 'addContent.html',
                 controller: 'AddContentController'
             });
@@ -86,12 +92,12 @@
 
         $scope.getColumns = function() {
             var w = window.innerWidth;
-            if(w > 1300) return 5
-            else if(w < 1300 && w > 1000) return 4;
-            else if(w < 1000 && w > 600) return 3;
-            else if(w < 600 && w > 400) return 2;
+            if (w > 1300) return 5
+            else if (w < 1300 && w > 1000) return 4;
+            else if (w < 1000 && w > 600) return 3;
+            else if (w < 600 && w > 400) return 2;
             else return 1;
-        }
+        };
 
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
@@ -122,7 +128,32 @@
         };
     };
 
-    var AddContentController = function($scope, $uibModalInstance) {
+    var AddContentController = function($scope, $uibModalInstance, $q) {
+
+        $scope.showProgressbar = false;
+
+        function ContentPromise() {
+            this.deferred = undefined;
+        }
+
+        ContentPromise.prototype.setPromise = function(promise) {
+            this.deferred = promise;
+        }
+        ContentPromise.prototype.resetPromise = function() {
+            this.deferred = undefined;
+        }
+        ContentPromise.prototype.resolveContent = function(data) {
+            this.deferred.resolve(data);
+        }
+        ContentPromise.prototype.rejectContent = function(data) {
+            this.deferred.reject(data);
+        }
+        ContentPromise.prototype.getPromise = function() {
+            return this.deferred.promise;
+        }
+
+        var contentPromise = new ContentPromise();
+
         $scope.addSource = function(item) {
             console.log("item to add is: " + JSON.stringify(item));
             $uibModalInstance.close(item);
@@ -130,44 +161,49 @@
 
         $scope.log = function() {
             console.log("clicked");
-        }
+        };
+
+        var contentPromise = new ContentPromise();
 
         $scope.getSourceSuggestions = function(query) {
-            $scope.suggestions = [{
-                title: "Engadget",
-                websiteUrl: "http://www.engadget.com",
-                streamId: "feed/http://www.engadget.com/rss-full.xml",
-                icon: "http://storage.googleapis.com/site-assets/4i-1vhCwmRRLfmB7ypTnMh-ZKSvsz6Rgf0lfR0WWb0w_visual-150719f6d2d",
-                description: "lorem ipsum dolor set amit",
-                tags: ["tech"],
-                wanted: true
-            }, {
-                title: "Techcrunch",
-                websiteUrl: "http://techcrunch.com",
-                streamId: "feed/http://feeds.feedburner.com/Techcrunch",
-                icon: "http://storage.googleapis.com/site-assets/Xne8uW_IUiZhV1EuO2ZMzIrc2Ak6NlhGjboZ-Yk0rJ8_visual-14e42a4d997",
-                description: "lorem ipsum dolor set amit",
-                tags: ["tech"],
-                wanted: true
-            }, {
-                title: "Gizmodo",
-                websiteUrl: "http://gizmodo.com",
-                streamId: "feed/http://feeds.gawker.com/gizmodo/full",
-                icon: "http://storage.googleapis.com/site-assets/YgTD2rF1XSAfR77lKtxrTwuR-azzbzQhUxfiRyg1u0w_visual-14cde04613e",
-                description: "lorem ipsum dolor set amit",
-                tags: ["tech"],
-                wanted: true
-            }, {
-                title: "Dribbble",
-                websiteUrl: "https://dribbble.com/",
-                streamId: "feed/http://dribbble.com/shots/popular.rss",
-                icon: "http://storage.googleapis.com/site-assets/BnJ8HLdN6KkB0LbmwfVmx3aWGMAdrc5NScyF4JLTJnM_visual-14a5c737fe2",
-                description: "lorem ipsum dolor set amit",
-                tags: ["art"],
-                wanted: true
-            }];
-            return $scope.suggestions;
+            console.log("Querying for: " + query);
+            // Show progressbar
+            $scope.showProgressbar = true;
+            contentPromise.setPromise($q.defer());
+            $scope.$emit(
+                '$messageOutgoing',
+                angular.toJson({
+                    target: "ContentManager",
+                    intent: "search",
+                    payload: {
+                        query: query
+                    }
+                })
+            );
+            console.log("called getSourceSuggestions.");
+            return contentPromise.getPromise()
+                .then(function(suggestions) {
+                    console.log(JSON.stringify(suggestions));
+                    return suggestions;
+                });
         };
+
+        $scope.$root.$on('$messageIncoming', function(event, data) {
+            data = angular.fromJson(data);
+            if (data.target == "ContentController") {
+                console.log("message for CC");
+                switch (data.intent) {
+                    case "suggestionList":
+                        console.log("loading suggestions");
+                        // Hide progressbar
+                        $scope.showProgressbar = false;
+                        // TODO: Filter (or mark) results already in feed list
+                        contentPromise.resolveContent(data.payload);
+                        break;
+                }
+            }
+        });
+
     };
 
     app.controller('ContentController', ContentController);
