@@ -22,8 +22,18 @@
 
         $scope.deleteItem = function(item) {
             console.log('deleting ' + JSON.stringify(item));
-            var index = $scope.items.indexOf(item);
+            var index = indexOf(item);
             if (index >= 0) {
+                $scope.$emit(
+                    '$messageOutgoing',
+                    angular.toJson({
+                        target: "ContentManager",
+                        intent: "delete",
+                        payload: {
+                            removeItem: item
+                        }
+                    })
+                );
                 $scope.items.splice(index, 1);
                 $scope.alerts.push({
                     type: "danger",
@@ -33,8 +43,45 @@
         }
 
         $scope.addSourceItem = function(addItem) {
-            console.log("Adding " + JSON.stringify(addItem));
-        }
+            console.log("adding new item " + JSON.stringify(addItem));
+            var newFeedItem = {
+                title: addItem.title,
+                websiteUrl: addItem.website,
+                streamId: addItem.feedId,
+                icon: addItem.visualUrl,
+                description: addItem.description,
+                tags: addItem.deliciousTags,
+                wanted: true
+            };
+
+            console.log("Adding new item: " + JSON.stringify(newFeedItem));
+
+            $scope.$emit(
+                '$messageOutgoing',
+                angular.toJson({
+                    target: "ContentManager",
+                    intent: "add",
+                    payload: {
+                        addItem: newFeedItem
+                    }
+                })
+            );
+
+            if(indexOf(newFeedItem) === -1) {
+                // New Source
+                $scope.items.push(newFeedItem);
+                $scope.alerts.push({
+                    type: "success",
+                    msg: newFeedItem.title + " has been added to your feed list."
+                });
+            } else {
+                // Source already exists
+                $scope.alerts.push({
+                    type: "warning",
+                    msg: newFeedItem.title + " is already a source."
+                });
+            }
+        };
 
         $scope.addContent = function() {
 
@@ -47,12 +94,8 @@
 
             modalInstance.result.then(function(addItem) {
                 $scope.addSourceItem(addItem);
-                $scope.alerts.push({
-                    type: "success",
-                    msg: addItem.title + " has been added to your feed list."
-                });
             }, function() {
-                console.log('Modal dismissed at: ' + new Date());
+                //console.log('Nothing added');
             });
         };
 
@@ -114,6 +157,17 @@
 
         $scope.getContentList();
 
+        // Helper function to get index of object
+        var indexOf = function(o) {
+            for (var i = 0; i < $scope.items.length; i++) {
+                if ($scope.items[i].title == o.title &&
+                        $scope.items[i].websiteUrl == o.websiteUrl) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+
     };
 
     var DeleteModalController = function($scope, $uibModalInstance, toDelete) {
@@ -132,6 +186,7 @@
 
         $scope.showProgressbar = false;
 
+        /* Create a custom promise for async suggestions */
         function ContentPromise() {
             this.deferred = undefined;
         }
@@ -155,12 +210,7 @@
         var contentPromise = new ContentPromise();
 
         $scope.addSource = function(item) {
-            console.log("item to add is: " + JSON.stringify(item));
             $uibModalInstance.close(item);
-        };
-
-        $scope.log = function() {
-            console.log("clicked");
         };
 
         var contentPromise = new ContentPromise();
@@ -183,7 +233,7 @@
             console.log("called getSourceSuggestions.");
             return contentPromise.getPromise()
                 .then(function(suggestions) {
-                    console.log(JSON.stringify(suggestions));
+                    //console.log(JSON.stringify(suggestions));
                     return suggestions;
                 });
         };

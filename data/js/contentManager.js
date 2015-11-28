@@ -54,6 +54,13 @@
         request.send();
     };
 
+    var addSourceItem = function(item) {
+        self.port.emit("addSourceItem", item);
+    }
+
+    var deleteSourceItem = function(item) {
+        self.port.emit("deleteSourceItem", item);
+    }
 
     /* Listen for window message events, and process accordingly. */
     window.addEventListener('message', function(event) {
@@ -63,12 +70,20 @@
             var intent = message.intent;
             switch (intent) {
                 case "fetch":
+                    console.log("fetch request");
                     fetchContentList(3);
                     break;
                 case "search":
                     console.log("search request");
                     getAutocompleteSuggestions(message.payload.query);
                     break;
+                case "add":
+                    console.log("add request");
+                    addSourceItem(message.payload.addItem);
+                    break;
+                case "delete":
+                    console.log("delete request");
+                    deleteSourceItem(message.payload.removeItem);
             }
         }
     }, false);

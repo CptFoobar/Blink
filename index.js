@@ -45,6 +45,8 @@ unload(function() {
     clearSettings();
 });
 
+// TODO: MIGRATION FOR UPGRADERS!!
+
 /* Clear settings on disable/uninstall.
    But due to bug https://bugzilla.mozilla.org/show_bug.cgi?id=627432#c12,
    uninstall is never called */
@@ -150,6 +152,17 @@ function setPageMods() {
                 worker.port.emit("contentList", feedList);
                 Log("Emmitting contentlist");
             });
+            worker.port.on("addSourceItem", function(item) {
+                feedList.push(item);
+                updateFeed();
+            });
+            worker.port.on("deleteSourceItem", function(item) {
+                var index = indexOf(item);
+                if (index >= 0) {
+                    feedList.splice(index, 1);
+                    updateFeed();
+                }
+            });
         }
     });
 }
@@ -167,7 +180,7 @@ function initConfig() {
 }
 
 // For testing only.
-updateFeed([{
+makeFeed([{
     title: "Engadget",
     websiteUrl: "http://www.engadget.com",
     streamId: "feed/http://www.engadget.com/rss-full.xml",
@@ -202,11 +215,18 @@ updateFeed([{
 }]);
 
 /* Update feed with a new feed list */
-function updateFeed(newFeedList) {
+function makeFeed(newFeedList) {
     feedList = newFeedList;
     ss.storage.feedList = feedList;
     Log("Updated feed. feedList.length: " + ss.storage.feedList.length);
 }
+
+function updateFeed() {
+    ss.storage.feedList = feedList;
+    Log("Updated feed. feedList.length: " + ss.storage.feedList.length);
+}
+
+
 
 /* fetch bookmarks */
 function getBookmarks() {
@@ -271,6 +291,17 @@ function getHistory() {
         history = results;
     });
 }
+
+/* Helper function to get index of object */
+var indexOf = function(o) {
+    for (var i = 0; i < feedList.length; i++) {
+        if (feedList[i].title == o.title &&
+                feedList[i].websiteUrl == o.websiteUrl) {
+            return i;
+        }
+    }
+    return -1;
+};
 
 /* util for debugging */
 function Log(log) {
