@@ -84,6 +84,7 @@
                 case "delete":
                     console.log("delete request");
                     deleteSourceItem(message.payload.removeItem);
+                    break;
             }
         }
     }, false);

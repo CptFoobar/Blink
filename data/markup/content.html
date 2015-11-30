@@ -63,7 +63,10 @@
     </div>
 </script>
 <div class="container">
-    <div class="row text-center" ng-if="!items[0]">
+    <div class="row text-center alert-wrapper" ng-if="alerts[0]">
+        <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="5000"> {{ alert.msg }}</uib-alert>
+    </div>
+    <div class="row text-center noselect" ng-if="!items[0]" style="cursor: defualt">
         <span class="no-items">
             <br />
             <i class="fa fa-exclamation fa-3x"></i><br /><br />
@@ -71,9 +74,6 @@
             Let's add some content to your news feed. <br /><br/>
             <p class="tip">Click the 'Add Content' on the bottom-right of the page to get started</p>
         </span>
-    </div>
-    <div class="row text-center alert-wrapper" ng-if="alerts[0]">
-        <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="5000"> {{ alert.msg }}</uib-alert>
     </div>
     <div class="row" ng-if="items[0]">
         <div class="column col-xs-8 col-sm-3 col-md-2 col-md-push-1 content-wrapper" ng-repeat="i in [] | range:getColumns()">

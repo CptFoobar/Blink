@@ -13,8 +13,8 @@ List of targets for v1:
     Four pages, _Home_, _Feed_, _Recent_ and _Bookmarks_
     - ~~_Home_: Minimal home screen~~
     - ~~_Feed_: Cards layout for feed~~
-    - _Recent_: Show top visited sites
-    - _Bookmarks_: Show Bookmarks
+    - ~~_Recent_: Show top visited sites~~
+    - ~~_Bookmarks_: Show Bookmarks~~
     - ~~Flat-Material(-ish) design~~
 
 
@@ -31,21 +31,23 @@ List of targets for v1:
 
 
 * Settings Options
+    - _Greeting_ : Show greeting
     - _Name_ : Input user name for greeting
     - _Location_ : Use automatic/manual location  
     - _Weather_ : C/F
-    - ~~(?) _Theme_ : Set dark/light theme~~
-    - _Feed type_ :
+    - ~~(X) _Theme_ : Set dark/light theme~~
+    - _Feed content_ :
         <-- Latest only -- Latest > Trending -- Balanced -- Trending > Latest -- Trending only -->
+    - _History_ : Show last < 100 - 250 - 500 - 750 - 1000 >
+
 
 
 * Content
 
     => Using feedly API
-    - _Add_ :  Add content from feedly
-    - _Remove_ : Remove feeds from feed list
-    - _Search_ : Search for streams
-    indexed by feedly
+    - ~~_Add_ :  Add content from feedly~~
+    - ~~_Remove_ : Remove feeds from feed list~~
+    - ~~_Search_ : Search for streams indexed by feedly~~
 
 
 * Other Views

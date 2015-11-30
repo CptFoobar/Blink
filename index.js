@@ -21,7 +21,7 @@ var devlogs = true; // set true to enable logging
 var feedList = [];
 var bookmarksTree = [];
 var bookmarks = [];
-
+var userSettings = [];
 const useNewAPI = require("sdk/system").version >= "41.0";
 
 var newTabURL = data.url("blink_shell.html");
@@ -58,7 +58,8 @@ exports.onUnload = function(reason) {
 /* Returns original new tab. If none found, returns default new tab */
 function getOriginalNewTab() {
     var ont;
-    if (self.loadReason == "install" || self.loadReason == "enable") {
+    if (self.loadReason == "install" || self.loadReason == "enable"
+            || self.loadReason == "upgrade") {
         ont = services.get("browser.newtab.url");
         ss.storage.originalNewTab = ont;
     } else {
@@ -165,6 +166,22 @@ function setPageMods() {
             });
         }
     });
+
+    // PageMod for settings
+    pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: data.url("js/settingsManager.js"),
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getUserSettings", function(nothing) {
+                worker.port.emit("userSettings", userSettings);
+                Log("Emmitting userSettings");
+            });
+            worker.port.on("saveUserSettings", function(newSettings) {
+                updateUserSettings(newSettings);
+            });
+        }
+    });
 }
 
 /* Initialise configuration with user-set preferences and feed list */
@@ -172,8 +189,15 @@ function initConfig() {
     if (self.loadReason == "install" || !ss.storage.feedList) {
         feedList = ["alpha"];
         ss.storage.feedList = feedList;
+        userSettings = {
+            showGreeting: true,
+            userName: "Emma",
+            feedType: 'b'
+        };
+        ss.storage.userSettings = userSettings;
     } else {
         feedList = ss.storage.feedList;
+        userSettings = ss.storage.userSettings;
     }
     getBookmarks();
     getHistory();
@@ -226,7 +250,12 @@ function updateFeed() {
     Log("Updated feed. feedList.length: " + ss.storage.feedList.length);
 }
 
-
+/* get Settings */
+function updateUserSettings(newSettings) {
+    ss.storage.userSettings = newSettings;
+    userSettings = newSettings;
+    console.log("updated. new settings are: " + JSON.stringify(userSettings));
+}
 
 /* fetch bookmarks */
 function getBookmarks() {
@@ -263,7 +292,7 @@ function getBookmarks() {
     });
 }
 
-
+/* Get history */
 function getHistory() {
     var history = [];
     pageMod.PageMod({
@@ -282,7 +311,7 @@ function getHistory() {
     Log("Getting history");
     search(
       { url: "" },
-      { count: 1000,
+      { count: 750,
         sort: "visitCount",
         descending: true
       }

@@ -1,0 +1,40 @@
+<uib-progressbar class="progress-striped active" value="dynamic" type="warning" ng-show="showProgressbar" style="border-radius: 5px"></uib-progressbar>
+<div class="container" ng-hide="showProgressbar">
+    <div class="row text-center alert-wrapper" ng-if="alerts[0]">
+        <uib-alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)" dismiss-on-timeout="3500"> {{ alert.msg }} </uib-alert>
+    </div>
+    <div class="row text-center">
+        <h2 style="font-family: 'Lobster'">Settings</h2>
+    </div>
+    <br />
+    <div class="row">
+        <form class="col-xs-10 col-xs-push-1 col-md-push-2 col-md-8">
+            <h4 style="font-family: 'Lobster'">Home</h4>
+            <hr>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="showGreeting"> Show Greeting</input>
+                </label>
+            </div>
+            <div class="form-group form-inline">
+                <label for="userName">Greet by name:&nbsp;&nbsp;</label>
+                <input type="text" class="form-control" id="userName" ng-model="userName" placeholder="{{ userName }}" ng-disabled="!showGreeting" style="color: #eee">
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <form class="col-xs-10 col-xs-push-1 col-md-push-2 col-md-8">
+            <h4 style="font-family: 'Lobster'">Feed</h4>
+            <hr>
+            <div>
+                <h6>Feed content type:</h6>
+                <div class="btn-group">
+                    <label class="btn btn-success" ng-model="feedType" uib-btn-radio="'l'">Latest news only</label>
+                    <label class="btn btn-success" ng-model="feedType" uib-btn-radio="'b'">Balanced</label>
+                    <label class="btn btn-success" ng-model="feedType" uib-btn-radio="'t'">Trending news only</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <button class="btn btn-primary save-button" ng-click="saveConfig()"><i class="fa fa-floppy-o fa-fw fa-2x"></i></button>
+</div>

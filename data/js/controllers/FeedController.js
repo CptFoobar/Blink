@@ -4,7 +4,7 @@
     var TAG = "BLINK: ";
 
     var FeedController = function($scope, $document) {
-        // TODO: Move entrylist and feedmap into a service
+        // TODO: Add timeout for feed and display 'Aw snap'
         $scope.entryList = [];
         $scope.feedMap = {};
         $scope.showTopButton = false;

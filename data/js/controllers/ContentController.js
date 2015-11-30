@@ -54,8 +54,6 @@
                 wanted: true
             };
 
-            console.log("Adding new item: " + JSON.stringify(newFeedItem));
-
             $scope.$emit(
                 '$messageOutgoing',
                 angular.toJson({
@@ -186,6 +184,7 @@
 
         $scope.showProgressbar = false;
 
+        /* TODO: Check for ES6 support in Firefox and change this to class */
         /* Create a custom promise for async suggestions */
         function ContentPromise() {
             this.deferred = undefined;
@@ -256,8 +255,11 @@
 
     };
 
-    app.controller('ContentController', ContentController);
-    app.controller('AddContentController', AddContentController);
-    app.controller('DeleteModalController', DeleteModalController);
+    app.controller('ContentController', ['$scope', '$uibModal',
+                                                        ContentController]);
+    app.controller('AddContentController', ['$scope', '$uibModalInstance',
+                                                '$q', AddContentController]);
+    app.controller('DeleteModalController', ['$scope', '$uibModalInstance',
+                                        'toDelete', DeleteModalController]);
 
 }());
