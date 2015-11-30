@@ -12,7 +12,8 @@
 
        $scope.clock = Date.now();
        $scope.greeting = greetingFor(new Date().getHours());
-       $scope.username = "Emma";
+       $scope.username = "";
+       $scope.showGreeting = true;
 
        $scope.clocky = function() {
            $interval(function () {
@@ -23,6 +24,28 @@
 
        $scope.clocky();
 
+       $scope.$emit(
+           '$messageOutgoing',
+           angular.toJson({
+               target: "HomeManager",
+               intent: "getHomeConfig",
+               payload: {}
+           })
+       );
+
+       $scope.$root.$on('$messageIncoming', function(event, data) {
+           data = angular.fromJson(data);
+           if (data.target == "HomeController") {
+               console.log("message for HC");
+               switch (data.intent) {
+                   case "homeConfig":
+                       $scope.username = data.payload.config.userName;
+                       $scope.showGreeting = data.payload.config.showGreeting;
+                       break;
+               }
+           }
+       });
+       console.log("called fetchAllBookmarks.");
     };
 
     app.controller('HomeController', ['$scope', '$interval', HomeController]);

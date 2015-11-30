@@ -3,9 +3,17 @@
     /* feedHandler is available here (given by pagemod) */
 
     var feedList= [];
-
+    var feedRatio = -1; // 0-latest, 1-balanced, 2-trending
     self.port.on("feedList", function(feed) {
         feedList = feed;
+    });
+
+    self.port.on("feedRatio", function(ratio) {
+        ratio = ratio.feedRatio;
+        console.log("Feed ratio: " + ratio);
+        if(ratio === 'l') feedRatio = 0;
+        else if(ratio === 't') feedRatio = 2;
+        else feedRatio = 1;
     });
 
     // If feedList is empty, ping the add-on process to get it
@@ -21,12 +29,12 @@
             return;
         }
 
-        if(feedList.length == 0) {
+        if(feedList.length == 0 || feedRatio === -1) {
             setTimeout(function() {
                 fetchAllFeed(timeout - 1);
             }, 1000);
         } else {
-        feedHandler.fetchAll(feedList);
+            feedHandler.fetchAll(feedList, feedRatio);
         }
     };
 
@@ -38,15 +46,9 @@
             var intent = message.intent;
             switch (intent) {
                 case "fetch":
-                    fetchAllFeed(3);
-                    break;
-                case "fetchById":
-                    var data = JSON.parse(message.data);
-                    feedHandler.fetchById(data.streamId);
-                    break;
-                case "searchContent ":
-                    var data = JSON.parse(message.data);
-                    contentHandler.search(data.query);
+                    feedRatio = -1;
+                    self.port.emit("getFeedConfig", {});
+                    fetchAllFeed(4);
                     break;
             }
         }

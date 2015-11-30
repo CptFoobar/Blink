@@ -6,7 +6,7 @@
         <div class="col-md-8 col-md-push-2 clocky">
             <h1 class="time"> {{ clock | date:'hh mm' }} </h1>
             <h4 class="day"> {{ clock | date:'EEEE, MMMM dd' }} </h4>
-            <h3 class="greeting">Good {{ greeting }}, {{ username }}</h3>
+            <h3 class="greeting" ng-show="showGreeting">Good {{ greeting }}, {{ username }}</h3>
         </div>
     </div>
 

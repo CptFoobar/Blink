@@ -10,6 +10,10 @@
         $scope.feedType = 'b';
         $scope.alerts = [];
 
+        $scope.closeAlert = function(index) {
+            $scope.alerts.splice(index, 1);
+        }
+
         $scope.saveConfig = function(){
             var cfg = {
                 showGreeting: $scope.showGreeting,

@@ -8,12 +8,16 @@
         $scope.entryList = [];
         $scope.feedMap = {};
         $scope.showTopButton = false;
+        $scope.showProgressbar = true;
         var fbPrefix = "https://www.facebook.com/sharer/sharer.php?u=";
         var twitterPrefix = "https://twitter.com/intent/tweet?status=";
         var googleplusPrefix = "https://plus.google.com/share?url=";
+
         var addEntries = function(entries) {
             $scope.entryList.push.apply($scope.entryList, entries);
             $scope.entryList = shuffle($scope.entryList);
+            if($scope.showProgressbar)
+                $scope.showProgressbar = false;
         };
 
         $scope.toTheTop = function() {
@@ -88,7 +92,6 @@
                             iconUrl: data.payload.iconUrl
                         };
                         addEntries(data.payload.entries);
-                        //$scope.entryList.push.apply($scope.entryList, data.payload.entries);
                         break;
                 }
             }

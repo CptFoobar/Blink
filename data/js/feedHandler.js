@@ -6,39 +6,48 @@
     var trendingUrlPrefix = "https://cloud.feedly.com/v3/mixes/contents?streamId=";
     // TODO: Make this user defined (?) (must be multiple of 3 for better
     // placement of cards)
-    var streamCount = "&count=9";
-    var trendingCount = "&count=6"
+    var countPrefix = "&count=";
 
-    var fetchAll = function(feedList) {
-        fetchAllStreams(feedList);
-        fetchAllTrending(feedList);
+    var fetchAll = function(feedList, feedRatio) {
+        if(feedRatio === 0) {
+            // Latest only
+            fetchAllStreams(feedList, 15);
+        } else if(feedRatio === 1) {
+            // Balanced
+            fetchAllStreams(feedList, 8);
+            fetchAllTrending(feedList, 7);
+        } else if(feedRatio === 2) {
+            // Trending only
+            fetchAllTrending(feedList, 15);
+        }
     }
 
     /* Fetch all feed streams */
-    var fetchAllStreams = function(feedList) {
+    var fetchAllStreams = function(feedList, count) {
         // FIXME: This might very soon start returning 429 (too many requests)
         // Request only 2 streams (or limited entries) at a time (and use
         // 'Load More' loader)
         console.log("fetching streams...");
         for (i = 0; i < feedList.length; i++) {
-            fetchById(feedList[i], streamUrlPrefix, streamCount);
+            fetchById(feedList[i], streamUrlPrefix, count);
         }
     };
 
     /* Fetch all feed trending */
-    var fetchAllTrending = function(feedList) {
+    var fetchAllTrending = function(feedList, count) {
         // FIXME: This might very soon start returning 429 (too many requests)
         // Request only 2 streams (or limited entries) at a time (and use
         // 'Load More' loader)
         console.log("fetching trends...");
         for (i = 0; i < feedList.length; i++) {
-            fetchById(feedList[i], trendingUrlPrefix, trendingCount);
+            fetchById(feedList[i], trendingUrlPrefix, count);
         }
     };
 
     /* Fetch feed by streamId */
     var fetchById = function(feedItem, urlPrefix, count) {
         var request = new XMLHttpRequest();
+        count = countPrefix + count.toString();
         request.open("GET", urlPrefix + feedItem.streamId + count, true);
         request.onload = function() {
             window.postMessage({

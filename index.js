@@ -116,6 +116,23 @@ function onPrefChange(prefName) {
 
 /* Set PageMods */
 function setPageMods() {
+    // PageMod for home page
+    pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: data.url("js/homeManager.js"),
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getHomeConfig", function(nothing) {
+                worker.port.emit("homeConfig", {
+                        userName: userSettings.userName,
+                        showGreeting: userSettings.showGreeting
+                    });
+                Log("Emmitting feedlist");
+            });
+        }
+    });
+
+
     // PageMod for feed page
     pageMod.PageMod({
         include: "resource://blink/data/*",
@@ -123,6 +140,9 @@ function setPageMods() {
                             data.url("js/feedManager.js")],
         contentScriptWhen: 'ready',
         onAttach: function(worker) {
+            worker.port.on("getFeedConfig", function(nothing) {
+                worker.port.emit("feedRatio", {feedRatio: userSettings.feedType});
+            });
             worker.port.on("getFeed", function(nothing) {
                 worker.port.emit("feedList", feedList);
                 Log("Emmitting feedlist");
