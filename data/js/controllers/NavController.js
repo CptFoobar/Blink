@@ -2,7 +2,7 @@
 
     var app = angular.module('blink');
 
-    var NavController =  function($scope, $http) {
+    var NavController =  function($scope, $http, $uibModal) {
         $scope.searchbarOpen = false;
         $scope.navbarCollapsed = true;
         $scope.selected = undefined;
@@ -47,7 +47,22 @@
         $scope.toggleSearchbar = function() {
             $scope.searchbarOpen= !$scope.searchbarOpen;
         };
+
+        $scope.showYourLove = function() {
+
+           var modalInstance = $uibModal.open({
+               animation: true,
+               templateUrl: 'showYourLove.html'
+           });
+
+           modalInstance.result.then(function(deleteItem) {
+               //$scope.deleteItem(deleteItem);
+               console.log('SYL Modal returned');
+           }, function() {
+               console.log('SYL Modal dismissed at: ' + new Date());
+           });
+       };
     };
 
-    app.controller('NavController', ['$scope', '$http', NavController]);
+    app.controller('NavController', ['$scope', '$http', '$uibModal', NavController]);
 }());

@@ -205,3 +205,12 @@ nav.navbar.navbar-transparent {
         display: inline-block;
     }
 }
+
+.paypal-form>form>table>tbody>tr>td>select {
+    width: 150%;
+    color: #333;
+}
+
+.paypal-form>form>table>tbody>tr>td {
+    color: #333;
+}
