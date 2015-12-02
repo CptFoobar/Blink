@@ -3,7 +3,7 @@
     <div class="space"></div>
     <div class="space"></div>
     <div class="row text-center">
-        <div class="col-md-8 col-md-push-2 clocky">
+        <div class="col-md-8 col-md-push-2 clocky noselect" style="cursor: default">
             <h1 class="time"> {{ clock | date:'hh mm' }} </h1>
             <h4 class="day"> {{ clock | date:'EEEE, MMMM dd' }} </h4>
             <h3 class="greeting" ng-show="showGreeting">Good {{ greeting }}, {{ username }}</h3>

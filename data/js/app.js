@@ -28,6 +28,9 @@
         target: "/blink/content",
         url: "markup/content.html",
         controller: "ContentController"
+    }, {
+        target: "/blink/help",
+        url: "markup/help.html"
     }];
 
     app.config(function($routeProvider) {
@@ -47,9 +50,9 @@
 
     });
 
+    // Code adopted from http://stackoverflow.com/a/14837021
     app.directive('focusMe', function($timeout, $parse) {
         return {
-            //scope: true,   // optionally create a child scope
             link: function(scope, element, attrs) {
                 var model = $parse(attrs.focusMe);
                 scope.$watch(model, function(value) {
@@ -59,7 +62,6 @@
                         });
                     }
                 });
-                // to address @blesh's comment, set attribute value to 'false'
                 // on blur event:
                 element.bind('blur', function() {
                     scope.$apply(model.assign(scope, false));
@@ -77,16 +79,16 @@
         };
     });
 
-    app.directive("scroll", function ($window) {
-    return function(scope, element, attrs) {
-        angular.element($window).bind("scroll", function() {
-             if (this.pageYOffset >= 50) {
-                 scope.showTopButton = true;
-             } else {
-                 scope.showTopButton = false;
-             }
-            scope.$apply();
-        });
-    };
-});
+    app.directive("scroll", function($window) {
+        return function(scope, element, attrs) {
+            angular.element($window).bind("scroll", function() {
+                if (this.pageYOffset >= 50) {
+                    scope.showTopButton = true;
+                } else {
+                    scope.showTopButton = false;
+                }
+                scope.$apply();
+            });
+        };
+    });
 }());
