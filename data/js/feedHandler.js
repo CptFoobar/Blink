@@ -130,7 +130,7 @@
     }
 
     var getVisualUrl = function(img) {
-        if (img === undefined || img === 'none')
+        if (typeof img === 'undefined' || img === 'none')
             return "https://unsplash.it/600/480/?random";
         else return img;
     }

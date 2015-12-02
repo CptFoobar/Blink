@@ -31,6 +31,9 @@
     }, {
         target: "/blink/help",
         url: "markup/help.html"
+    }, {
+        target: "/blink/about",
+        url: "markup/about.html"
     }];
 
     app.config(function($routeProvider) {

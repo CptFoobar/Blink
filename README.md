@@ -31,14 +31,14 @@ List of targets for v1:
 
 
 * Settings Options
-    - _Greeting_ : Show greeting
-    - _Name_ : Input user name for greeting
+    - ~~_Greeting_ : Show greeting~~
+    - ~~_Name_ : Input user name for greeting~~
     - _Location_ : Use automatic/manual location  
     - _Weather_ : C/F
     - ~~(X) _Theme_ : Set dark/light theme~~
-    - _Feed content_ :
-        <-- Latest only -- Latest > Trending -- Balanced -- Trending > Latest -- Trending only -->
-    - _History_ : Show last < 100 - 250 - 500 - 750 - 1000 >
+    - ~~_Feed content_ :~~
+        ~~<-- Latest only -- Latest > Trending -- Balanced -- Trending > Latest -- Trending only -->~~
+    - ~~(X) _History_ : Show last < 100 - 250 - 500 - 750 - 1000 >~~
 
 
 
@@ -51,7 +51,7 @@ List of targets for v1:
 
 
 * Other Views
-    - _Help_ : How to use Blink
+    - ~~_Help_ : How to use Blink~~
     - _About_ : About Blink (ahem, and me)
     - _Support_: $$$ = <3
 
