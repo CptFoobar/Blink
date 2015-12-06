@@ -14,6 +14,9 @@ const browserWindows = require("sdk/windows").browserWindows;
 // For  setting new tab URL
 const NewTabSetter = require(data.url("js/NewTabSetter.js"));
 
+// For handling Migration
+const MigrationHandler = require(data.url("js/MigrationHandler"));
+
 var oldNewTab;
 var blinkEnable = prefSet.prefs.blinkEnable;
 var devlogs = true; // set true to enable logging
@@ -197,8 +200,9 @@ function setPageMods() {
 
 /* Initialise configuration with user-set preferences and feed list */
 function initConfig() {
-    if (self.loadReason == "install" || !ss.storage.feedList) {
-        makeFeed();
+    if (self.loadReason == "install" || self.loadReason == "upgrade"
+            || !ss.storage.feedList) {
+        //makeFeed();
         userSettings = {
             showGreeting: true,
             userName: "Emma",
@@ -209,13 +213,66 @@ function initConfig() {
         feedList = ss.storage.feedList;
         userSettings = ss.storage.userSettings;
     }
+
+    ss.storage.feedprefs = [{
+					"name" : "TechCrunch",
+					"link" : "http://feeds.feedburner.com/Techcrunch",
+					"wanted" : true
+				 },
+				 {
+					"name" : "Gizmodo",
+					"link" : "http://feeds.gawker.com/gizmodo/full",
+					"wanted" : true
+				 },
+				 {
+					"name" : "Engadget",
+					"link" : "http://www.engadget.com/rss.xml",
+					"wanted" : true
+				 },
+				 {
+					"name" : "LifeHacker",
+					"link" : "http://feeds.gawker.com/lifehacker/vip",
+					"wanted" : true
+				 },
+				 {
+					"name" : "The Verge",
+					"link" : "http://www.theverge.com/rss/index.xml",
+					"wanted" : true
+				 },
+				 {
+					"name" : "Mashable",
+					"link" : "http://feeds.mashable.com/mashable/tech",
+					"wanted" : false
+				 },
+				 {
+					"name" : "Wired",
+					"link" : "http://feeds.wired.com/wired/index",
+					"wanted" : true
+				 },
+				 {
+					"name" : "The Next Web",
+					"link" : "http://thenextweb.com/feed/",
+					"wanted" : false
+                 },{
+					"name" : "// TODO",
+					"link" : "http://blog.championswimmer.in/feed.xml",
+					"wanted" : true
+				 }];
+
+    //if (self.loadReason == "upgrade") {
+    if(true) {
+        feedList = MigrationHandler.migrate(ss.storage.feedprefs);
+        updateFeed();
+        delete ss.storage.feedprefs;
+    }
+
     getBookmarks();
     getHistory();
 }
 
 // For testing only.
 
-makeFeed();
+// makeFeed();
 
 /* Update feed with a new feed list */
 function makeFeed() {
