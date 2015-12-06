@@ -41,8 +41,8 @@
     /* Listen for window message events, and process accordingly. */
     window.addEventListener('message', function(event) {
         var message = JSON.parse(event.data);
-        if (message.target && message.target == "FeedHandler") {
-            console.log("Got message for handler");
+        if (message.target && message.target == "FeedManager") {
+            console.log("Got message for FeedManager");
             var intent = message.intent;
             switch (intent) {
                 case "fetch":

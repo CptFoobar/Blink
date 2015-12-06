@@ -32,8 +32,7 @@
         }
     };
 
-    /* Listen for window message events, and process accordingly. */
-    window.addEventListener('message', function(event) {
+    var HomeListener = function(event) {
         var message = JSON.parse(event.data);
         if (message.target && message.target == "HomeManager") {
             console.log("Got message for HomeManager");
@@ -44,6 +43,8 @@
                     break;
             }
         }
-    }, false);
+    };
+
+    window.addEventListener('message', HomeListener, false);
 
 }());

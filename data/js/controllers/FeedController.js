@@ -101,7 +101,7 @@
             $scope.$emit(
                 '$messageOutgoing',
                 angular.toJson({
-                    target: "FeedHandler",
+                    target: "FeedManager",
                     intent: "fetch",
                     payload: {}
                 })

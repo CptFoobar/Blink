@@ -22,6 +22,7 @@ var bookmarksTree = [];
 var bookmarks = [];
 var userSettings = [];
 var version = require("sdk/system").version;
+var blinkPageMods = [];
 
 // TODO: Add other urls to be hidden into a list
 
@@ -86,6 +87,11 @@ function blinkInit() {
 function clearSettings() {
     NewTabSetter.reset(version, oldNewTab);
     browserWindows.removeListener("open", blinkInit);
+    for(let i = 0; i < blinkPageMods.length; i++) {
+        blinkPageMods[i].destroy();
+    }
+    // Empty the array
+    blinkPageMods.splice(0, blinkPageMods.length);
 };
 
 /* Preference change handler */
@@ -102,7 +108,7 @@ function onPrefChange(prefName) {
 /* Set PageMods */
 function setPageMods() {
     // PageMod for home page
-    pageMod.PageMod({
+    blinkPageMods.push(pageMod.PageMod({
         include: "resource://blink/data/*",
         contentScriptFile: data.url("js/homeManager.js"),
         contentScriptWhen: 'ready',
@@ -115,11 +121,11 @@ function setPageMods() {
                 Log("Emmitting feedlist");
             });
         }
-    });
+    }));
 
 
     // PageMod for feed page
-    pageMod.PageMod({
+    blinkPageMods.push(pageMod.PageMod({
         include: "resource://blink/data/*",
         contentScriptFile: [data.url("js/feedHandler.js"),
                             data.url("js/feedManager.js")],
@@ -133,10 +139,10 @@ function setPageMods() {
                 Log("Emmitting feedlist");
             });
         }
-    });
+    }));
 
     // PageMod for bookmarks
-    pageMod.PageMod({
+    blinkPageMods.push(pageMod.PageMod({
         include: "resource://blink/data/*",
         contentScriptFile: data.url("js/bookmarksManager.js"),
         contentScriptWhen: 'ready',
@@ -146,10 +152,10 @@ function setPageMods() {
                 Log("Emmitting bookmarks");
             });
         }
-    });
+    }));
 
     // PageMod for content
-    pageMod.PageMod({
+    blinkPageMods.push(pageMod.PageMod({
         include: "resource://blink/data/*",
         contentScriptFile: data.url("js/contentManager.js"),
         contentScriptWhen: 'ready',
@@ -170,10 +176,10 @@ function setPageMods() {
                 }
             });
         }
-    });
+    }));
 
     // PageMod for settings
-    pageMod.PageMod({
+    blinkPageMods.push(pageMod.PageMod({
         include: "resource://blink/data/*",
         contentScriptFile: data.url("js/settingsManager.js"),
         contentScriptWhen: 'ready',
@@ -186,14 +192,13 @@ function setPageMods() {
                 updateUserSettings(newSettings);
             });
         }
-    });
+    }));
 }
 
 /* Initialise configuration with user-set preferences and feed list */
 function initConfig() {
     if (self.loadReason == "install" || !ss.storage.feedList) {
-        feedList = ["alpha"];
-        ss.storage.feedList = feedList;
+        makeFeed();
         userSettings = {
             showGreeting: true,
             userName: "Emma",
@@ -209,42 +214,45 @@ function initConfig() {
 }
 
 // For testing only.
-makeFeed([{
-    title: "Engadget",
-    websiteUrl: "http://www.engadget.com",
-    streamId: "feed/http://www.engadget.com/rss-full.xml",
-    icon: "http://storage.googleapis.com/site-assets/4i-1vhCwmRRLfmB7ypTnMh-ZKSvsz6Rgf0lfR0WWb0w_visual-150719f6d2d",
-    description: "lorem ipsum dolor set amit",
-    tags: ["tech"],
-    wanted: true
-}, {
-    title: "Techcrunch",
-    websiteUrl: "http://techcrunch.com",
-    streamId: "feed/http://feeds.feedburner.com/Techcrunch",
-    icon: "http://storage.googleapis.com/site-assets/Xne8uW_IUiZhV1EuO2ZMzIrc2Ak6NlhGjboZ-Yk0rJ8_visual-14e42a4d997",
-    description: "lorem ipsum dolor set amit",
-    tags: ["tech"],
-    wanted: true
-}, {
-    title: "Gizmodo",
-    websiteUrl: "http://gizmodo.com",
-    streamId: "feed/http://feeds.gawker.com/gizmodo/full",
-    icon: "http://storage.googleapis.com/site-assets/YgTD2rF1XSAfR77lKtxrTwuR-azzbzQhUxfiRyg1u0w_visual-14cde04613e",
-    description: "lorem ipsum dolor set amit",
-    tags: ["tech"],
-    wanted: true
-}, {
-    title: "Dribbble",
-    websiteUrl: "https://dribbble.com/",
-    streamId: "feed/http://dribbble.com/shots/popular.rss",
-    icon: "http://storage.googleapis.com/site-assets/BnJ8HLdN6KkB0LbmwfVmx3aWGMAdrc5NScyF4JLTJnM_visual-14a5c737fe2",
-    description: "lorem ipsum dolor set amit",
-    tags: ["art"],
-    wanted: true
-}]);
+
+makeFeed();
 
 /* Update feed with a new feed list */
-function makeFeed(newFeedList) {
+function makeFeed() {
+    var newFeedList = [{
+        title: "Engadget",
+        websiteUrl: "http://www.engadget.com",
+        streamId: "feed/http://www.engadget.com/rss-full.xml",
+        icon: "http://storage.googleapis.com/site-assets/4i-1vhCwmRRLfmB7ypTnMh-ZKSvsz6Rgf0lfR0WWb0w_visual-150719f6d2d",
+        description: "lorem ipsum dolor set amit",
+        tags: ["tech"],
+        wanted: true
+    }, {
+        title: "Techcrunch",
+        websiteUrl: "http://techcrunch.com",
+        streamId: "feed/http://feeds.feedburner.com/Techcrunch",
+        icon: "http://storage.googleapis.com/site-assets/Xne8uW_IUiZhV1EuO2ZMzIrc2Ak6NlhGjboZ-Yk0rJ8_visual-14e42a4d997",
+        description: "lorem ipsum dolor set amit",
+        tags: ["tech"],
+        wanted: true
+    }, {
+        title: "Gizmodo",
+        websiteUrl: "http://gizmodo.com",
+        streamId: "feed/http://feeds.gawker.com/gizmodo/full",
+        icon: "http://storage.googleapis.com/site-assets/YgTD2rF1XSAfR77lKtxrTwuR-azzbzQhUxfiRyg1u0w_visual-14cde04613e",
+        description: "lorem ipsum dolor set amit",
+        tags: ["tech"],
+        wanted: true
+    }, {
+        title: "Dribbble",
+        websiteUrl: "https://dribbble.com/",
+        streamId: "feed/http://dribbble.com/shots/popular.rss",
+        icon: "http://storage.googleapis.com/site-assets/BnJ8HLdN6KkB0LbmwfVmx3aWGMAdrc5NScyF4JLTJnM_visual-14a5c737fe2",
+        description: "lorem ipsum dolor set amit",
+        tags: ["art"],
+        wanted: true
+    }];
+
     feedList = newFeedList;
     ss.storage.feedList = feedList;
     Log("Updated feed. feedList.length: " + ss.storage.feedList.length);
