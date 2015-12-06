@@ -12,8 +12,7 @@ const services = require("sdk/preferences/service");
 const browserWindows = require("sdk/windows").browserWindows;
 
 // For  setting new tab URL
-const fx38 = require(data.url("js/fx38.js"));
-const NewTabURL = require('resource:///modules/NewTabURL.jsm').NewTabURL;
+const NewTabSetter = require(data.url("js/NewTabSetter.js"));
 
 var oldNewTab;
 var blinkEnable = prefSet.prefs.blinkEnable;
@@ -22,10 +21,8 @@ var feedList = [];
 var bookmarksTree = [];
 var bookmarks = [];
 var userSettings = [];
-const useNewAPI = require("sdk/system").version >= "41.0";
+var version = require("sdk/system").version;
 
-var newTabURL = data.url("blink_shell.html");
-newTabURL = newTabURL + "#/home";
 // TODO: Add other urls to be hidden into a list
 
 // Get and save original new tab
@@ -76,16 +73,10 @@ function getOriginalNewTab() {
 /* Init function. Da bomb. */
 function blinkInit() {
     if (blinkEnable) {
-        if (useNewAPI) {
-            Log("Using new API")
-            NewTabURL.override(newTabURL);
-        } else {
-            Log("Using old API")
-            fx38.setNewTabUrl(newTabURL);
-        }
-
+        // Set Blink home as new tab
+        NewTabSetter.setNewTabUrl(version);
+        // Set things up
         initConfig();
-
         // Set PageMods
         setPageMods();
     }
@@ -93,13 +84,7 @@ function blinkInit() {
 
 /* Clear the settings we changed */
 function clearSettings() {
-    if (useNewAPI) {
-        Log("Clearing the new way");
-        NewTabURL.override(oldNewTab);
-    } else {
-        Log("Clearing the old way");
-        fx38.reset(oldNewTab);
-    }
+    NewTabSetter.reset(version, oldNewTab);
     browserWindows.removeListener("open", blinkInit);
 };
 
@@ -342,7 +327,7 @@ function getHistory() {
 }
 
 /* Helper function to get index of object */
-var indexOf = function(o) {
+function indexOf(o) {
     for (var i = 0; i < feedList.length; i++) {
         if (feedList[i].title == o.title &&
                 feedList[i].websiteUrl == o.websiteUrl) {
