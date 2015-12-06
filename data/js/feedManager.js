@@ -16,10 +16,6 @@
         else feedRatio = 1;
     });
 
-    // If feedList is empty, ping the add-on process to get it
-    if(feedList.length == 0)
-        self.port.emit("getFeed", {});
-
     /* Wrapper for fetching all feed */
     var fetchAllFeed = function(timeout) {
         // Wait for `timeout` secs before declaring 'fetch failure'
@@ -47,6 +43,8 @@
             switch (intent) {
                 case "fetch":
                     feedRatio = -1;
+                    feedList = [];
+                    self.port.emit("getFeed", {});
                     self.port.emit("getFeedConfig", {});
                     fetchAllFeed(4);
                     break;

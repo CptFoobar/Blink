@@ -29,7 +29,8 @@
         // 'Load More' loader)
         console.log("fetching streams...");
         for (i = 0; i < feedList.length; i++) {
-            fetchById(feedList[i], streamUrlPrefix, count);
+            if (feedList[i].wanted)
+                fetchById(feedList[i], streamUrlPrefix, count);
         }
     };
 
@@ -40,7 +41,8 @@
         // 'Load More' loader)
         console.log("fetching trends...");
         for (i = 0; i < feedList.length; i++) {
-            fetchById(feedList[i], trendingUrlPrefix, count);
+            if (feedList[i].wanted)
+                fetchById(feedList[i], trendingUrlPrefix, count);
         }
     };
 

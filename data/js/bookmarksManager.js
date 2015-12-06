@@ -5,10 +5,7 @@
     self.port.on("bookmarks", function(bookmarksTree) {
         bookmarks = bookmarksTree;
     });
-    // If bookmarks is empty, ping the add-on process to get it
-    if (bookmarks.length == 0)
-        self.port.emit("getBookmarks", {});
-
+    
     /* Wrapper for fetching all bookmarks */
     var fetchBookmarks = function(timeout) {
         // Wait for `timeout` secs before declaring 'fetch failure'
@@ -38,6 +35,8 @@
             var intent = message.intent;
             switch (intent) {
                 case "fetch":
+                    bookmarks = [];
+                    self.port.emit("getBookmarks", {});
                     fetchBookmarks(3);
                     break;
             }

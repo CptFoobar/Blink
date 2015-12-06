@@ -5,10 +5,7 @@
     self.port.on("contentList", function(content) {
         contentList = content;
     });
-    // If contentList is empty, ping the add-on process to get it
-    if (contentList.length == 0)
-        self.port.emit("getContentList", {});
-
+    
     // FIXME: DRY in managers
     // The code below this line (fetchcontentList and the window listener)
     // is being repeated in every *Manager.js file. Maybe we can move this
@@ -62,6 +59,10 @@
         self.port.emit("deleteSourceItem", item);
     }
 
+    var toggleSourceItem = function(item) {
+        self.port.emit("toggleSourceItem", item);
+    }
+
     /* Listen for window message events, and process accordingly. */
     window.addEventListener('message', function(event) {
         var message = JSON.parse(event.data);
@@ -71,6 +72,8 @@
             switch (intent) {
                 case "fetch":
                     console.log("fetch request");
+                    contentList = [];
+                    self.port.emit("getContentList", {});
                     fetchContentList(3);
                     break;
                 case "search":
@@ -84,6 +87,10 @@
                 case "delete":
                     console.log("delete request");
                     deleteSourceItem(message.payload.removeItem);
+                    break;
+                case "toggle":
+                    console.log("toggle request");
+                    toggleSourceItem(message.payload.toggleItem)
                     break;
             }
         }

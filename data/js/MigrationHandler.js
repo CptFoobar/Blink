@@ -12,7 +12,6 @@ var parseFeedSource = function(json, wanted) {
                         sourceObject.deliciousTags : [],
         wanted: wanted
     };
-    //console.log("parsed: " + JSON.stringify(parsedSource));
     return parsedSource;
 };
 
@@ -23,7 +22,6 @@ const migrate = function(oldPrefs) {
     var searchUrlPrefix = "https://cloud.feedly.com/v3/search/feeds?q=";
     for (let i = 0; i < oldPrefs.length; i++) {
         let url = searchUrlPrefix + oldPrefs[i].link;
-        console.log("url is: " + url);
         Request({
             url: url,
             onComplete: function(response) {

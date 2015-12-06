@@ -178,6 +178,13 @@ function setPageMods() {
                     updateFeed();
                 }
             });
+            worker.port.on("toggleSourceItem", function(item) {
+                var index = indexOf(item);
+                if (index >= 0) {
+                    feedList[index].wanted = !feedList[index].wanted;
+                    updateFeed();
+                }
+            });
         }
     }));
 
@@ -202,7 +209,6 @@ function setPageMods() {
 function initConfig() {
     if (self.loadReason == "install" || self.loadReason == "upgrade"
             || !ss.storage.feedList) {
-        //makeFeed();
         userSettings = {
             showGreeting: true,
             userName: "Emma",
@@ -214,53 +220,7 @@ function initConfig() {
         userSettings = ss.storage.userSettings;
     }
 
-    ss.storage.feedprefs = [{
-					"name" : "TechCrunch",
-					"link" : "http://feeds.feedburner.com/Techcrunch",
-					"wanted" : true
-				 },
-				 {
-					"name" : "Gizmodo",
-					"link" : "http://feeds.gawker.com/gizmodo/full",
-					"wanted" : true
-				 },
-				 {
-					"name" : "Engadget",
-					"link" : "http://www.engadget.com/rss.xml",
-					"wanted" : true
-				 },
-				 {
-					"name" : "LifeHacker",
-					"link" : "http://feeds.gawker.com/lifehacker/vip",
-					"wanted" : true
-				 },
-				 {
-					"name" : "The Verge",
-					"link" : "http://www.theverge.com/rss/index.xml",
-					"wanted" : true
-				 },
-				 {
-					"name" : "Mashable",
-					"link" : "http://feeds.mashable.com/mashable/tech",
-					"wanted" : false
-				 },
-				 {
-					"name" : "Wired",
-					"link" : "http://feeds.wired.com/wired/index",
-					"wanted" : true
-				 },
-				 {
-					"name" : "The Next Web",
-					"link" : "http://thenextweb.com/feed/",
-					"wanted" : false
-                 },{
-					"name" : "// TODO",
-					"link" : "http://blog.championswimmer.in/feed.xml",
-					"wanted" : true
-				 }];
-
-    //if (self.loadReason == "upgrade") {
-    if(true) {
+    if (self.loadReason == "upgrade") {
         feedList = MigrationHandler.migrate(ss.storage.feedprefs);
         updateFeed();
         delete ss.storage.feedprefs;
@@ -324,7 +284,7 @@ function updateFeed() {
 function updateUserSettings(newSettings) {
     ss.storage.userSettings = newSettings;
     userSettings = newSettings;
-    console.log("updated. new settings are: " + JSON.stringify(userSettings));
+    Log("updated. new settings are: " + JSON.stringify(userSettings));
 }
 
 /* fetch bookmarks */

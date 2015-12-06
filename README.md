@@ -21,7 +21,7 @@ List of targets for v1:
 * Home
     - ~~Clock~~
     - ~~Greeting~~
-    - Weather
+    - ~~(moved to v2) Weather~~
     - ~~Nav~~
 
 
@@ -33,8 +33,8 @@ List of targets for v1:
 * Settings Options
     - ~~_Greeting_ : Show greeting~~
     - ~~_Name_ : Input user name for greeting~~
-    - _Location_ : Use automatic/manual location  
-    - _Weather_ : C/F
+    - ~~(X) _Location_ : Use automatic/manual location~~
+    - ~~_(X) Weather_ : C/F~~
     - ~~(X) _Theme_ : Set dark/light theme~~
     - ~~_Feed content_ :~~
         ~~<-- Latest only -- Latest > Trending -- Balanced -- Trending > Latest -- Trending only -->~~
@@ -52,8 +52,8 @@ List of targets for v1:
 
 * Other Views
     - ~~_Help_ : How to use Blink~~
-    - _About_ : About Blink (ahem, and me)
-    - _Support_: $$$ = <3
+    - ~~_About_ : About Blink (ahem, and me)~~
+    - ~~_Support_: $$$ = <3~~
 
 * Misc
-    - [Isotope and packery](http://desandro.com/masonry)
+    - ~~(moved to v2) [Isotope and packery](http://desandro.com/masonry)~~

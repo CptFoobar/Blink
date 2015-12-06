@@ -16,9 +16,19 @@
             $scope.alerts.splice(index, 1);
         };
 
-        $scope.updatePrefs = function(msg) {
-            console.log('toggled ' + msg);
-        }
+        $scope.updatePrefs = function(item) {
+            console.log("toggling " + item.title);
+            $scope.$emit(
+                '$messageOutgoing',
+                angular.toJson({
+                    target: "ContentManager",
+                    intent: "toggle",
+                    payload: {
+                        toggleItem: item
+                    }
+                })
+            );
+        };
 
         $scope.deleteItem = function(item) {
             console.log('deleting ' + JSON.stringify(item));
@@ -98,8 +108,8 @@
         };
 
 
-        $scope.promptDelete = function(idToDelete) {
-
+        $scope.promptDelete = function(item) {
+            var idToDelete = indexOf(item);
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'confirmDelete.html',

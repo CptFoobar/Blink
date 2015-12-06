@@ -6,10 +6,6 @@
         userSettings = content;
     });
 
-    // If userSettings is empty, ping the add-on process to get it
-    if (userSettings.length == 0)
-        self.port.emit("getUserSettings", {});
-
     /* Wrapper for fetching all userSettings */
     var fetchUserSettings = function(timeout) {
         // Wait for `timeout` secs before declaring 'fetch failure'
@@ -46,6 +42,8 @@
             switch (intent) {
                 case "getConfig":
                     console.log("fetch user settings request");
+                    userSettings = [];
+                    self.port.emit("getUserSettings", {});
                     fetchUserSettings(3);
                     break;
                 case "saveConfig":

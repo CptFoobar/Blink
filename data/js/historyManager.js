@@ -10,10 +10,6 @@
         history = recents;
     });
 
-    // If history is empty, ping the add-on process to get it
-    if (history.length === 0)
-        self.port.emit("getHistory", {});
-
     /* Wrapper for fetching all history */
     var fetchHistory = function(timeout) {
         // Wait for `timeout` secs before declaring 'fetch failure'
@@ -75,6 +71,8 @@
             var intent = message.intent;
             switch (intent) {
                 case "fetch":
+                    history = [];
+                    self.port.emit("getHistory", {});
                     fetchHistory(3);
                     break;
             }
