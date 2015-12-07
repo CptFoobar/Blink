@@ -83,7 +83,7 @@
                 <img ng-src="{{ src.icon }}" class="feed-icon" />
                 <p class="text-center">
                     <input type="checkbox" style="vertical-align: text-top;" ng-model="src.wanted" ng-click="updatePrefs(src)">
-                    <a ng-href="{{ src.websiteUrl }}">{{ src.title }}</a>
+                    <a ng-href="{{ src.websiteUrl }}">{{ getTitle(src.title) }}</a>
                 </p>
                 </span>
             </div>

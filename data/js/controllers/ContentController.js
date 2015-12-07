@@ -64,20 +64,19 @@
                 wanted: true
             };
 
-            $scope.$emit(
-                '$messageOutgoing',
-                angular.toJson({
-                    target: "ContentManager",
-                    intent: "add",
-                    payload: {
-                        addItem: newFeedItem
-                    }
-                })
-            );
-
             if(indexOf(newFeedItem) === -1) {
                 // New Source
                 $scope.items.push(newFeedItem);
+                $scope.$emit(
+                    '$messageOutgoing',
+                    angular.toJson({
+                        target: "ContentManager",
+                        intent: "add",
+                        payload: {
+                            addItem: newFeedItem
+                        }
+                    })
+                );
                 $scope.alerts.push({
                     type: "success",
                     msg: newFeedItem.title + " has been added to your feed list."
@@ -148,6 +147,12 @@
             else if (w < 1000 && w > 600) return 3;
             else if (w < 600 && w > 400) return 2;
             else return 1;
+        };
+
+        $scope.getTitle = function(title) {
+            if (title.length > 10)
+                title = title.substring(0, 10) + "...";
+            return title;
         };
 
         $scope.$root.$on('$messageIncoming', function(event, data) {
