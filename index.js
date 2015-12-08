@@ -27,8 +27,6 @@ var userSettings = [];
 var version = require("sdk/system").version;
 var blinkPageMods = [];
 
-// TODO: Add other urls to be hidden into a list
-
 // Get and save original new tab
 oldNewTab = getOriginalNewTab();
 
@@ -45,8 +43,6 @@ prefSet.on("blinkEnable", onPrefChange);
 unload(function() {
     clearSettings();
 });
-
-// TODO: MIGRATION FOR UPGRADERS!!
 
 /* Clear settings on disable/uninstall.
    But due to bug https://bugzilla.mozilla.org/show_bug.cgi?id=627432#c12,
@@ -207,8 +203,8 @@ function setPageMods() {
 
 /* Initialise configuration with user-set preferences and feed list */
 function initConfig() {
-    if (self.loadReason == "install" || self.loadReason == "upgrade"
-            || !ss.storage.feedList) {
+    if (self.loadReason == "install" || ss.storage.feedprefs
+            || !ss.storage.feedList || !ss.storage.userSettings) {
         userSettings = {
             showGreeting: true,
             userName: "Emma",
@@ -220,7 +216,8 @@ function initConfig() {
         userSettings = ss.storage.userSettings;
     }
 
-    if (self.loadReason == "upgrade") {
+    // If old prefernces are found, migrate
+    if (ss.storage.feedprefs) {
         feedList = MigrationHandler.migrate(ss.storage.feedprefs);
         updateFeed();
         delete ss.storage.feedprefs;
@@ -228,51 +225,6 @@ function initConfig() {
 
     getBookmarks();
     getHistory();
-}
-
-// For testing only.
-
-// makeFeed();
-
-/* Update feed with a new feed list */
-function makeFeed() {
-    var newFeedList = [{
-        title: "Engadget",
-        websiteUrl: "http://www.engadget.com",
-        streamId: "feed/http://www.engadget.com/rss-full.xml",
-        icon: "http://storage.googleapis.com/site-assets/4i-1vhCwmRRLfmB7ypTnMh-ZKSvsz6Rgf0lfR0WWb0w_visual-150719f6d2d",
-        description: "lorem ipsum dolor set amit",
-        tags: ["tech"],
-        wanted: true
-    }, {
-        title: "Techcrunch",
-        websiteUrl: "http://techcrunch.com",
-        streamId: "feed/http://feeds.feedburner.com/Techcrunch",
-        icon: "http://storage.googleapis.com/site-assets/Xne8uW_IUiZhV1EuO2ZMzIrc2Ak6NlhGjboZ-Yk0rJ8_visual-14e42a4d997",
-        description: "lorem ipsum dolor set amit",
-        tags: ["tech"],
-        wanted: true
-    }, {
-        title: "Gizmodo",
-        websiteUrl: "http://gizmodo.com",
-        streamId: "feed/http://feeds.gawker.com/gizmodo/full",
-        icon: "http://storage.googleapis.com/site-assets/YgTD2rF1XSAfR77lKtxrTwuR-azzbzQhUxfiRyg1u0w_visual-14cde04613e",
-        description: "lorem ipsum dolor set amit",
-        tags: ["tech"],
-        wanted: true
-    }, {
-        title: "Dribbble",
-        websiteUrl: "https://dribbble.com/",
-        streamId: "feed/http://dribbble.com/shots/popular.rss",
-        icon: "http://storage.googleapis.com/site-assets/BnJ8HLdN6KkB0LbmwfVmx3aWGMAdrc5NScyF4JLTJnM_visual-14a5c737fe2",
-        description: "lorem ipsum dolor set amit",
-        tags: ["art"],
-        wanted: true
-    }];
-
-    feedList = newFeedList;
-    ss.storage.feedList = feedList;
-    Log("Updated feed. feedList.length: " + ss.storage.feedList.length);
 }
 
 function updateFeed() {

@@ -5,12 +5,18 @@
     self.port.on("bookmarks", function(bookmarksTree) {
         bookmarks = bookmarksTree;
     });
-    
+
     /* Wrapper for fetching all bookmarks */
     var fetchBookmarks = function(timeout) {
         // Wait for `timeout` secs before declaring 'fetch failure'
         if(timeout == 0 && bookmarks.length == 0) {
             console.log("Failed to retrieve bookmarks.");
+            // Inform BookmarksController
+            window.postMessage({
+                target: "BookmarksController",
+                intent: "noBookmarks",
+                payload: {}
+            }, "resource://blink/data/blink_shell.html#/bookmarks");
             return;
         }
 
@@ -22,8 +28,8 @@
             window.postMessage({
                 target: "BookmarksController",
                 intent: "bookmarks",
-                payload: bookmarks
-            }, "resource://blink/data/blink_shell.html#/feed");
+                payload: { bookmarks: bookmarks }
+            }, "resource://blink/data/blink_shell.html#/bookmarks");
         }
     };
 

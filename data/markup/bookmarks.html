@@ -1,6 +1,13 @@
+<uib-progressbar class="progress-striped active" value="dynamic" type="success" ng-show="showProgressbar" style="border-radius: 5px; height: 10px"></uib-progressbar>
 <div class="container">
-    <div class="row">
-        <!-- TODO: Add preloader -->
+    <div class="row text-center noselect" ng-if="noBookmarks" style="cursor: default">
+        <span class="no-items">
+            <br />
+            <i class="fa fa-exclamation fa-3x"></i><br /><br />
+            Unable to fetch bookmarks :(
+        </span>
+    </div>
+    <div class="row" ng-hide="noBookmarks">
         <div class="collapse-control col-md-2">
             <button class="btn btn-danger btn-bm-control" ng-click="accordion.expandAll()" onclick="this.blur();" tooltip-placement="bottom" uib-tooltip="Expand all" tooltip-popup-delay='1000'>
                 <i class="fa fa-plus-square-o fa-fw fa-lg"></i>

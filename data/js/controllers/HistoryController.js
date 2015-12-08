@@ -4,6 +4,8 @@
 
     var HistoryController = function($scope) {
         $scope.history = [];
+        $scope.showProgressbar = true;
+        $scope.noHistory = false;
         var TAG = "HistoryController";
 
         $scope.$root.$on('$messageIncoming', function(event, data) {
@@ -12,8 +14,13 @@
                 console.log(TAG + "message for HC");
                 switch (data.intent) {
                     case "history":
-                        console.log("Got history");
-                        $scope.history = data.payload;
+                        $scope.history = data.payload.history;
+                        $scope.showProgressbar = false;
+                        $scope.noHistory = false;
+                        break;
+                    case "noHistory":
+                        $scope.showProgressbar = false;
+                        $scope.noHistory = true;
                         break;
                 }
             }

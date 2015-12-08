@@ -13,7 +13,7 @@
        $scope.clock = Date.now();
        $scope.greeting = greetingFor(new Date().getHours());
        $scope.username = "";
-       $scope.showGreeting = true;
+       $scope.showGreeting = false;
 
        $scope.clocky = function() {
            $interval(function () {

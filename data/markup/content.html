@@ -66,7 +66,7 @@
     <div class="row text-center alert-wrapper" ng-if="alerts[0]">
         <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="5000"> {{ alert.msg }}</uib-alert>
     </div>
-    <div class="row text-center noselect" ng-if="!items[0]" style="cursor: defualt">
+    <div class="row text-center noselect" ng-if="!items[0]" style="cursor: default">
         <span class="no-items">
             <br />
             <i class="fa fa-exclamation fa-3x"></i><br /><br />

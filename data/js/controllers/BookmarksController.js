@@ -6,6 +6,8 @@
 
         $scope.bookmarks = [];
         var TAG = "BookmarkController";
+        $scope.showProgressbar = true;
+        $scope.noBookmarks = false;
 
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
@@ -13,8 +15,13 @@
                 console.log(TAG + "message for BC");
                 switch (data.intent) {
                     case "bookmarks":
-                        console.log("got bookmarks");
-                        $scope.bookmarks = data.payload;
+                        $scope.bookmarks = data.payload.bookmarks;
+                        $scope.showProgressbar = false;
+                        $scope.noBookmarks = false;
+                        break;
+                    case "noBookmarks":
+                        $scope.showProgressbar = false;
+                        $scope.noBookmarks = true;
                         break;
                 }
             }

@@ -1,6 +1,13 @@
+<uib-progressbar class="progress-striped active" value="dynamic" type="success" ng-show="showProgressbar" style="border-radius: 5px; height: 10px"></uib-progressbar>
 <div class="container">
-    <div class="row">
-        <!-- TODO: Add preloader -->
+    <div class="row text-center noselect" ng-if="noHistory" style="cursor: default">
+        <span class="no-items">
+            <br />
+            <i class="fa fa-exclamation fa-3x"></i><br /><br />
+            Unable to fetch history :(
+        </span>
+    </div>
+    <div class="row" ng-hide="noHistory">
         <!-- History uses bookmark.css formatting, so need not create another stylesheet -->
         <!-- TODO: Make bookmarks.css class names more generic -->
         <div class="collapse-control col-md-2">

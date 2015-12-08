@@ -5,7 +5,7 @@
     self.port.on("contentList", function(content) {
         contentList = content;
     });
-    
+
     // FIXME: DRY in managers
     // The code below this line (fetchcontentList and the window listener)
     // is being repeated in every *Manager.js file. Maybe we can move this
@@ -37,10 +37,8 @@
         var request = new XMLHttpRequest();
         var completeQuery = "https://cloud.feedly.com/v3/search/feeds?q="
                                 + query + "&count=8";
-        console.log("Getting auto-complete suggestions");
         request.open("GET", completeQuery, true);
         request.onload = function() {
-            console.log("Got autocomplete list");
             window.postMessage({
                 target: "ContentController",
                 intent: "suggestionList",

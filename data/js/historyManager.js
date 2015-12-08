@@ -15,6 +15,12 @@
         // Wait for `timeout` secs before declaring 'fetch failure'
         if (timeout === 0 && history.length === 0) {
             console.log("Failed to retrieve history.");
+            // Inform HistoryController
+            window.postMessage({
+                target: "HistoryController",
+                intent: "noHistory",
+                payload: {}
+            }, "resource://blink/data/blink_shell.html#/recent");
             return;
         }
 
@@ -26,7 +32,7 @@
             window.postMessage({
                 target: "HistoryController",
                 intent: "history",
-                payload: sortHistory()
+                payload: { history: sortHistory() }
             }, "resource://blink/data/blink_shell.html#/recent");
         }
     };

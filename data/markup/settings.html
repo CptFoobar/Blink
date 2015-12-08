@@ -1,4 +1,4 @@
-<uib-progressbar class="progress-striped active" value="dynamic" type="warning" ng-show="showProgressbar" style="border-radius: 5px"></uib-progressbar>
+<uib-progressbar class="progress-striped active" value="dynamic" type="warning" ng-show="showProgressbar" style="border-radius: 5px; height: 10px;"></uib-progressbar>
 <div class="container" ng-hide="showProgressbar">
     <div class="row text-center alert-wrapper" ng-if="alerts[0]">
         <uib-alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)" dismiss-on-timeout="3500"> {{ alert.msg }} </uib-alert>

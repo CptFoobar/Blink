@@ -4,11 +4,11 @@
     var TAG = "BLINK: ";
 
     var FeedController = function($scope, $document) {
-        // TODO: Add timeout for feed and display 'Aw snap'
         $scope.entryList = [];
         $scope.feedMap = {};
         $scope.showTopButton = false;
         $scope.showProgressbar = true;
+        $scope.emptyFeedList = false;
         var fbPrefix = "https://www.facebook.com/sharer/sharer.php?u=";
         var twitterPrefix = "https://twitter.com/intent/tweet?status=";
         var googleplusPrefix = "https://plus.google.com/share?url=";
@@ -92,6 +92,11 @@
                             iconUrl: data.payload.iconUrl
                         };
                         addEntries(data.payload.entries);
+                        break;
+                    case "emptyFeedList":
+                        console.log("Empty feed list");
+                        $scope.showProgressbar = false;
+                        $scope.emptyFeedList = true;
                         break;
                 }
             }

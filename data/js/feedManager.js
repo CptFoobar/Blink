@@ -10,7 +10,6 @@
 
     self.port.on("feedRatio", function(ratio) {
         ratio = ratio.feedRatio;
-        console.log("Feed ratio: " + ratio);
         if(ratio === 'l') feedRatio = 0;
         else if(ratio === 't') feedRatio = 2;
         else feedRatio = 1;
@@ -20,7 +19,12 @@
     var fetchAllFeed = function(timeout) {
         // Wait for `timeout` secs before declaring 'fetch failure'
         if(timeout == 0 && feedList.length == 0) {
-            // TODO: Inform FeedController about this devastating turn of events
+            // Inform FeedController
+            window.postMessage({
+                target: "FeedController",
+                intent: "emptyFeedList",
+                payload: {}
+            }, "resource://blink/data/blink_shell.html#/feed");
             console.log("Failed to retrieve feedList.");
             return;
         }

@@ -4,8 +4,6 @@
     var streamUrlPrefix = "https://cloud.feedly.com/v3/streams/contents?streamId=";
     // Mix in some trending news
     var trendingUrlPrefix = "https://cloud.feedly.com/v3/mixes/contents?streamId=";
-    // TODO: Make this user defined (?) (must be multiple of 3 for better
-    // placement of cards)
     var countPrefix = "&count=";
 
     var fetchAll = function(feedList, feedRatio) {
