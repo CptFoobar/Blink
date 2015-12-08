@@ -1,0 +1,95 @@
+<!-- TODO: Move ng-template to individual files instead of stuffing them in content.html -->
+<!-- AddContent Searchbox dropdown menu -->
+<script type="text/ng-template" id="autoSuggestSource.html">
+    <div class="content-popup-wrapper col-sm-12" style="display: block;" ng-show="isOpen() && !moveInProgress" aria-hidden="{{!isOpen()}}">
+        <ul class="dropdown-menu" role="listbox">
+            <li ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="{{::match.id}}">
+                <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>
+            </li>
+        </ul>
+    </div>
+</script>
+
+<!-- AddContent Searchbox dropdown menu list item -->
+<script type="text/ng-template" id="suggestedSource.html">
+    <a>
+        <div class="media">
+            <div class="media-left">
+                <img class="media-object" ng-src="{{match.model.visualUrl}}" style=" width: 64px; padding-top: 2px">
+            </div>
+            <div class="media-body">
+                <span class="media-heading suggestion-title">{{ match.model.title }}</span><br />
+                <span class="suggestion-desc">{{ match.model.description }}</span>
+            </div>
+        </div>
+    </a>
+</script>
+
+<!-- Delete confirmation modal -->
+<script type="text/ng-template" id="confirmDelete.html">
+    <div class="modal-header">
+        <span class="modal-title delete-confirm-title"> Delete {{ toDelete.title }} ?
+            <img ng-src="{{ toDelete.icon }}" class="src-img"/>
+            </span>
+    </div>
+    <div class="modal-body delete-confirm-body">
+        <p class="confirm-message">Are you sure you want to delete feed from {{ toDelete.title }} ?
+            <br />
+        </p>
+        <p class="confirm-tip">You can always get it back by adding it using the 'Add Content' button on the bottom-right.</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" type="button" ng-click="cancel()"><i class="fa fa-times fa-fw fa-2x"></i></button>
+        <button class="btn btn-danger" type="button" ng-click="ok()"><i class="fa fa-trash fa-fw fa-2x"></i></button>
+    </div>
+</script>
+
+<!-- Add content Modal -->
+<script type="text/ng-template" id="addContent.html">
+    <div class="modal-header">
+        <div class="modal-title ac-modal-title"> Add Content
+            </div>
+    </div>
+    <div class="modal-body ac-modal-body">
+        <form class="form-horizontal" role="search">
+            <div class="form-group col-md-10 col-md-push-1">
+                <input ng-model="asyncSelected" uib-typeahead="suggestion as suggestion.title for suggestion in getSourceSuggestions($viewValue)"
+                  type="text" class="form-control" placeholder="Search for feeds..." ng-keyup="$event.keyCode == 13 && addSource(asyncSelected)"
+                  typeahead-on-select="addSource(asyncSelected)" typeahead-popup-template-url="autoSuggestSource.html"
+                  typeahead-template-url="suggestedSource.html" autofocus/>
+                <uib-progressbar class="progress-striped active" value="dynamic" type="success" ng-show="showProgressbar"></uib-progressbar>
+            </div>
+        </form>
+    </div>
+</script>
+<div class="container">
+    <div class="row text-center alert-wrapper" ng-if="alerts[0]">
+        <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="5000"> {{ alert.msg }}</uib-alert>
+    </div>
+    <div class="row text-center noselect" ng-if="!items[0]" style="cursor: default">
+        <span class="no-items">
+            <br />
+            <i class="fa fa-exclamation fa-3x"></i><br /><br />
+            Hmmm... It's quite lonely here.. <br />
+            Let's add some content to your news feed. <br /><br/>
+            <p class="tip">Click the 'Add Content' on the bottom-right of the page to get started</p>
+        </span>
+    </div>
+    <div class="row" ng-if="items[0]">
+        <div class="column col-xs-8 col-sm-3 col-md-2 col-md-push-1 content-wrapper" ng-repeat="i in [] | range:getColumns()">
+            <div class="item-container noselect" ng-repeat="src in items | orderBy:'title'" ng-if="$index % getColumns() === i">
+                <span>
+                    <h5><span class="delete-button" ng-click="promptDelete(src)"><i class="fa fa-trash fa-fw fa-lg"></i></span></h5>
+                <img ng-src="{{ src.icon }}" class="feed-icon" />
+                <p class="text-center">
+                    <input type="checkbox" style="vertical-align: text-top;" ng-model="src.wanted" ng-click="updatePrefs(src)">
+                    <a ng-href="{{ src.websiteUrl }}">{{ getTitle(src.title) }}</a>
+                </p>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="add-content-wrapper">
+        <button class="btn btn-danger add-content-button" ng-click="addContent()"><i class="fa fa-plus fa-fw fa-2x"></i></button>
+    </div>
+</div>

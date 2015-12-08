@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title> New Tab </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Main container for blink">
+    <meta name="author" content="Sidhant Sharma [:tk]">
+
+    <link rel="stylesheet" href="libs/bootswatch_bootstrap_paper/bootstrap.min.css" />
+    <link rel="stylesheet" href="libs/v-accordion/v-accordion.min.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+
+    <script src="libs/angular/angular.min.js"></script>
+    <script src="libs/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="libs/angular-route/angular-route.min.js"></script>
+    <script src="libs/angular-animate/angular-animate.min.js"></script>
+    <script src="libs/angular-post-message/angular-post-message.min.js"></script>
+    <script src="libs/angular-scroll/angular-scroll.min.js"></script>
+    <script src="libs/v-accordion/v-accordion.min.js" charset="utf-8"></script>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/fonts.css">
+
+    <script src="js/app.js" charset="utf-8"></script>
+    <script src="js/controllers/BookmarksController.js" charset="utf-8"></script>
+    <script src="js/controllers/FeedController.js" charset="utf-8"></script>
+    <script src="js/controllers/HistoryController.js" charset="utf-8"></script>
+    <script src="js/controllers/HomeController.js" charset="utf-8"></script>
+    <script src="js/controllers/NavController.js" charset="utf-8"></script>
+    <script src="js/controllers/ContentController.js" charset="utf-8"></script>
+    <script src="js/controllers/SettingsController.js" charset="utf-8"></script>
+
+</head>
+
+<body ng-app="blink">
+    <script type="text/ng-template" id="autoSuggest.html">
+        <div class="custom-popup-wrapper col-sm-12" style="display: block;" ng-show="isOpen() && !moveInProgress" aria-hidden="{{!isOpen()}}">
+            <ul class="dropdown-menu" role="listbox">
+                <li ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }" ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="{{::match.id}}">
+                    <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>
+                </li>
+            </ul>
+        </div>
+    </script>
+    <script type="text/ng-template" id="showYourLove.html">
+        <div class="modal-header text-center">
+            <span class="modal-title delete-confirm-title">
+                <i class="fa fa-heart fa-fw" style="color: #f7403a"></i> &nbsp; Show you love &nbsp;
+                <i class="fa fa-heart fa-fw" style="color: #f7403a"></i>
+            </span>
+        </div>
+        <div class="modal-body delete-confirm-body">
+            <p class="confirm-message"> If you are enjoying Blink, and would like to see it grow and improve your experience, please contribute to its development.</p>
+            <br />
+            <p class="confirm-tip">You can show your love by sending me something with Paypal :)</p>
+            <div class="paypal-form text-center">
+                <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="B46BJ9WF8BMFE">
+                    <table style="margin: 0 auto;">
+                        <tr>
+                            <td>
+                                <input type="hidden" name="on0" value="I <3 Blink">I &hearts; Blink</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select name="os0">
+                                    <option value="<3 x1,">
+                                        &hearts; x1, $1.49 USD</option>
+                                    <option value="<3 x2,">
+                                        &hearts; x2, $1.99 USD</option>
+                                    <option value="<3 x3,">
+                                        &hearts; x3, $2.49 USD</option>
+                                    <option value="<3 x5,">
+                                        &hearts; x5, $4.99 USD</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="hidden" name="currency_code" value="USD">
+                    <input type="image" src="resource://blink/data/img/paypal_donate.png" border="0" name="submit" alt="Show your love with PayPal">
+                    <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+                </form>
+            </div>
+
+        </div>
+    </script>
+    <nav class="navbar navbar-transparent navbar-fixed-top noselect" role="navigation" ng-controller="NavController">
+
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle add-border" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar add-border"></span>
+                <span class="icon-bar add-border"></span>
+                <span class="icon-bar add-border"></span>
+            </button>
+            <a class="navbar-brand" href="#/home">B</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-collapse-transparent responsive-bg" ng-class="!navCollapsed && 'in'">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#/feed">
+                        <span class="text-center" style="display: inline-flex;">
+                            <i class="fa fa-rss fa-fw fa-lg nav-icon" style="color: #ff9900;"></i>
+                            <span class="visible-xs">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Feed
+                            </span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/bookmarks">
+                        <span class="text-center" style="display: inline-flex;">
+                            <i class="fa fa-bookmark fa-fw fa-lg nav-icon" style="color: #ccfc49;"></i>
+                            <span class="visible-xs">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bookmarks
+                            </span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/recent">
+                        <span class="text-center" style="display: inline-flex;">
+                            <i class="fa fa-clock-o fa-fw fa-lg nav-icon" style="color: #1cfffb;"></i>
+                            <span class="visible-xs" style="display;/* display: inline-block; */">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; History
+                            </span>
+                        </span>
+                    </a>
+                </li>
+                <li class="dropdown" uib-dropdown="">
+                    <a href="#/main" class="dropdown-toggle" uib-dropdown-toggle="" data-toggle="dropdown" style="margin-right: 10px;">
+                        <span class="text-center" style="display: inline-flex;">
+                            <i class="fa fa-ellipsis-v fa-fw fa-lg"></i>
+                            <span class="visible-xs" style="display;/* display: inline-block; */">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Options
+                            </span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#/blink/content">
+                                <i class="fa fa-pencil fa-fw fa-lg"></i>       Content
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/blink/settings">
+                                <i class="fa fa-cog fa-fw fa-lg"></i>       Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/blink/help">
+                                <i class="fa fa-question fa-fw fa-lg"></i>       Help
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/blink/about">
+                                <i class="fa fa-info fa-fw fa-lg"></i>       About
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click="showYourLove()" style="cursor: pointer">
+                                <i class="fa fa-heart fa-fw fa-lg"></i>       Support
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-right" role="search" style="cursor: pointer" ng-click="toggleSearchbar()">
+                <button type="submit" class="btn btn-search" ng-mouseover="searchbarOpen=true" ng-class="{btnActive: searchbarOpen}"></button>
+                <span class="text-center responsive-search">
+                    <div class="form-group searchbar" ng-show="searchbarOpen">
+                        <input ng-model="asyncSelected" uib-typeahead="suggestion for suggestion in getSuggestions($viewValue)" type="text" class="form-control"
+                         placeholder="Google Search..." focus-me="searchbarOpen" ng-keyup="$event.keyCode == 13 && google($viewValue, asyncSelected)"
+                         typeahead-on-select="google($viewValue, asyncSelected)" typeahead-focus-first="false" 
+                         typeahead-popup-template-url="autoSuggest.html" style="width: 300px" />
+                    </div>
+                    <span class="visible-xs noselect" ng-hide="searchbarOpen" style="cursor: pointer">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Google Search
+                    </span>
+                </span>
+            </form>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+
+    <div ng-view ng-cloak></div>
+
+</body>
+
+</html>

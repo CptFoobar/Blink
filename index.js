@@ -1,166 +1,320 @@
-const { Cc, Ci} = require("chrome");
-const windowMediator = Cc["@mozilla.org/appshell/window-mediator;1"]
-                     .getService(Ci.nsIWindowMediator);
+// Basics
 const self = require('sdk/self');
-const services = require("sdk/preferences/service");
-const newTabURL = self.data.url("sources/tab.html");
-const helpTabUrl = self.data.url("sources/help.html");
-const contentTabUrl = self.data.url("sources/content.html");
+const data = self.data;
+const pageMod = require("sdk/page-mod");
+const tabs = require("sdk/tabs");
+
+// Storage and permissions
 const { when: unload } = require("sdk/system/unload");
 const prefSet = require("sdk/simple-prefs");
-const pageMod = require("sdk/page-mod");
 const ss = require("sdk/simple-storage");
+const services = require("sdk/preferences/service");
 const browserWindows = require("sdk/windows").browserWindows;
-const tabs = require("sdk/tabs")
-const defaultPrefs = require(self.data.url("sources/js/defaultConfig.js"));
-const NewTabURL = require('resource:///modules/NewTabURL.jsm').NewTabURL;
+
+// For  setting new tab URL
+const NewTabSetter = require(data.url("js/NewTabSetter.js"));
+
+// For handling Migration
+const MigrationHandler = require(data.url("js/MigrationHandler"));
+
 var oldNewTab;
 var blinkEnable = prefSet.prefs.blinkEnable;
+var devlogs = true; // set true to enable logging
+var feedList = [];
+var bookmarksTree = [];
+var bookmarks = [];
+var userSettings = [];
 var version = require("sdk/system").version;
-var devlogs = false;              // set true to enable logging
-// TODO: Code cleanup and restructuring. This can't be my code. It just can't be.
+var blinkPageMods = [];
 
-if(self.loadReason == "install" || self.loadReason == "enable") {
-	oldNewTab = services.get("browser.newtab.url");
-	ss.storage.originalNewTab = oldNewTab;
-} else {
-	oldNewTab = ss.storage.originalNewTab;
-}
-if(oldNewTab == undefined)
-    oldNewTab = 'about:newtab';
+// Get and save original new tab
+oldNewTab = getOriginalNewTab();
 
-if(devlogs) console.log(oldNewTab)
+// Init Blink
+blinkInit();
 
-const blinkInit = function() {
-	/* Set new tab source */
-	if(blinkEnable) {
-        if(version >= "41.0") {
-            if(devlogs) console.log("Using new API")
-            NewTabURL.override(newTabURL);
-        } else {
-            if(devlogs) console.log("Using old API")
-		        services.set("browser.newtab.url", self.data.url("sources/tab.html"));
-		        clearTabUrlbar();
-        }
-    }
-};
+// Init Blink on new windows when they open
+browserWindows.on("open", blinkInit);
 
-const clearTabUrlbar = function() {
-	/* Clear New tab's url bar. */
-	let windows = windowMediator.getEnumerator(null);
-	while (windows.hasMoreElements()) {
-		let window = windows.getNext();
-		if(window.gInitialPages.indexOf(newTabURL) == -1)
-			window.gInitialPages.push(newTabURL);
-		if(window.gInitialPages.indexOf(helpTabUrl) == -1)
-			window.gInitialPages.push(helpTabUrl);
-		if(window.gInitialPages.indexOf(contentTabUrl) == -1)
-			window.gInitialPages.push(contentTabUrl);
-	}
-};
-
-const clearSettings = function() {
-	/* Clear the settings we changed */
-    if(version >= "41.0") {
-        if(devlogs) console.log("Clearing from " + version);
-        NewTabURL.override(oldNewTab);
-    } else {
-      if(devlogs) console.log("Clearing from " + version + " the old way");
-	    services.set("browser.newtab.url", oldNewTab);
-	    let windows = windowMediator.getEnumerator(null);
-	    while (windows.hasMoreElements()) {
-		  let window = windows.getNext();
-		  if(window.gInitialPages.indexOf(newTabURL) > -1)
-		    window.gInitialPages.splice(window.gInitialPages.indexOf(newTabURL), 1);
-		  if(window.gInitialPages.indexOf(helpTabUrl) > -1)
-		    window.gInitialPages.splice(window.gInitialPages.indexOf(helpTabUrl), 1);
-		  if(window.gInitialPages.indexOf(contentTabUrl) > -1)
-		    window.gInitialPages.splice(window.gInitialPages.indexOf(contentTabUrl), 1);
-      }
-	}
-	browserWindows.removeListener("open", blinkInit);
-}
-
-// Feed sources with prefs
-var feedPrefs;
-
-if(self.loadReason == "install" || !ss.storage.feedprefs) {
-	feedPrefs = defaultPrefs.getDefaultPrefs();
-	ss.storage.feedprefs = feedPrefs;
-} else {
-	feedPrefs = ss.storage.feedprefs;
-}
-
-var getFeeds = function() {
-	/* Refresh feeds */
-	var f = [];
-	for(var i = 0; i < feedPrefs.length; i++) {
-		if(feedPrefs[i].wanted)
-			f.push(feedPrefs[i].link)
-	}
-	return f;
-}
-
- //feeds only
-var feeds = getFeeds();
-
-var refreshFeeds = function(feedList) {
-	/* Refresh feed prefs */
-	feedPrefs = feedList;
-	feeds = getFeeds();
-	ss.storage.feedprefs = feedList;
-}
-
-pageMod.PageMod({
-	include: "resource://blink/data/sources/tab.html",
-	contentScriptFile: self.data.url("sources/js/feeder.js"),
-	contentScriptWhen: 'end',
-	onAttach: function(worker) {
-    	worker.port.emit("feedList", feeds);
-    }
-});
-
-pageMod.PageMod({
-	include: "resource://blink/data/sources/content.html",
-	contentScriptFile: self.data.url("sources/js/feedListener.js"),
-	contentScriptWhen: 'end',
-	onAttach: function(worker) {
-		worker.port.emit("feedPrefs", feedPrefs);
-    	worker.port.on("newFeedList", function(newFeeds) {
-      	refreshFeeds(newFeeds)
-    });
-  }
-});
-
-function onPrefChange(prefName) {
-	/* A generic prefs change callback */
-    if(prefName == "blinkEnable") {
-    	blinkEnable = prefSet.prefs.blinkEnable;
-    	if(blinkEnable)
-    		blinkInit();
-    	else
-    		clearSettings();
-    }
-}
-
+// Set preference change listener
 prefSet.on("blinkEnable", onPrefChange);
 
 // Clear settings on Unload. (Redundant?)
 unload(function() {
-//	if(blinkEnable)
-		clearSettings();
+    clearSettings();
 });
 
 /* Clear settings on disable/uninstall.
- But due to bug https://bugzilla.mozilla.org/show_bug.cgi?id=627432#c12, uninstall is never called */
-exports.onUnload = function (reason) {
-	if (reason === "disable" || reason === "uninstall") {
-//		if(blinkEnable)
-			clearSettings();
-	}
+   But due to bug https://bugzilla.mozilla.org/show_bug.cgi?id=627432#c12,
+   uninstall is never called */
+exports.onUnload = function(reason) {
+    if (reason === "disable" || reason === "uninstall")
+        clearSettings();
 };
 
-// Init Blink
-blinkInit();
-// Init Blink on new windows when they open
-browserWindows.on("open", blinkInit);
+/* Returns original new tab. If none found, returns default new tab */
+function getOriginalNewTab() {
+    var ont;
+    if (self.loadReason == "install" || self.loadReason == "enable"
+            || self.loadReason == "upgrade") {
+        ont = services.get("browser.newtab.url");
+        ss.storage.originalNewTab = ont;
+    } else {
+        ont = ss.storage.originalNewTab;
+    }
+
+    ont = ont ? ont : "about:newtab";
+
+    Log("oldNewTab: " + ont);
+
+    return ont;
+};
+
+/* Init function. Da bomb. */
+function blinkInit() {
+    if (blinkEnable) {
+        // Set Blink home as new tab
+        NewTabSetter.setNewTabUrl(version);
+        // Set things up
+        initConfig();
+        // Set PageMods
+        setPageMods();
+    }
+};
+
+/* Clear the settings we changed */
+function clearSettings() {
+    NewTabSetter.reset(version, oldNewTab);
+    browserWindows.removeListener("open", blinkInit);
+    for(let i = 0; i < blinkPageMods.length; i++) {
+        blinkPageMods[i].destroy();
+    }
+    // Empty the array
+    blinkPageMods.splice(0, blinkPageMods.length);
+};
+
+/* Preference change handler */
+function onPrefChange(prefName) {
+    if (prefName == "blinkEnable") {
+        blinkEnable = prefSet.prefs.blinkEnable;
+        if (blinkEnable)
+            blinkInit();
+        else
+            clearSettings();
+    }
+};
+
+/* Set PageMods */
+function setPageMods() {
+    // PageMod for home page
+    blinkPageMods.push(pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: data.url("js/homeManager.js"),
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getHomeConfig", function(nothing) {
+                worker.port.emit("homeConfig", {
+                        userName: userSettings.userName,
+                        showGreeting: userSettings.showGreeting
+                    });
+                Log("Emmitting feedlist");
+            });
+        }
+    }));
+
+
+    // PageMod for feed page
+    blinkPageMods.push(pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: [data.url("js/feedHandler.js"),
+                            data.url("js/feedManager.js")],
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getFeedConfig", function(nothing) {
+                worker.port.emit("feedRatio", {feedRatio: userSettings.feedType});
+            });
+            worker.port.on("getFeed", function(nothing) {
+                worker.port.emit("feedList", feedList);
+                Log("Emmitting feedlist");
+            });
+        }
+    }));
+
+    // PageMod for bookmarks
+    blinkPageMods.push(pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: data.url("js/bookmarksManager.js"),
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getBookmarks", function(nothing) {
+                worker.port.emit("bookmarks", bookmarksTree);
+                Log("Emmitting bookmarks");
+            });
+        }
+    }));
+
+    // PageMod for content
+    blinkPageMods.push(pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: data.url("js/contentManager.js"),
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getContentList", function(nothing) {
+                worker.port.emit("contentList", feedList);
+                Log("Emmitting contentlist");
+            });
+            worker.port.on("addSourceItem", function(item) {
+                feedList.push(item);
+                updateFeed();
+            });
+            worker.port.on("deleteSourceItem", function(item) {
+                var index = indexOf(item);
+                if (index >= 0) {
+                    feedList.splice(index, 1);
+                    updateFeed();
+                }
+            });
+            worker.port.on("toggleSourceItem", function(item) {
+                var index = indexOf(item);
+                if (index >= 0) {
+                    feedList[index].wanted = !feedList[index].wanted;
+                    updateFeed();
+                }
+            });
+        }
+    }));
+
+    // PageMod for settings
+    blinkPageMods.push(pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: data.url("js/settingsManager.js"),
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getUserSettings", function(nothing) {
+                worker.port.emit("userSettings", userSettings);
+                Log("Emmitting userSettings");
+            });
+            worker.port.on("saveUserSettings", function(newSettings) {
+                updateUserSettings(newSettings);
+            });
+        }
+    }));
+}
+
+/* Initialise configuration with user-set preferences and feed list */
+function initConfig() {
+    if (self.loadReason == "install" || ss.storage.feedprefs
+            || !ss.storage.feedList || !ss.storage.userSettings) {
+        userSettings = {
+            showGreeting: true,
+            userName: "Emma",
+            feedType: 'b'
+        };
+        ss.storage.userSettings = userSettings;
+    } else {
+        feedList = ss.storage.feedList;
+        userSettings = ss.storage.userSettings;
+    }
+
+    // If old prefernces are found, migrate
+    if (ss.storage.feedprefs) {
+        feedList = MigrationHandler.migrate(ss.storage.feedprefs);
+        updateFeed();
+        delete ss.storage.feedprefs;
+    }
+
+    getBookmarks();
+    getHistory();
+}
+
+function updateFeed() {
+    ss.storage.feedList = feedList;
+    Log("Updated feed. feedList.length: " + ss.storage.feedList.length);
+}
+
+/* get Settings */
+function updateUserSettings(newSettings) {
+    ss.storage.userSettings = newSettings;
+    userSettings = newSettings;
+    Log("updated. new settings are: " + JSON.stringify(userSettings));
+}
+
+/* fetch bookmarks */
+function getBookmarks() {
+    const { search } = require("sdk/places/bookmarks");
+    Log("Getting bookmarks");
+    // TODO: Bookmarks caching
+    search({
+        query: ""
+    }).on("end", function(bookmarks) {
+        Log("Processing bookmarks");
+        // FIXME: Nested groups will be flattened this way.
+        var BMGroups = {};
+        for (let i = 0; i < bookmarks.length; i++) {
+            var bm = bookmarks[i];
+            var bookmark = {};
+            bookmark.title = bm.title;
+            bookmark.url = bm.url;
+
+            if (BMGroups[bm.group.id]) {
+                BMGroups[bm.group.id].children.push(bookmark);
+            } else {
+                BMGroups[bm.group.id] = {
+                    title: bm.group.title,
+                    children: [bookmark]
+                };
+            }
+        }
+
+        for (var key in BMGroups) {
+            if (BMGroups.hasOwnProperty(key)) {
+                bookmarksTree.push(BMGroups[key]);
+            }
+        }
+    });
+}
+
+/* Get history */
+function getHistory() {
+    var history = [];
+    pageMod.PageMod({
+        include: "resource://blink/data/*",
+        contentScriptFile: data.url("js/historyManager.js"),
+        contentScriptWhen: 'ready',
+        onAttach: function(worker) {
+            worker.port.on("getHistory", function(nothing) {
+                worker.port.emit("history", history);
+                Log("Emmitting history");
+            });
+        }
+    });
+    const { search } = require("sdk/places/history");
+    // Simple query
+    Log("Getting history");
+    search(
+      { url: "" },
+      { count: 750,
+        sort: "visitCount",
+        descending: true
+      }
+    ).on("end", function (results) {
+        Log("Got history");
+        history = results;
+    });
+}
+
+/* Helper function to get index of object */
+function indexOf(o) {
+    for (var i = 0; i < feedList.length; i++) {
+        if (feedList[i].title == o.title &&
+                feedList[i].websiteUrl == o.websiteUrl) {
+            return i;
+        }
+    }
+    return -1;
+};
+
+/* util for debugging */
+function Log(log) {
+    if (devlogs) console.log(log);
+}

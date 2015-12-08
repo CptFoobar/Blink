@@ -1,18 +1,59 @@
 # Blink
-An add-on that makes that turns the new tab page into an interesting news feed from various websites and blogs of your choice. You can customize your feeds by simply adding links to the RSS feeds in the Manage Content Section, and remove by unchecking the box next to the feed you don't want.  
+An add-on that makes that turns the new tab page into an interesting news feed
+from various websites and blogs of your choice. Blink can display any feed, as
+long as it is indexed by [Feedly](feedly.com).
 
-## Screenshots
+This branch is specificallyMaterial for v1.0 of Blink. Bug fixes to current
+version (0.3.1 as of Nov 4, 2015) must be based on develop or master branch.
 
-![Blink New Tab](http://1.bp.blogspot.com/-d-bdZPTbsGI/VeGqpaZXfDI/AAAAAAAAADY/4n6m6-rPH_0/s1600/Blink%2BHome.png "Blink New Tab")
+List of targets for v1:
 
-![Blink Menu](http://2.bp.blogspot.com/-ng9RGCbZZOo/VeGqojYlWxI/AAAAAAAAADQ/5eApEVUTToM/s1600/Blink%2BMenu%2B2.png "Blink Menu")
+* UI Overhaul
 
-![Manage your feeds](http://2.bp.blogspot.com/-LCKWRQd4Q1E/VeGrQWxbZxI/AAAAAAAAADg/lQu4i0K5Snc/s1600/Manage%2BContent%2B2.png "Manage Content")
+    Four pages, _Home_, _Feed_, _Recent_ and _Bookmarks_
+    - ~~_Home_: Minimal home screen~~
+    - ~~_Feed_: Cards layout for feed~~
+    - ~~_Recent_: Show top visited sites~~
+    - ~~_Bookmarks_: Show Bookmarks~~
+    - ~~Flat-Material(-ish) design~~
 
-Sounds good? Get it from [Mozilla Add-ons website](https://addons.mozilla.org/en-US/firefox/addon/blink/)
 
-Found an issue? Need a feature? Open a ticket [here](https://github.com/TigerKid001/Blink/issues).
+* Home
+    - ~~Clock~~
+    - ~~Greeting~~
+    - ~~(moved to v2) Weather~~
+    - ~~Nav~~
 
-### And..
-Thanks to [CoDrops](http://tympanus.net/codrops/) for the awesome UI samples.<br />
-Made with [Materialize](http://materializecss.com/).
+
+* Feed
+    - ~~_Cards_ : Create cars for feed entries~~
+    - ~~Share : Social buttons~~
+
+
+* Settings Options
+    - ~~_Greeting_ : Show greeting~~
+    - ~~_Name_ : Input user name for greeting~~
+    - ~~(X) _Location_ : Use automatic/manual location~~
+    - ~~_(X) Weather_ : C/F~~
+    - ~~(X) _Theme_ : Set dark/light theme~~
+    - ~~_Feed content_ :~~
+        ~~<-- Latest only -- Latest > Trending -- Balanced -- Trending > Latest -- Trending only -->~~
+    - ~~(X) _History_ : Show last < 100 - 250 - 500 - 750 - 1000 >~~
+
+
+
+* Content
+
+    => Using feedly API
+    - ~~_Add_ :  Add content from feedly~~
+    - ~~_Remove_ : Remove feeds from feed list~~
+    - ~~_Search_ : Search for streams indexed by feedly~~
+
+
+* Other Views
+    - ~~_Help_ : How to use Blink~~
+    - ~~_About_ : About Blink (ahem, and me)~~
+    - ~~_Support_: $$$ = <3~~
+
+* Misc
+    - ~~(moved to v2) [Isotope and packery](http://desandro.com/masonry)~~

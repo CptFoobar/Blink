@@ -1,0 +1,211 @@
+.bl-cardbox {
+    margin-bottom: 40px;
+    max-width: 90%;
+}
+
+.bl-card {
+    display: block;
+    overflow: auto;
+    background-color: #fdfdfd;
+    border-radius: 7px;
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.4);
+    position: relative;
+}
+
+.bl-banner {
+    position: relative;
+}
+
+.bl-banner:hover > .banner-button,
+.bl-banner:hover > .blur-filter {
+    opacity: 1;
+}
+
+.banner-image {
+    width: 100%;
+    height: auto;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    transition: filter 0.3s ease-in;
+    -webkit-transition: -webkit-filter 0.3s ease-in;
+    -moz-transition: -moz-filter 0.3s ease-in;
+}
+
+.banner-button {
+    position: absolute;
+    z-index: 200;
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+    -webkit-transition: opacity 0.3s ease-in;
+    -moz-transition: opacity 0.3s ease-in;
+}
+
+.btn-read-more {
+    top: calc(50% - 19px);
+    left: calc(50% - 60px);
+}
+
+.btn-read-more:active:focus {
+    outline: none
+}
+
+.btn-share {
+    top: calc(100% - 43px);
+    left: calc(80% - 60px);
+}
+
+.btn-save-for-later {
+    top: calc(80% - 19px);
+    right: calc(80% - 60px);
+}
+
+.blur-filter {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.35);
+    filter: blur(2px) grayscale(15%);
+    -moz-filter: blur(2px) grayscale(15%);
+    -webkit-filter: blur(2px) grayscale(15%);
+    top: 0;
+    left: 0;
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+    -webkit-transition: opacity 0.3s ease-in;
+    -moz-transition: opacity 0.3s ease-in;
+}
+
+.bl-content {
+    background-color: #fdfdfd;
+    color: #222;
+    padding: 5px 20px 15px 20px;
+    line-height: 1.8em;
+}
+
+.bl-content .source {
+    color: #887;
+    font-weight: 500;
+    font-family: inherit;
+    font-size: 1.05em;
+}
+
+.bl-content .source:hover {
+    text-decoration: none;
+}
+
+.bl-content .title {
+    font-size: 1.25em;
+    color: #222;
+}
+
+.bl-content .snippet {
+    color: #404040;
+    line-height: 1.6em;
+    padding-top: 1em;
+}
+
+.bl-flames {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    cursor: default;
+}
+
+.banner-hover-button {
+    z-index: 250;
+    padding: 9px 18px;
+    border-radius: 30px;
+}
+
+.share-buttons > .btn-group > .btn-group > .btn {
+    border-radius: 0;
+    border: none;
+}
+
+.share-buttons > .btn-group > .btn-group > .btn:active,
+.share-buttons > .btn-group > .btn-group > .btn:focus,
+.share-buttons > .btn-group > .btn-group > .btn:hover:active {
+    border-radius: 0;
+    border: none;
+    -webkit-box-shadow: 0px 2px 2px rgba(0,0,0,0.3);
+    box-shadow: 0px 2px 2px rgba(0,0,0,0.3);
+}
+
+.share-buttons {
+    top: calc(100% - 25px);
+    left: 0;
+}
+
+.share-fb {
+    background-color: #3b5998;
+    color: #fdfdfd;
+}
+
+.share-fb:hover, .share-fb:active, .share-fb:focus, .share-fb:hover:active {
+    background-color: #fdfdfd;
+    color: #3b5998;
+}
+
+.share-twitter {
+    background-color: #00aced;
+    color: #fdfdfd;
+}
+
+.share-twitter:hover, .share-twitter:active, .share-twitter:focus, .share-twitter:hover:active {
+    background-color: #fdfdfd;
+    color: #00aced;
+}
+
+.share-google-plus {
+    background-color: #d34836;
+    color: #fdfdfd;
+}
+
+.share-google-plus:hover, .share-google-plus:active, .share-google-plus:focus, .share-google-plus:hover:active {
+    background-color: #fdfdfd;
+    color: #d34836;
+}
+
+.btn-to-top {
+    background-color: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.65);
+    height: 2em;
+    width: 2em;
+    padding: 0;
+    opacity: 1;
+}
+
+.btn-to-top:hover, .btn-to-top:active, .btn-to-top:focus, .btn-to-top:hover:active {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: rgba(255, 255, 255, 1);
+    background-image: none;
+    box-shadow: none;
+    opacity: 1;
+}
+
+.btn-to-top.ng-hide {
+    opacity: 0;
+}
+
+.scroller {
+    z-index: 300;
+    position: fixed;
+    top: 92.5%;
+    right: 2.5%;
+    opacity: 1;
+    transition: opacity 0.4s;
+    -webkit-transition: opacity 0.4s;
+    -moz-transition: opacity 0.4s;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
