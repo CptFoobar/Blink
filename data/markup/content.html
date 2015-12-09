@@ -76,16 +76,18 @@
         </span>
     </div>
     <div class="row" ng-if="items[0]">
-        <div class="column col-xs-8 col-sm-3 col-md-2 col-md-push-1 content-wrapper" ng-repeat="i in [] | range:getColumns()">
-            <div class="item-container noselect" ng-repeat="src in items | orderBy:'title'" ng-if="$index % getColumns() === i">
-                <span>
-                    <h5><span class="delete-button" ng-click="promptDelete(src)"><i class="fa fa-trash fa-fw fa-lg"></i></span></h5>
-                <img ng-src="{{ src.icon }}" class="feed-icon" />
-                <p class="text-center">
-                    <input type="checkbox" style="vertical-align: text-top;" ng-model="src.wanted" ng-click="updatePrefs(src)">
-                    <a ng-href="{{ src.websiteUrl }}">{{ getTitle(src.title) }}</a>
-                </p>
-                </span>
+        <div class="row" ng-repeat="j in [] | range:getRowCount()">
+            <div class="column col-xs-8 col-sm-3 col-md-2 col-md-push-1 content-wrapper" ng-repeat="i in [] | range:getColumnCount()">
+                <div class="item-container noselect" ng-repeat="src in items | orderBy:'title'" ng-if="$index === i + getColumnCount()*j">
+                    <span>
+                        <h5><span class="delete-button" ng-click="promptDelete(src)"><i class="fa fa-trash fa-fw fa-lg"></i></span></h5>
+                    <img ng-src="{{ src.icon }}" class="feed-icon" />
+                    <p class="text-center">
+                        <input type="checkbox" style="vertical-align: text-top;" ng-model="src.wanted" ng-click="updatePrefs(src)">
+                        <a ng-href="{{ src.websiteUrl }}">{{ src.title }}</a>
+                    </p>
+                    </span>
+                </div>
             </div>
         </div>
     </div>

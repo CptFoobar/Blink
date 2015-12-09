@@ -140,7 +140,7 @@
         };
 
 
-        $scope.getColumns = function() {
+        $scope.getColumnCount = function() {
             var w = window.innerWidth;
             if (w > 1300) return 5
             else if (w < 1300 && w > 1000) return 4;
@@ -148,6 +148,10 @@
             else if (w < 600 && w > 400) return 2;
             else return 1;
         };
+
+        $scope.getRowCount = function() {
+           return Math.ceil($scope.items.length / $scope.getColumnCount());
+       }
 
         $scope.getTitle = function(title) {
             if (title.length > 10)
