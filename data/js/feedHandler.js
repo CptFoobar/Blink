@@ -87,7 +87,7 @@
                     entryTitle: feedObject.items[i].title,
                     entryUrl: entryUrl(feedObject.items[i].originId, feedObject.items[i].alternate[0].href),
                     timestamp: feedObject.items[i].published,
-                    coverUrl: getVisualUrl(feedObject.items[i].visual.url),
+                    coverUrl: getVisualUrl(feedObject.items[i].visual.url, feedItem.icon),
                     contentSnippet: getContentSnippet(feedObject.items[i].summary.content),
                     flames: getFlames(feedObject.items[i].engagementRate),
                     sourceHash: hash
@@ -129,9 +129,9 @@
         else return true;
     }
 
-    var getVisualUrl = function(img) {
+    var getVisualUrl = function(img, icon) {
         if (typeof img === 'undefined' || img === 'none')
-            return "https://unsplash.it/600/480/?random";
+            return icon;
         else return img;
     }
 
