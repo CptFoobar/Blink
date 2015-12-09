@@ -16,6 +16,11 @@
         // Wait for `timeout` secs before declaring 'fetch failure'
         if(timeout == 0 && contentList.length == 0) {
             console.log("Failed to retrieve contentList.");
+            window.postMessage({
+                target: "ContentController",
+                intent: "emptyContentList",
+                payload: {}
+            }, "resource://blink/data/blink_shell.html#/blink/content");
             return;
         }
 

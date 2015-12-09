@@ -52,7 +52,7 @@
 
            var modalInstance = $uibModal.open({
                animation: true,
-               templateUrl: 'showYourLove.html'
+               templateUrl: 'resource://blink/data/markup/showYourLove.html'
            });
 
            modalInstance.result.then(function(deleteItem) {

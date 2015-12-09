@@ -50,7 +50,7 @@
                     feedList = [];
                     self.port.emit("getFeed", {});
                     self.port.emit("getFeedConfig", {});
-                    fetchAllFeed(4);
+                    fetchAllFeed(3);
                     break;
             }
         }

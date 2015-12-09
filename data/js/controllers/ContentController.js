@@ -10,6 +10,9 @@
 
         $scope.items = [];
 
+        $scope.showProgressbar = true;
+        $scope.emptyContentList = false;
+
         var TAG = "ContentController";
 
         $scope.closeAlert = function(index) {
@@ -49,6 +52,7 @@
                     type: "danger",
                     msg: "Deleted '" + item.title + "' from your feed list."
                 });
+                if ($scope.items.length === 0) $scope.emptyContentList = true;
             }
         }
 
@@ -81,6 +85,9 @@
                     type: "success",
                     msg: newFeedItem.title + " has been added to your feed list."
                 });
+
+                if ($scope.emptyContentList) $scope.emptyContentList = false;
+
             } else {
                 // Source already exists
                 $scope.alerts.push({
@@ -95,7 +102,7 @@
             var modalInstance = $uibModal.open({
                 animation: true,
                 size: 'lg',
-                templateUrl: 'addContent.html',
+                templateUrl: 'resource://blink/data/markup/addContent.html',
                 controller: 'AddContentController'
             });
 
@@ -111,7 +118,7 @@
             var idToDelete = indexOf(item);
             var modalInstance = $uibModal.open({
                 animation: true,
-                templateUrl: 'confirmDelete.html',
+                templateUrl: 'resource://blink/data/markup/confirmDelete.html',
                 controller: 'DeleteModalController',
                 resolve: {
                     toDelete: function() {
@@ -167,6 +174,13 @@
                     case "contentList":
                         console.log("loading content list");
                         $scope.items = data.payload;
+                        $scope.showProgressbar = false;
+                        $scope.emptyContentList = false;
+                        break;
+                    case "emptyContentList":
+                        console.log("Empty content list");
+                        $scope.showProgressbar = false;
+                        $scope.emptyContentList = true;
                         break;
                 }
             }
