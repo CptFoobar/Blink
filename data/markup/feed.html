@@ -11,7 +11,7 @@
     </div>
     <div class="row">
         <div class="column col-xs-10 col-xs-push-1 col-sm-push-0 col-sm-6 col-md-4" ng-repeat="i in [] | range:columns()">
-            <div class="bl-cardbox" ng-repeat="entry in entryList" ng-if="$index % columns() == i">
+            <div class="bl-cardbox" ng-repeat="entry in entryList | unique:'entryTitle'" ng-if="$index % columns() == i">
                 <div class="bl-card">
                     <div class="bl-banner">
                         <span class="blur-filter"></span>
