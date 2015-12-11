@@ -79,6 +79,16 @@
             else return 1;
         };
 
+        $scope.getPublishedTime = function(time) {
+            var diff = new Date().getTime() - time;
+            var t = diff / (60 * 60 * 1000);    // Calculate hours
+            if (t > 0 && t < 24)
+                return Math.floor(t).toString() + " hrs ago";
+            else if (t < 0)
+                return Math.floor(t * 60).toString() + " mins ago";
+            else return Math.floor(t / 24).toString() + " days ago";
+        }
+
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
             if (data.target == "FeedController") {
@@ -103,6 +113,7 @@
         });
 
         $scope.fetchAllFeed = function() {
+            $scope.entryList.splice(0, $scope.entryList.length);
             $scope.$emit(
                 '$messageOutgoing',
                 angular.toJson({

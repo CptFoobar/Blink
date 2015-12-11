@@ -50,13 +50,23 @@
         count = countPrefix + count.toString();
         request.open("GET", urlPrefix + feedItem.streamId + count, true);
         request.onload = function() {
+            console.log("[SUCCESS " + request.status + ": " + request.statusText
+                + "] fetchById: " + feedItem.streamId);
             window.postMessage({
                 target: "FeedController",
                 intent: "feedEntries",
                 payload: parseFeed(request.responseText, feedItem)
             }, "resource://blink/data/blink_shell.html#/feed");
         };
-        // TODO: request.onerror
+        request.onerror = function() {
+            console.log("[ERROR " + request.status + ": " + request.statusText
+                    + "] fetchById: " + feedItem.streamId);
+        }
+
+        request.ontimeout = function() {
+            console.log("[ERROR " + request.status + ": " + request.statusText
+                    + "] fetchById: " + feedItem.streamId);
+        }
         request.send();
     };
 
@@ -82,19 +92,30 @@
         };
 
         for (i = 0; i < feedObject.items.length; i++) {
-            if (usefulEntry(feedObject.items[i].title, feedObject.items[i].summary.content)) {
+            // Thanks to an anomaly in the feed items from The Verge, we can now
+            // get the content snippet from either summary or content, depending
+            // on what is available.
+            var contentSnippet = function(item) {
+                if (typeof item.summary === 'undefined')
+                    if (typeof item.content === 'undefined')
+                        return "";
+                    else return getContentSnippet(item.content.content);
+                else return getContentSnippet(item.summary.content);
+            }(feedObject.items[i]);
+            if (usefulEntry(feedObject.items[i].title, contentSnippet)) {
+                console.log("Useful entry");
                 parsedFeed.entries.push({
                     entryTitle: feedObject.items[i].title,
                     entryUrl: entryUrl(feedObject.items[i].originId, feedObject.items[i].alternate[0].href),
                     timestamp: feedObject.items[i].published,
                     coverUrl: getVisualUrl(feedObject.items[i].visual.url, feedItem.icon),
-                    contentSnippet: getContentSnippet(feedObject.items[i].summary.content),
+                    contentSnippet: contentSnippet,
                     flames: getFlames(feedObject.items[i].engagementRate),
                     sourceHash: hash
                 });
             }
         }
-        //console.log("returned object");
+
         return parsedFeed;
     };
 

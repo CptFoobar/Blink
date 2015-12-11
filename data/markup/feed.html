@@ -35,7 +35,10 @@
                         </span>
                     </div>
                     <div class="bl-content">
-                        <a ng-href="{{ feedMap[entry.sourceHash].siteUrl }}" alt="{{ feedMap[entry.sourceHash].title }}" class="source"> {{ feedMap[entry.sourceHash].title }} </a>
+                        <span>
+                            <a ng-href="{{ feedMap[entry.sourceHash].siteUrl }}" alt="{{ feedMap[entry.sourceHash].title }}" class="source"> {{ feedMap[entry.sourceHash].title }} </a>
+                            <span class="feed-time"> {{ getPublishedTime(entry.timestamp) }} </span>
+                        </span>
                         <div class="title">{{ entry.entryTitle }}</div>
                         <div class="snippet" ng-if="entry.contentSnippet">{{ entry.contentSnippet }}</div>
                     </div>

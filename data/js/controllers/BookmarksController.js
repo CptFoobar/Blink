@@ -15,7 +15,9 @@
                 console.log(TAG + "message for BC");
                 switch (data.intent) {
                     case "bookmarks":
-                        $scope.bookmarks = data.payload.bookmarks;
+                        if ($scope.bookmarks.length > 0)
+                            $scope.bookmarks.splice(0, $scope.bookmarks.length);
+                        $scope.bookmarks = data.payload.bookmarks
                         $scope.showProgressbar = false;
                         $scope.noBookmarks = false;
                         break;

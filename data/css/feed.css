@@ -24,6 +24,7 @@
 .banner-image {
     width: 100%;
     height: auto;
+    min-height: 100px;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
     transition: filter 0.3s ease-in;
@@ -41,7 +42,7 @@
 }
 
 .btn-read-more {
-    top: calc(50% - 19px);
+    top: calc(50% - 25px);
     left: calc(50% - 60px);
 }
 
@@ -115,6 +116,12 @@
     z-index: 250;
     padding: 9px 18px;
     border-radius: 30px;
+}
+
+.feed-time {
+    float: right;
+    color: #777;
+    font-size: 0.9em
 }
 
 .share-buttons > .btn-group > .btn-group > .btn {
