@@ -103,7 +103,6 @@
                 else return getContentSnippet(item.summary.content);
             }(feedObject.items[i]);
             if (usefulEntry(feedObject.items[i].title, contentSnippet)) {
-                console.log("Useful entry");
                 parsedFeed.entries.push({
                     entryTitle: feedObject.items[i].title,
                     entryUrl: entryUrl(feedObject.items[i].originId, feedObject.items[i].alternate[0].href),
@@ -170,10 +169,7 @@
 
     var feedHandler = {
         fetchAll: fetchAll,
-        fetchById: fetchById,
-        ping: function() {
-            console.log("Ping received at feedHandler");
-        }
+        fetchById: fetchById
     };
 
     // HACK: Shouldn't set feedHandler as a window attribute (or should we?)

@@ -3,12 +3,14 @@
     var app = angular.module('blink');
     var TAG = "BLINK: ";
 
-    var FeedController = function($scope, $document) {
+    var FeedController = function($scope, $document, $timeout) {
         $scope.entryList = [];
         $scope.feedMap = {};
         $scope.showTopButton = false;
         $scope.showProgressbar = true;
         $scope.emptyFeedList = false;
+        $scope.timedOut = false;
+        $scope.pendingRequest = false;
         var fbPrefix = "https://www.facebook.com/sharer/sharer.php?u=";
         var twitterPrefix = "https://twitter.com/intent/tweet?status=";
         var googleplusPrefix = "https://plus.google.com/share?url=";
@@ -16,8 +18,10 @@
         var addEntries = function(entries) {
             $scope.entryList.push.apply($scope.entryList, entries);
             $scope.entryList = shuffle($scope.entryList);
-            if($scope.showProgressbar)
-                $scope.showProgressbar = false;
+            $scope.showProgressbar = false;
+            $scope.timedOut = false;
+            $scope.emptyFeedList = false;
+            $scope.pendingRequest = false;
         };
 
         $scope.toTheTop = function() {
@@ -82,9 +86,9 @@
         $scope.getPublishedTime = function(time) {
             var diff = new Date().getTime() - time;
             var t = diff / (60 * 60 * 1000);    // Calculate hours
-            if (t > 0 && t < 24)
+            if (t >= 1 && t < 24)
                 return Math.floor(t).toString() + " hrs ago";
-            else if (t < 0)
+            else if (t < 1)
                 return Math.floor(t * 60).toString() + " mins ago";
             else return Math.floor(t / 24).toString() + " days ago";
         }
@@ -107,6 +111,8 @@
                         console.log("Empty feed list");
                         $scope.showProgressbar = false;
                         $scope.emptyFeedList = true;
+                        $scope.timedOut = false;
+                        $scope.pendingRequest = false;
                         break;
                 }
             }
@@ -114,6 +120,7 @@
 
         $scope.fetchAllFeed = function() {
             $scope.entryList.splice(0, $scope.entryList.length);
+            $scope.pendingRequest = true;
             $scope.$emit(
                 '$messageOutgoing',
                 angular.toJson({
@@ -122,12 +129,21 @@
                     payload: {}
                 })
             );
+            $timeout(function(){
+                // We still havent got any response after 10 secs, inform user
+                if ($scope.pendingRequest) {
+                    $scope.showProgressbar = false;
+                    $scope.timedOut = true;
+                    $scope.emptyFeedList = true;
+                    $scope.pendingRequest = false;
+                }
+            }, 10 * 1000);
             console.log("called fetchAllFeed.");
         };
 
         $scope.fetchAllFeed();
     };
 
-    app.controller('FeedController', ['$scope', '$document', FeedController]);
+    app.controller('FeedController', ['$scope', '$document', '$timeout', FeedController]);
 
 }());

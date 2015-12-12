@@ -1,6 +1,6 @@
 <uib-progressbar class="progress-striped active" value="dynamic" type="success" ng-show="showProgressbar" style="border-radius: 5px; height: 10px"></uib-progressbar>
 <div class="container" scroll>
-    <div class="row text-center noselect" ng-if="emptyFeedList" style="cursor: default">
+    <div class="row text-center noselect" ng-if="emptyFeedList && !timedOut" style="cursor: default">
         <span class="no-items">
             <br />
             <i class="fa fa-exclamation fa-3x"></i><br /><br />
@@ -9,7 +9,17 @@
             <p class="tip">Hint: Go to the Content section in the Options and click the 'Add Content' button</p>
         </span>
     </div>
-    <div class="row">
+    <div class="row text-center noselect" ng-if="emptyFeedList && timedOut" style="cursor: default">
+        <span class="no-items">
+            <br />
+            <i class="fa fa-frown-o fa-3x"></i><br /><br />
+            Oops! <br />
+            Couldn't fetch your news feed.
+            <br /><br/>
+            <p class="tip">Please check your internet connection and try again.</p>
+        </span>
+    </div>
+    <div class="row" ng-hide="emptyFeedList">
         <div class="column col-xs-10 col-xs-push-1 col-sm-push-0 col-sm-6 col-md-4" ng-repeat="i in [] | range:columns()">
             <div class="bl-cardbox" ng-repeat="entry in entryList | unique:'entryTitle'" ng-if="$index % columns() == i">
                 <div class="bl-card">
