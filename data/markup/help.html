@@ -14,7 +14,7 @@
                 <div class="panel-heading help-heading">Content</div>
                 <div class="panel-body help-body">
                     <div class="embed-responsive embed-responsive-16by9">
-                        <img class="embed-responsive-item" src="resource://blink/data/img/blink_content.png"/>
+                        <img class="embed-responsive-item" src="resource://blink/data/img/blink_content.png" />
                     </div>
                     <div class="media">
                         <div class="media-left media-middle">
@@ -62,6 +62,21 @@
                         </li>
                     </ol>
                     If you accidentally delete a source, you can always get it back using the Add Content button.
+                    <br />
+                    <span class="help-body-title" id="disableContent">
+                        Disable Content sources
+                    </span>
+                    <hr class="help-panel-divider"> If you wish to temporarily disable feed from a particular source, without actually removing it from your list, you can do so in the following way:
+                    <ol>
+                        <li>
+                            First, locate the feed source you want to disable in the content list.
+                        </li>
+                        <li>
+                            Now uncheck the little checkbox (<i class="fa fa-check-square-o fa-fw"></i>) present before the source's name.
+                        </li>
+                    </ol>
+                    And voilà, the feed is now hidden.
+                    <br /> If you want to enable a disabled feed, simply check the checkbox next to it.
                 </div>
             </div>
 
@@ -150,6 +165,10 @@
                 <li>
                     <a class="help-nav-link" du-smooth-scroll="removeContent" duration="750" offset="75">
                     Remove Content sources</a>
+                </li>
+                <li>
+                    <a class="help-nav-link" du-smooth-scroll="disableContent" duration="750" offset="75">
+                    Disable Content sources</a>
                 </li>
             </ul>
 

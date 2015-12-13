@@ -87,10 +87,13 @@
             var diff = new Date().getTime() - time;
             var t = diff / (60 * 60 * 1000);    // Calculate hours
             if (t >= 1 && t < 24)
-                return Math.floor(t).toString() + " hrs ago";
+                return Math.floor(t).toString() +
+                    (Math.floor(t).toString() == 1 ? " hr ago" : " hrs ago");
             else if (t < 1)
-                return Math.floor(t * 60).toString() + " mins ago";
-            else return Math.floor(t / 24).toString() + " days ago";
+                return Math.floor(t * 60).toString() +
+                    (Math.floor(t * 60).toString() == 1 ? " min ago" : " mins ago");
+            else return Math.floor(t / 24).toString() +
+                    (Math.floor(t / 24).toString() == 1 ? " day ago" : " days ago");
         }
 
         $scope.$root.$on('$messageIncoming', function(event, data) {

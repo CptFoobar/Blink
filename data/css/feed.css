@@ -97,6 +97,7 @@
 .bl-content .title {
     font-size: 1.25em;
     color: #222;
+    word-wrap: break-word;
 }
 
 .bl-content .snippet {

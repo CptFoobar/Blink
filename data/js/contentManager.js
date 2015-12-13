@@ -41,7 +41,7 @@
     var getAutocompleteSuggestions = function(query) {
         var request = new XMLHttpRequest();
         var completeQuery = "https://cloud.feedly.com/v3/search/feeds?q="
-                                + query + "&count=8";
+                                + query + "&count=12";
         request.open("GET", completeQuery, true);
         request.onload = function() {
             window.postMessage({
