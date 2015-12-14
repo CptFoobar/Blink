@@ -11,6 +11,7 @@
         $scope.emptyFeedList = false;
         $scope.timedOut = false;
         $scope.pendingRequest = false;
+        $scope.arraySize = -1;
         var fbPrefix = "https://www.facebook.com/sharer/sharer.php?u=";
         var twitterPrefix = "https://twitter.com/intent/tweet?status=";
         var googleplusPrefix = "https://plus.google.com/share?url=";
@@ -18,7 +19,8 @@
         var addEntries = function(entries) {
             $scope.entryList.push.apply($scope.entryList, entries);
             $scope.entryList = shuffle($scope.entryList);
-            $scope.showProgressbar = false;
+            if ($scope.entryList.length == $scope.arraySize)
+                $scope.showProgressbar = false;
             $scope.timedOut = false;
             $scope.emptyFeedList = false;
             $scope.pendingRequest = false;
@@ -116,6 +118,9 @@
                         $scope.emptyFeedList = true;
                         $scope.timedOut = false;
                         $scope.pendingRequest = false;
+                        break;
+                    case "fetchComplete":
+                        $scope.arraySize = data.payload.size;
                         break;
                 }
             }

@@ -18,6 +18,11 @@
             // Trending only
             fetchAllTrending(feedList, 15);
         }
+        window.postMessage({
+            target: "FeedController",
+            intent: "fetchComplete",
+            payload: { size: 15 * feedList.length }
+        }, "resource://blink/data/blink_shell.html#/feed");
     }
 
     /* Fetch all feed streams */
@@ -92,22 +97,15 @@
         };
 
         for (i = 0; i < feedObject.items.length; i++) {
-            // Thanks to an anomaly in the feed items from The Verge, we can now
-            // get the content snippet from either summary or content, depending
-            // on what is available.
-            var contentSnippet = function(item) {
-                if (typeof item.summary === 'undefined')
-                    if (typeof item.content === 'undefined')
-                        return "";
-                    else return getContentSnippet(item.content.content);
-                else return getContentSnippet(item.summary.content);
-            }(feedObject.items[i]);
+            var contentSnippet = getContentSnippet(feedObject.items[i].summary,
+                                    feedObject.items[i].content);
             if (usefulEntry(feedObject.items[i].title, contentSnippet)) {
                 parsedFeed.entries.push({
                     entryTitle: feedObject.items[i].title,
-                    entryUrl: entryUrl(feedObject.items[i].originId, feedObject.items[i].alternate[0].href),
+                    entryUrl: entryUrl(feedObject.items[i].originId,
+                                    feedObject.items[i].alternate[0].href),
                     timestamp: feedObject.items[i].published,
-                    coverUrl: getVisualUrl(feedObject.items[i].visual.url, feedItem.icon),
+                    coverUrl: getVisualUrl(feedObject.items[i].visual, feedItem.icon),
                     contentSnippet: contentSnippet,
                     flames: getFlames(feedObject.items[i].engagementRate),
                     sourceHash: hash
@@ -119,7 +117,15 @@
     };
 
     /* Make the content summary readable */
-    var getContentSnippet = function(snippet) {
+    var getContentSnippet = function(summary, content) {
+        // Some feed entries don't have a summary available, some don't have
+        // content. So pick whatever is available.
+        var snippet = "";
+        if (typeof summary === 'undefined')
+            if (typeof content === 'undefined')
+                return snippet;
+            else snippet = content.content;
+        else snippet = summary.content;
         // Remove HTML tags
         snippet = snippet.replace(/(<([^>]+)>)/ig, "");
         // Remove \r and \n occurences
@@ -129,8 +135,11 @@
         // Replace all occurences of 'Read More'
         var regex = new RegExp("Read More", 'g');
         snippet = snippet.replace(regex, '');
-        if (snippet.length > 120)
-            snippet = snippet.substring(0, 148);
+        // Adding ellipsis
+        if (snippet.length > 150) {
+            snippet = snippet.substring(0, 150);
+            snippet = snippet.substring(0, snippet.lastIndexOf(" ") + 1);
+        }
         if (snippet.length === 0)
             snippet = "";
         else snippet += "...";
@@ -152,7 +161,9 @@
     var getVisualUrl = function(img, icon) {
         if (typeof img === 'undefined' || img === 'none')
             return icon;
-        else return img;
+        else if (typeof img.url === 'undefined' || img.url === 'none')
+            return icon;
+        else return img.url;
     }
 
     /* Generate hash code for given string */
