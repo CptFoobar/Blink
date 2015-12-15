@@ -19,7 +19,8 @@
         var addEntries = function(entries) {
             $scope.entryList.push.apply($scope.entryList, entries);
             $scope.entryList = shuffle($scope.entryList);
-            if ($scope.entryList.length == $scope.arraySize)
+            // Tolerance of 2 missing posts per source
+            if ($scope.entryList.length > $scope.arraySize * 13)
                 $scope.showProgressbar = false;
             $scope.timedOut = false;
             $scope.emptyFeedList = false;

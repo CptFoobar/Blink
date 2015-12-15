@@ -21,7 +21,7 @@
         window.postMessage({
             target: "FeedController",
             intent: "fetchComplete",
-            payload: { size: 15 * feedList.length }
+            payload: { size: feedList.length }
         }, "resource://blink/data/blink_shell.html#/feed");
     }
 
