@@ -1,59 +1,37 @@
 # Blink
-An add-on that makes that turns the new tab page into an interesting news feed
-from various websites and blogs of your choice. Blink can display any feed, as
-long as it is indexed by [Feedly](feedly.com).
 
-This branch is specificallyMaterial for v1.0 of Blink. Bug fixes to current
-version (0.3.1 as of Nov 4, 2015) must be based on develop or master branch.
+![Blink Home](http://4.bp.blogspot.com/-qUMUKb4pV0M/VnADAxZGpaI/AAAAAAAAAHg/htlI3F35jeQ/s1600/blink_home_mockup.jpg)
+<br />
+<br />
+![Blink Home](http://1.bp.blogspot.com/-Sa_rP__ZYbw/VnAC0635uOI/AAAAAAAAAHQ/efePc7eCvK0/s1600/blink_feed.png)
+<br />
+<br />
+![Blink Home](http://1.bp.blogspot.com/-71y3qacL4qI/VnAC3Sz_zuI/AAAAAAAAAHY/oyL6UKwoYNQ/s1600/blink_content.png)
 
-List of targets for v1:
+----------------------------
 
-* UI Overhaul
+## What is it?
 
-    Four pages, _Home_, _Feed_, _Recent_ and _Bookmarks_
-    - ~~_Home_: Minimal home screen~~
-    - ~~_Feed_: Cards layout for feed~~
-    - ~~_Recent_: Show top visited sites~~
-    - ~~_Bookmarks_: Show Bookmarks~~
-    - ~~Flat-Material(-ish) design~~
+Blink makes your 'New Tab' page more useful, productive and inspiring by replacing it with an elegant and beautiful alternative homescreen. It keeps you up-to-date with latest stories of topics of your choice, from around the world. Not just that, Blink also puts the Google search, your bookmarks and recent history just one click away.
 
+## Content
 
-* Home
-    - ~~Clock~~
-    - ~~Greeting~~
-    - ~~(moved to v2) Weather~~
-    - ~~Nav~~
+Blink lets you choose exactly what you see in your feed. Powered by **[Feedly](https://feedly.com)** API, Blink lets you catch up on news from any of the feed sources (indexed by feedly) of your choice.
 
+## Features
 
-* Feed
-    - ~~_Cards_ : Create cars for feed entries~~
-    - ~~Share : Social buttons~~
+* Simple and clean design
+* Minimal homescreen
+* Handy Google searchbar with dropdown suggestions
+* Comfortable and clean card layout of news feed
+* Search for content sources
+* Share link on Facebook, Twitter or Google+ in one click
+* Quick access to history and bookmarks
 
+## Contributing to Blink
 
-* Settings Options
-    - ~~_Greeting_ : Show greeting~~
-    - ~~_Name_ : Input user name for greeting~~
-    - ~~(X) _Location_ : Use automatic/manual location~~
-    - ~~_(X) Weather_ : C/F~~
-    - ~~(X) _Theme_ : Set dark/light theme~~
-    - ~~_Feed content_ :~~
-        ~~<-- Latest only -- Latest > Trending -- Balanced -- Trending > Latest -- Trending only -->~~
-    - ~~(X) _History_ : Show last < 100 - 250 - 500 - 750 - 1000 >~~
+There are a bunch of ways you can help with the development of Blink.
 
-
-
-* Content
-
-    => Using feedly API
-    - ~~_Add_ :  Add content from feedly~~
-    - ~~_Remove_ : Remove feeds from feed list~~
-    - ~~_Search_ : Search for streams indexed by feedly~~
-
-
-* Other Views
-    - ~~_Help_ : How to use Blink~~
-    - ~~_About_ : About Blink (ahem, and me)~~
-    - ~~_Support_: $$$ = <3~~
-
-* Misc
-    - ~~(moved to v2) [Isotope and packery](http://desandro.com/masonry)~~
+* Support development using PayPal (see the Support section of the addon)
+* Suggest new features, report bugs [here](https://github.com/TigerKid001/Blink/issues)
+* [Contribute code](https://github.com/TigerKid001/Blink/blob/master/CONTRIBUTING.md) (fix bugs, implement features)

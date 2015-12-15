@@ -207,7 +207,7 @@ function initConfig() {
             || !ss.storage.feedList || !ss.storage.userSettings) {
         userSettings = {
             showGreeting: true,
-            userName: "Emma",
+            userName: "User",
             feedType: 'b'
         };
         ss.storage.userSettings = userSettings;
