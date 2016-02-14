@@ -1,6 +1,5 @@
 (function() {
     'use strict'
-    // ^ since we cannot (yet) use classes without strict mode
 
     var app = angular.module('blink');
 
@@ -20,7 +19,7 @@
         };
 
         $scope.updatePrefs = function(item) {
-            console.log("toggling " + item.title);
+            // console.log("toggling " + item.title);
             $scope.$emit(
                 '$messageOutgoing',
                 angular.toJson({
@@ -34,7 +33,7 @@
         };
 
         $scope.deleteItem = function(item) {
-            console.log('deleting ' + JSON.stringify(item));
+            // console.log('deleting ' + JSON.stringify(item));
             var index = indexOf(item);
             if (index >= 0) {
                 $scope.$emit(
@@ -57,7 +56,7 @@
         }
 
         $scope.addSourceItem = function(addItem) {
-            console.log("adding new item " + JSON.stringify(addItem));
+            // console.log("adding new item " + JSON.stringify(addItem));
             var newFeedItem = {
                 title: addItem.title,
                 websiteUrl: addItem.website,
@@ -130,7 +129,7 @@
             modalInstance.result.then(function(deleteItem) {
                 $scope.deleteItem(deleteItem);
             }, function() {
-                console.log('Modal dismissed at: ' + new Date());
+                // console.log('Modal dismissed at: ' + new Date());
             });
         };
 
@@ -143,7 +142,7 @@
                     payload: {}
                 })
             );
-            console.log("called getContentList.");
+            // console.log("called getContentList.");
         };
 
 
@@ -169,16 +168,16 @@
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
             if (data.target == "ContentController") {
-                console.log(TAG + "message for CC");
+                // console.log(TAG + "message for CC");
                 switch (data.intent) {
                     case "contentList":
-                        console.log("loading content list");
+                        // console.log("loading content list");
                         $scope.items = data.payload;
                         $scope.showProgressbar = false;
                         $scope.emptyContentList = false;
                         break;
                     case "emptyContentList":
-                        console.log("Empty content list");
+                        // console.log("Empty content list");
                         $scope.showProgressbar = false;
                         $scope.emptyContentList = true;
                         break;
@@ -248,7 +247,7 @@
         var contentPromise = new ContentPromise();
 
         $scope.getSourceSuggestions = function(query) {
-            console.log("Querying for: " + query);
+            // console.log("Querying for: " + query);
             // Show progressbar
             $scope.showProgressbar = true;
             contentPromise.setPromise($q.defer());
@@ -262,10 +261,10 @@
                     }
                 })
             );
-            console.log("called getSourceSuggestions.");
+            // console.log("called getSourceSuggestions.");
             return contentPromise.getPromise()
                 .then(function(suggestions) {
-                    //console.log(JSON.stringify(suggestions));
+                    //// console.log(JSON.stringify(suggestions));
                     return suggestions;
                 });
         };
@@ -273,10 +272,10 @@
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
             if (data.target == "ContentController") {
-                console.log("message for CC");
+                // console.log("message for CC");
                 switch (data.intent) {
                     case "suggestionList":
-                        console.log("loading suggestions");
+                        // console.log("loading suggestions");
                         // Hide progressbar
                         $scope.showProgressbar = false;
                         // TODO: Filter (or mark) results already in feed list

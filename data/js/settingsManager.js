@@ -10,7 +10,7 @@
     var fetchUserSettings = function(timeout) {
         // Wait for `timeout` secs before declaring 'fetch failure'
         if(timeout == 0 && userSettings.length == 0) {
-            console.log("Failed to retrieve userSettings.");
+            // console.log("Failed to retrieve userSettings.");
             return;
         }
 
@@ -19,7 +19,7 @@
                 fetchUserSettings(timeout - 1);
             }, 1000);
         } else {
-            console.log("Posting userSettings");
+            // console.log("Posting userSettings");
             window.postMessage({
                 target: "SettingsController",
                 intent: "config",
@@ -37,17 +37,17 @@
     window.addEventListener('message', function(event) {
         var message = JSON.parse(event.data);
         if (message.target && message.target == "SettingsManager") {
-            console.log("Got message for SettingsManager");
+            // console.log("Got message for SettingsManager");
             var intent = message.intent;
             switch (intent) {
                 case "getConfig":
-                    console.log("fetch user settings request");
+                    // console.log("fetch user settings request");
                     userSettings = [];
                     self.port.emit("getUserSettings", {});
                     fetchUserSettings(3);
                     break;
                 case "saveConfig":
-                    console.log("save user settings request");
+                    // console.log("save user settings request");
                     saveSettings(message.payload.config);
                     break;
             }

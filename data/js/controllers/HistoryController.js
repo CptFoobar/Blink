@@ -11,7 +11,7 @@
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
             if (data.target == "HistoryController") {
-                console.log(TAG + "message for HC");
+                // console.log(TAG + "message for HC");
                 switch (data.intent) {
                     case "history":
                         $scope.history = data.payload.history;
@@ -35,7 +35,7 @@
                     payload: {}
                 })
             );
-            console.log("called fetchHistory.");
+            // console.log("called fetchHistory.");
         };
 
         $scope.fetchHistory();

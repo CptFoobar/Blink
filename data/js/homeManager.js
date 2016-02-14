@@ -15,7 +15,7 @@
     var fetchHomeConfig = function(timeout) {
         // Wait for `timeout` secs before declaring 'fetch failure'
         if (timeout === 0 && typeof homeConfig.showGreeting === 'undefined') {
-            console.log("Failed to retrieve homeConfig.");
+            // console.log("Failed to retrieve homeConfig.");
             return;
         }
 
@@ -35,7 +35,7 @@
     var HomeListener = function(event) {
         var message = JSON.parse(event.data);
         if (message.target && message.target == "HomeManager") {
-            console.log("Got message for HomeManager");
+            // console.log("Got message for HomeManager");
             var intent = message.intent;
             switch (intent) {
                 case "getHomeConfig":

@@ -34,7 +34,7 @@
         };
 
         $scope.google = function(query, selection) {
-            console.log("q: " + query + " s: " + selection);
+            // console.log("q: " + query + " s: " + selection);
             if (selection.length < 1)
                 if (typeof query != 'undefined' && query.length !== 0)
                     window.location = "https://www.google.com/search?q=" +
@@ -57,9 +57,9 @@
 
            modalInstance.result.then(function(deleteItem) {
                //$scope.deleteItem(deleteItem);
-               console.log('SYL Modal returned');
+               // console.log('SYL Modal returned');
            }, function() {
-               console.log('SYL Modal dismissed at: ' + new Date());
+               // console.log('SYL Modal dismissed at: ' + new Date());
            });
        };
     };

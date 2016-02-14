@@ -12,7 +12,7 @@
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
             if (data.target == "BookmarksController") {
-                console.log(TAG + "message for BC");
+                // console.log(TAG + "message for BC");
                 switch (data.intent) {
                     case "bookmarks":
                         if ($scope.bookmarks.length > 0)
@@ -38,7 +38,7 @@
                     payload: {}
                 })
             );
-            console.log("called fetchAllBookmarks.");
+            // console.log("called fetchAllBookmarks.");
         };
 
         $scope.fetchAllBookmarks();

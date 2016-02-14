@@ -30,7 +30,7 @@
         // FIXME: This might very soon start returning 429 (too many requests)
         // Request only 2 streams (or limited entries) at a time (and use
         // 'Load More' loader)
-        console.log("fetching streams...");
+        // console.log("fetching streams...");
         for (i = 0; i < feedList.length; i++) {
             if (feedList[i].wanted)
                 fetchById(feedList[i], streamUrlPrefix, count);
@@ -42,7 +42,7 @@
         // FIXME: This might very soon start returning 429 (too many requests)
         // Request only 2 streams (or limited entries) at a time (and use
         // 'Load More' loader)
-        console.log("fetching trends...");
+        // console.log("fetching trends...");
         for (i = 0; i < feedList.length; i++) {
             if (feedList[i].wanted)
                 fetchById(feedList[i], trendingUrlPrefix, count);
@@ -55,8 +55,8 @@
         count = countPrefix + count.toString();
         request.open("GET", urlPrefix + feedItem.streamId + count, true);
         request.onload = function() {
-            console.log("[SUCCESS " + request.status + ": " + request.statusText
-                + "] fetchById: " + feedItem.streamId);
+            // console.log("[SUCCESS " + request.status + ": " + request.statusText
+                //+ "] fetchById: " + feedItem.streamId);
             window.postMessage({
                 target: "FeedController",
                 intent: "feedEntries",
@@ -64,13 +64,13 @@
             }, "resource://blink/data/blink_shell.html#/feed");
         };
         request.onerror = function() {
-            console.log("[ERROR " + request.status + ": " + request.statusText
-                    + "] fetchById: " + feedItem.streamId);
+            // console.log("[ERROR " + request.status + ": " + request.statusText
+                    //+ "] fetchById: " + feedItem.streamId);
         }
 
         request.ontimeout = function() {
-            console.log("[ERROR " + request.status + ": " + request.statusText
-                    + "] fetchById: " + feedItem.streamId);
+            // console.log("[ERROR " + request.status + ": " + request.statusText
+                    //+ "] fetchById: " + feedItem.streamId);
         }
         request.send();
     };

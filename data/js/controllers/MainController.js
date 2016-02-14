@@ -4,7 +4,7 @@
     var MainController = function($scope, $location) {
 
         $scope.goTo = function(path) {
-            console.log("Going to: " + path + " " + typeof path);
+            // console.log("Going to: " + path + " " + typeof path);
             $location.path(path);
         }
 

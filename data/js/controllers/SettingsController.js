@@ -44,10 +44,10 @@
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
             if (data.target == "SettingsController") {
-                console.log("message for SC");
+                // console.log("message for SC");
                 switch (data.intent) {
                     case "config":
-                        console.log("loading configuration");
+                        // console.log("loading configuration");
                         // Hide progressbar
                         $scope.showProgressbar = false;
                         config(data.payload.config);

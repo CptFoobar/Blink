@@ -25,7 +25,7 @@
                 intent: "emptyFeedList",
                 payload: {}
             }, "resource://blink/data/blink_shell.html#/feed");
-            console.log("Failed to retrieve feedList.");
+            // console.log("Failed to retrieve feedList.");
             return;
         }
 
@@ -42,7 +42,7 @@
     window.addEventListener('message', function(event) {
         var message = JSON.parse(event.data);
         if (message.target && message.target == "FeedManager") {
-            console.log("Got message for FeedManager");
+            // console.log("Got message for FeedManager");
             var intent = message.intent;
             switch (intent) {
                 case "fetch":

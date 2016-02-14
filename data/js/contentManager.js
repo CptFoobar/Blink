@@ -15,7 +15,7 @@
     var fetchContentList = function(timeout) {
         // Wait for `timeout` secs before declaring 'fetch failure'
         if(timeout == 0 && contentList.length == 0) {
-            console.log("Failed to retrieve contentList.");
+            // console.log("Failed to retrieve contentList.");
             window.postMessage({
                 target: "ContentController",
                 intent: "emptyContentList",
@@ -29,7 +29,7 @@
                 fetchContentList(timeout - 1);
             }, 1000);
         } else {
-            console.log("Posting contentList");
+            // console.log("Posting contentList");
             window.postMessage({
                 target: "ContentController",
                 intent: "contentList",
@@ -70,29 +70,29 @@
     window.addEventListener('message', function(event) {
         var message = JSON.parse(event.data);
         if (message.target && message.target == "ContentManager") {
-            console.log("Got message for ContentManager");
+            // console.log("Got message for ContentManager");
             var intent = message.intent;
             switch (intent) {
                 case "fetch":
-                    console.log("fetch request");
+                    // console.log("fetch request");
                     contentList = [];
                     self.port.emit("getContentList", {});
                     fetchContentList(3);
                     break;
                 case "search":
-                    console.log("search request");
+                    // console.log("search request");
                     getAutocompleteSuggestions(message.payload.query);
                     break;
                 case "add":
-                    console.log("add request");
+                    // console.log("add request");
                     addSourceItem(message.payload.addItem);
                     break;
                 case "delete":
-                    console.log("delete request");
+                    // console.log("delete request");
                     deleteSourceItem(message.payload.removeItem);
                     break;
                 case "toggle":
-                    console.log("toggle request");
+                    // console.log("toggle request");
                     toggleSourceItem(message.payload.toggleItem)
                     break;
             }

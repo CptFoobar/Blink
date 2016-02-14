@@ -34,7 +34,7 @@
         // Open popup window. Code adopted from:
         // http://www.nigraphic.com/blog/java-script/how-open-new-window-popup-center-screen
         $scope.popup = function popupCenter(sharePoint, suffix) {
-            console.log("Opening popup ");
+            // console.log("Opening popup ");
             var url, title;
             switch (sharePoint) {
                 case 'f':
@@ -51,7 +51,7 @@
                     break;
             }
             url = url + suffix;
-            console.log("Opening popup for: " + url);
+            // console.log("Opening popup for: " + url);
             var h = 500, w = 500;
             var left = (screen.width / 2) - (w / 2);
             var top = (screen.height / 2) - (h / 2);
@@ -102,10 +102,10 @@
         $scope.$root.$on('$messageIncoming', function(event, data) {
             data = angular.fromJson(data);
             if (data.target == "FeedController") {
-                console.log(TAG + "message for FC");
+                // console.log(TAG + "message for FC");
                 switch (data.intent) {
                     case "feedEntries":
-                        console.log("adding entries");
+                        // console.log("adding entries");
                         $scope.feedMap[data.payload.hashCode] = {
                             title: data.payload.title,
                             siteUrl: data.payload.siteUrl,
@@ -114,7 +114,7 @@
                         addEntries(data.payload.entries);
                         break;
                     case "emptyFeedList":
-                        console.log("Empty feed list");
+                        // console.log("Empty feed list");
                         $scope.showProgressbar = false;
                         $scope.emptyFeedList = true;
                         $scope.timedOut = false;
@@ -147,7 +147,7 @@
                     $scope.pendingRequest = false;
                 }
             }, 10 * 1000);
-            console.log("called fetchAllFeed.");
+            // console.log("called fetchAllFeed.");
         };
 
         $scope.fetchAllFeed();

@@ -16,7 +16,7 @@ var parseFeedSource = function(json, wanted) {
 };
 
 const migrate = function(oldPrefs) {
-    console.log("migrating");
+    // console.log("migrating");
     var Request = require("sdk/request").Request;
     var migratedList = [];
     var searchUrlPrefix = "https://cloud.feedly.com/v3/search/feeds?q=";

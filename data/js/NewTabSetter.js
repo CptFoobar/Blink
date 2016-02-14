@@ -75,7 +75,7 @@ const resetHiddenPages = function() {
 }
 
 const setNewTabUrl = function(version) {
-    console.log("Setting new tab")
+    // console.log("Setting new tab")
     if (version <= Fx41)
         setNewTab_Fx41();
     else if (version >= Fx41 && version <= Fx44)

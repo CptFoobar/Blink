@@ -14,7 +14,7 @@
     var fetchHistory = function(timeout) {
         // Wait for `timeout` secs before declaring 'fetch failure'
         if (timeout === 0 && history.length === 0) {
-            console.log("Failed to retrieve history.");
+            // console.log("Failed to retrieve history.");
             // Inform HistoryController
             window.postMessage({
                 target: "HistoryController",
@@ -73,7 +73,7 @@
     window.addEventListener('message', function(event) {
         var message = JSON.parse(event.data);
         if (message.target && message.target == "HistoryManager") {
-            console.log("Got message for HistoryManager");
+            // console.log("Got message for HistoryManager");
             var intent = message.intent;
             switch (intent) {
                 case "fetch":

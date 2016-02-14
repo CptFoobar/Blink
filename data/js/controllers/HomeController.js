@@ -36,7 +36,7 @@
        $scope.$root.$on('$messageIncoming', function(event, data) {
            data = angular.fromJson(data);
            if (data.target == "HomeController") {
-               console.log("message for HC");
+               // console.log("message for HC");
                switch (data.intent) {
                    case "homeConfig":
                        $scope.username = data.payload.config.userName;
@@ -45,7 +45,7 @@
                }
            }
        });
-       console.log("called fetchAllBookmarks.");
+       // console.log("called fetchAllBookmarks.");
     };
 
     app.controller('HomeController', ['$scope', '$interval', HomeController]);
