@@ -19,7 +19,7 @@ const MigrationHandler = require(data.url("js/MigrationHandler"));
 
 var oldNewTab;
 var blinkEnable = prefSet.prefs.blinkEnable;
-var devlogs = true; // set true to enable logging
+var devlogs = false; // set true to enable logging
 var feedList = [];
 var bookmarksTree = [];
 var bookmarks = [];
@@ -43,6 +43,9 @@ prefSet.on("blinkEnable", onPrefChange);
 unload(function() {
     clearSettings();
 });
+
+if (self.loadReason == "install" || self.loadReason == "upgrade")
+    tabs.open(data.url("blink_shell.html#/blink/help"));
 
 /* Clear settings on disable/uninstall.
    But due to bug https://bugzilla.mozilla.org/show_bug.cgi?id=627432#c12,
