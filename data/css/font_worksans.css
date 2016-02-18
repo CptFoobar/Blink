@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'work_sans_thin';
+    src: url('../fonts/WorkSans/worksans-thin-webfont.eot');
+    src: url('../fonts/WorkSans/worksans-thin-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/WorkSans/worksans-thin-webfont.woff2') format('woff2'),
+         url('../fonts/WorkSans/worksans-thin-webfont.woff') format('woff'),
+         url('../fonts/WorkSans/worksans-thin-webfont.ttf') format('truetype'),
+         url('../fonts/WorkSans/worksans-thin-webfont.svg#work_sansthin') format('svg');
+}
+
+@font-face {
+    font-family: 'work_sans_hairline';
+    src: url('../fonts/WorkSans/worksans-hairline-webfont.eot');
+    src: url('../fonts/WorkSans/worksans-hairline-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/WorkSans/worksans-hairline-webfont.woff2') format('woff2'),
+         url('../fonts/WorkSans/worksans-hairline-webfont.woff') format('woff'),
+         url('../fonts/WorkSans/worksans-hairline-webfont.ttf') format('truetype'),
+         url('../fonts/WorkSans/worksans-hairline-webfont.svg#work_sanshairline') format('svg');
+}

@@ -26,5 +26,10 @@ If a new Firefox window pops up, and the new tab is replaced by the Blink tab, y
 #### Google Chrome
 
 Beginning port to Google Chrome. v1.0.0 for Google Chrome will be exact replica of v1.0.2 Firefox.
+Priority precedence order:
+* 0 - Urgent (Core* functionality breakage)
+* 1 - Important (Side functionality breakage)
+* 2 - Normal (Non-breaking Bug)
+* 3 - Low (Low priority bug, typo etc)
 
 Pull requests welcome. Please base bug-fixes on the develop branch. To contribute towards the development of v1, competing the TODOs and fixing the FIXMEs will be highly appreciated :smile:. Implementing new features would be awesome.

@@ -1,0 +1,152 @@
+.feed-icon {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    /*box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);*/
+    margin: 10px 0 25px 0;
+}
+
+.content-wrapper {
+    margin: 5px 0px -15px 0;
+}
+
+.item-container {
+    position: relative;
+}
+
+.item-container > span > p {
+    font-size: 1.25em;
+    margin-top: -15px;
+    color: #e5e5e5;
+}
+
+.item-container > span > p > a {
+    color: #e5e5e5;
+}
+
+.delete-button {
+    z-index: 200;
+    position: absolute;
+    top: 8%;
+    right: 5%;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 5px 0px 0px 2px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    font-size: 0.8em;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+}
+
+.delete-confirm-title {
+    color: #444;
+    font-size: 2em;
+}
+
+.delete-confirm-body {
+    color: #4e4e4e;
+}
+
+.confirm-message {
+    font-size: 1.25em;
+}
+
+.confirm-tip {
+    font-size: 1em;
+}
+
+.src-img {
+    width: 50px;
+    border-radius: 5px;
+    float: right;
+}
+
+.no-items {
+    font-size: 1.5em;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.no-items > .tip {
+    font-size: 0.75em;
+}
+
+.add-content-wrapper {
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+}
+
+.add-content-button {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 0;
+    width: 50px;
+    height: 50px;
+    line-height: 0;
+}
+
+.add-content-button:hover,
+.add-content-button:focus,
+.add-content-button:active,
+.add-content-button:hover:active {
+    outline: none;
+}
+
+.ac-modal-title {
+    color: #725177;
+    font-size: 2em;
+    width: 100%;
+    text-align: center;
+}
+
+.ac-modal-body {
+    color: #4e4e4e;
+    min-height: 200px;
+}
+
+
+
+.content-popup-wrapper {
+    max-width: 95%;
+    position: absolute;
+    top: 100%;
+    z-index: 1000;
+    display: none;
+    background-color: #fff;
+    border: 1px solid #bbb;
+    padding: 0 0;
+}
+
+.content-popup-wrapper > .dropdown-menu {
+    position: static;
+    float: none;
+    display: block;
+    min-width: 160px;
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.35);
+    font-size: 1.1em;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.suggestion-title {
+    font-size: 1.25em
+}
+
+.suggestion-desc {
+    font-size: 1em;
+}
+
+.alert-wrapper {
+}
+
+.alert-wrapper > .alert-danger {
+    background-color: rgba(229,28,35,0.75);
+}
+
+.alert-wrapper > .alert-success {
+    background-color: rgba(80, 228, 86, 0.75);
+}
