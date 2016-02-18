@@ -57,6 +57,10 @@
 
         $scope.addSourceItem = function(addItem) {
             // console.log("adding new item " + JSON.stringify(addItem));
+            if (typeof addItem == "undefined" ||
+                addItem.title.trim().length === 0 ||
+                    addItem.title.trim() === "undefined")
+                return;
             var newFeedItem = {
                 title: addItem.title,
                 websiteUrl: addItem.website,
