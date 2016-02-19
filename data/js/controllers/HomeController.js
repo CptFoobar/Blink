@@ -16,8 +16,7 @@
         $scope.showGreeting = false;
 
         chrome.storage.sync.get("userSettings", function(settings) {
-            console.log("In userSettings callback. Got: " + JSON.stringify(settings));
-            // It's safest to fail silently if there is an error retrieving settings
+            // It's safe to fail silently if there is error retrieving settings
             if (chrome.runtime.lastError)
                 return;
 

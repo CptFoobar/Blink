@@ -14,56 +14,43 @@
             $scope.alerts.splice(index, 1);
         }
 
-        $scope.saveConfig = function(){
-            var cfg = {
+        $scope.saveConfig = function() {
+            var userSettings = {
                 showGreeting: $scope.showGreeting,
                 userName: $scope.userName,
                 feedType: $scope.feedType
             };
 
-            $scope.$emit(
-                '$messageOutgoing',
-                angular.toJson({
-                    target: "SettingsManager",
-                    intent: "saveConfig",
-                    payload: {
-                        config: cfg
-                    }
-                })
-            );
-
-            $scope.alerts.push({type: "success", msg: "Configuration saved"});
+            chrome.storage.sync.set({ "userSettings": userSettings },
+              function() {
+                console.log("Saved settings");
+                if (chrome.runtime.lastError)
+                    $scope.$apply(function(){
+                        $scope.alerts.push({type: "danger", msg: "Failed to save " +
+                            "settings. Please reload the page and try again."})
+                    });
+                else
+                    $scope.$apply(function(){
+                        $scope.alerts.push({type: "success", msg: "Settings saved"})
+                    });
+            });
         }
 
-        var config = function(cfg) {
-            $scope.showGreeting = cfg.showGreeting;
-            $scope.userName = cfg.userName;
-            $scope.feedType = cfg.feedType;
-        };
-
-        $scope.$root.$on('$messageIncoming', function(event, data) {
-            data = angular.fromJson(data);
-            if (data.target == "SettingsController") {
-                // console.log("message for SC");
-                switch (data.intent) {
-                    case "config":
-                        // console.log("loading configuration");
-                        // Hide progressbar
-                        $scope.showProgressbar = false;
-                        config(data.payload.config);
-                        break;
-                }
+        chrome.storage.sync.get("userSettings", function(settings) {
+            $scope.showProgressbar = false;
+            if (settings.userSettings == "undefined" ||
+              typeof settings.userSettings === "undefined") {
+                $scope.alerts.push({type: "danger", msg: "Failed to load " +
+                    "settings. Please reload the page and try again."});
+                return;
             }
+
+            $scope.showGreeting = settings.userSettings.showGreeting;
+            $scope.userName = settings.userSettings.userName;
+            $scope.feedType = settings.userSettings.feedType;
+
         });
 
-        $scope.$emit(
-            '$messageOutgoing',
-            angular.toJson({
-                target: "SettingsManager",
-                intent: "getConfig",
-                payload: {}
-            })
-        );
     };
 
     app.controller('SettingsController', ['$scope', SettingsController]);
