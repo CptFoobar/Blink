@@ -5,47 +5,40 @@
     var HomeController = function($scope, $interval) {
 
         var greetingFor = function(hours) {
-           if(hours > 3 && hours < 12) return "Morning";
-           else if(hours >= 12 && hours < 16) return "Afternoon";
-           else return "Evening";
-       };
+            if (hours > 3 && hours < 12) return "Morning";
+            else if (hours >= 12 && hours < 16) return "Afternoon";
+            else return "Evening";
+        };
 
-       $scope.clock = Date.now();
-       $scope.greeting = greetingFor(new Date().getHours());
-       $scope.username = "";
-       $scope.showGreeting = false;
+        $scope.clock = Date.now();
+        $scope.greeting = greetingFor(new Date().getHours());
+        $scope.username = "";
+        $scope.showGreeting = false;
 
-       $scope.clocky = function() {
-           $interval(function () {
-               $scope.clock = Date.now();
-               $scope.greeting = greetingFor(new Date().getHours());
-           }, 1000)
-       };
+        chrome.storage.sync.get("userSettings", function(settings) {
+            console.log("In userSettings callback. Got: " + JSON.stringify(settings));
+            // It's safest to fail silently if there is an error retrieving settings
+            if (chrome.runtime.lastError)
+                return;
 
-       $scope.clocky();
+            if (settings.userSettings == "undefined" ||
+              typeof settings.userSettings === "undefined")
+                return;
 
-       $scope.$emit(
-           '$messageOutgoing',
-           angular.toJson({
-               target: "HomeManager",
-               intent: "getHomeConfig",
-               payload: {}
-           })
-       );
+            $scope.username = settings.userSettings.userName;
+            $scope.showGreeting = settings.userSettings.showGreeting;
 
-       $scope.$root.$on('$messageIncoming', function(event, data) {
-           data = angular.fromJson(data);
-           if (data.target == "HomeController") {
-               // console.log("message for HC");
-               switch (data.intent) {
-                   case "homeConfig":
-                       $scope.username = data.payload.config.userName;
-                       $scope.showGreeting = data.payload.config.showGreeting;
-                       break;
-               }
-           }
-       });
-       // console.log("called fetchAllBookmarks.");
+        });
+
+        $scope.clocky = function() {
+            $interval(function() {
+                $scope.clock = Date.now();
+                $scope.greeting = greetingFor(new Date().getHours());
+            }, 1000)
+        };
+
+        $scope.clocky();
+
     };
 
     app.controller('HomeController', ['$scope', '$interval', HomeController]);

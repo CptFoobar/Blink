@@ -1,6 +1,6 @@
 (function() {
 
-    var app = angular.module('blink', ['duScroll', 'ngAnimate', 'ngPostMessage',
+    var app = angular.module('blink', ['duScroll', 'ngAnimate',
         'ngRoute', 'ui.bootstrap', 'vAccordion'
     ]);
 
