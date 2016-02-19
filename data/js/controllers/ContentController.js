@@ -3,7 +3,7 @@
 
     var app = angular.module('blink');
 
-    var ContentController = function($scope, $uibModal) {
+    var ContentController = function($scope, $uibModal, $http) {
 
         $scope.alerts = [];
 
@@ -14,40 +14,51 @@
 
         var TAG = "ContentController";
 
+        chrome.storage.sync.get("feedList", function(feedList) {
+            $scope.showProgressbar = false;
+            if (chrome.runtime.lastError || feedList.feedList == "undefined" ||
+                typeof feedList.feedList === "undefined" ||
+                feedList.feedList.length === 0) {
+                $scope.emptyContentList = true;
+                return;
+            } else {
+                $scope.items.splice(0, $scope.items.length);
+                $scope.items = feedList.feedList;
+            }
+        });
+
         $scope.closeAlert = function(index) {
             $scope.alerts.splice(index, 1);
         };
 
-        $scope.updatePrefs = function(item) {
-            // console.log("toggling " + item.title);
-            $scope.$emit(
-                '$messageOutgoing',
-                angular.toJson({
-                    target: "ContentManager",
-                    intent: "toggle",
-                    payload: {
-                        toggleItem: item
-                    }
-                })
-            );
+        $scope.updatePrefs = function(successAlert, failureAlert) {
+            chrome.storage.sync.set({
+                "feedList": $scope.items
+            }, function() {
+                if (chrome.runtime.lastError) {
+                    if (successAlert)
+                        $scope.alerts.push(successAlert);
+                    return;
+                } else {
+                    if (failureAlert)
+                        $scope.alerts.push(failureAlert)
+                }
+            });
+        };
+
+        $scope.toggleItem = function() {
+            $scope.updatePrefs(null, null);
         };
 
         $scope.deleteItem = function(item) {
             // console.log('deleting ' + JSON.stringify(item));
             var index = indexOf(item);
             if (index >= 0) {
-                $scope.$emit(
-                    '$messageOutgoing',
-                    angular.toJson({
-                        target: "ContentManager",
-                        intent: "delete",
-                        payload: {
-                            removeItem: item
-                        }
-                    })
-                );
                 $scope.items.splice(index, 1);
-                $scope.alerts.push({
+                $scope.updatePrefs({
+                    type: "danger",
+                    msg: "Failed to delete " + item.title + " from your feed list."
+                }, {
                     type: "danger",
                     msg: "Deleted '" + item.title + "' from your feed list."
                 });
@@ -59,7 +70,7 @@
             // console.log("adding new item " + JSON.stringify(addItem));
             if (typeof addItem == "undefined" ||
                 addItem.title.trim().length === 0 ||
-                    addItem.title.trim() === "undefined")
+                addItem.title.trim() === "undefined")
                 return;
             var newFeedItem = {
                 title: addItem.title,
@@ -70,21 +81,15 @@
                 tags: addItem.deliciousTags,
                 wanted: true
             };
-
-            if(indexOf(newFeedItem) === -1) {
+            $scope.lastUsed = newFeedItem.title;
+            if (indexOf(newFeedItem) === -1) {
                 // New Source
                 $scope.items.push(newFeedItem);
-                $scope.$emit(
-                    '$messageOutgoing',
-                    angular.toJson({
-                        target: "ContentManager",
-                        intent: "add",
-                        payload: {
-                            addItem: newFeedItem
-                        }
-                    })
-                );
-                $scope.alerts.push({
+
+                $scope.updatePrefs({
+                    type: "danger",
+                    msg: "Failed to add " + newFeedItem.title + " to your feed list."
+                }, {
                     type: "success",
                     msg: newFeedItem.title + " has been added to your feed list."
                 });
@@ -105,7 +110,7 @@
             var modalInstance = $uibModal.open({
                 animation: true,
                 size: 'lg',
-                templateUrl: 'resource://blink/data/markup/addContent.html',
+                templateUrl: 'markup/addContent.html',
                 controller: 'AddContentController'
             });
 
@@ -121,7 +126,7 @@
             var idToDelete = indexOf(item);
             var modalInstance = $uibModal.open({
                 animation: true,
-                templateUrl: 'resource://blink/data/markup/confirmDelete.html',
+                templateUrl: 'markup/confirmDelete.html',
                 controller: 'DeleteModalController',
                 resolve: {
                     toDelete: function() {
@@ -137,19 +142,6 @@
             });
         };
 
-        $scope.getContentList = function() {
-            $scope.$emit(
-                '$messageOutgoing',
-                angular.toJson({
-                    target: "ContentManager",
-                    intent: "fetch",
-                    payload: {}
-                })
-            );
-            // console.log("called getContentList.");
-        };
-
-
         $scope.getColumnCount = function() {
             var w = window.innerWidth;
             if (w > 1300) return 5
@@ -160,8 +152,8 @@
         };
 
         $scope.getRowCount = function() {
-           return Math.ceil($scope.items.length / $scope.getColumnCount());
-       }
+            return Math.ceil($scope.items.length / $scope.getColumnCount());
+        }
 
         $scope.getTitle = function(title) {
             if (title.length > 10)
@@ -169,33 +161,11 @@
             return title;
         };
 
-        $scope.$root.$on('$messageIncoming', function(event, data) {
-            data = angular.fromJson(data);
-            if (data.target == "ContentController") {
-                // console.log(TAG + "message for CC");
-                switch (data.intent) {
-                    case "contentList":
-                        // console.log("loading content list");
-                        $scope.items = data.payload;
-                        $scope.showProgressbar = false;
-                        $scope.emptyContentList = false;
-                        break;
-                    case "emptyContentList":
-                        // console.log("Empty content list");
-                        $scope.showProgressbar = false;
-                        $scope.emptyContentList = true;
-                        break;
-                }
-            }
-        });
-
-        $scope.getContentList();
-
         // Helper function to get index of object
         var indexOf = function(o) {
             for (var i = 0; i < $scope.items.length; i++) {
                 if ($scope.items[i].title == o.title &&
-                        $scope.items[i].websiteUrl == o.websiteUrl) {
+                    $scope.items[i].websiteUrl == o.websiteUrl) {
                     return i;
                 }
             }
@@ -216,85 +186,47 @@
         };
     };
 
-    var AddContentController = function($scope, $uibModalInstance, $q) {
+    var AddContentController = function($scope, $uibModalInstance, $q, $http) {
 
         $scope.showProgressbar = false;
-
-        /* TODO: Implement ContentPromise as JS class. Priority: 3 */
-        /* Create a custom promise for async suggestions */
-        function ContentPromise() {
-            this.deferred = undefined;
-        }
-
-        ContentPromise.prototype.setPromise = function(promise) {
-            this.deferred = promise;
-        }
-        ContentPromise.prototype.resetPromise = function() {
-            this.deferred = undefined;
-        }
-        ContentPromise.prototype.resolveContent = function(data) {
-            this.deferred.resolve(data);
-        }
-        ContentPromise.prototype.rejectContent = function(data) {
-            this.deferred.reject(data);
-        }
-        ContentPromise.prototype.getPromise = function() {
-            return this.deferred.promise;
-        }
-
-        var contentPromise = new ContentPromise();
 
         $scope.addSource = function(item) {
             $uibModalInstance.close(item);
         };
 
-        var contentPromise = new ContentPromise();
-
         $scope.getSourceSuggestions = function(query) {
             // console.log("Querying for: " + query);
             // Show progressbar
             $scope.showProgressbar = true;
-            contentPromise.setPromise($q.defer());
-            $scope.$emit(
-                '$messageOutgoing',
-                angular.toJson({
-                    target: "ContentManager",
-                    intent: "search",
-                    payload: {
-                        query: query
-                    }
-                })
-            );
-            // console.log("called getSourceSuggestions.");
-            return contentPromise.getPromise()
-                .then(function(suggestions) {
-                    //// console.log(JSON.stringify(suggestions));
-                    return suggestions;
-                });
-        };
+            var url = 'https://cloud.feedly.com/v3/search/feeds?q=';
+            url += encodeURIComponent(query);
+            url += '&count=12';
 
-        $scope.$root.$on('$messageIncoming', function(event, data) {
-            data = angular.fromJson(data);
-            if (data.target == "ContentController") {
-                // console.log("message for CC");
-                switch (data.intent) {
-                    case "suggestionList":
-                        // console.log("loading suggestions");
-                        // Hide progressbar
-                        $scope.showProgressbar = false;
-                        contentPromise.resolveContent(data.payload);
-                        break;
+            return $http({
+                url: url,
+                method: 'GET',
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+
                 }
-            }
-        });
+            }).then(function(response) {
+                return response.data.results;
+            });
+        };
 
     };
 
-    app.controller('ContentController', ['$scope', '$uibModal',
-                                                        ContentController]);
-    app.controller('AddContentController', ['$scope', '$uibModalInstance',
-                                                '$q', AddContentController]);
+    app.controller('ContentController', ['$scope', '$uibModal', '$http',
+        ContentController
+    ]);
+    app.controller('AddContentController', ['$scope', '$uibModalInstance', '$q',
+        '$http', AddContentController
+    ]);
     app.controller('DeleteModalController', ['$scope', '$uibModalInstance',
-                                        'toDelete', DeleteModalController]);
+        'toDelete', DeleteModalController
+    ]);
 
 }());

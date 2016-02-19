@@ -1,7 +1,7 @@
 // Set to false for prod
 const debugMode = true;
 
-chrome.runtime.onInstalled.addListener(function (details) {
+chrome.runtime.onInstalled.addListener(function(details) {
     if ((details.reason == "install" || details.reason == "update") && !debugMode)
         chrome.tabs.create({
             url: chrome.extension.getURL("data/blink_shell.html#/blink/help")
@@ -17,7 +17,7 @@ chrome.storage.sync.get(null, function(defaults) {
     }
 
     if (defaults.userSettings == "undefined" ||
-      typeof defaults.userSettings === "undefined") {
+        typeof defaults.userSettings === "undefined") {
         // Set defaults for the extension
         defaults = {
             "userSettings": {
