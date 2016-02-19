@@ -9,39 +9,23 @@
         $scope.showProgressbar = true;
         $scope.noBookmarks = false;
 
-        $scope.$root.$on('$messageIncoming', function(event, data) {
-            data = angular.fromJson(data);
-            if (data.target == "BookmarksController") {
-                // console.log(TAG + "message for BC");
-                switch (data.intent) {
-                    case "bookmarks":
-                        if ($scope.bookmarks.length > 0)
-                            $scope.bookmarks.splice(0, $scope.bookmarks.length);
-                        $scope.bookmarks = data.payload.bookmarks
-                        $scope.showProgressbar = false;
-                        $scope.noBookmarks = false;
-                        break;
-                    case "noBookmarks":
-                        $scope.showProgressbar = false;
-                        $scope.noBookmarks = true;
-                        break;
-                }
+        chrome.bookmarks.getTree(function (tree) {
+            $scope.showProgressbar = false;
+            if (chrome.runtime.lastError) {
+                log("Error: " + JSON.stringify(chrome.runtime.lastError));
+                return;
             }
+
+            if (tree == "undefined" ||
+              typeof tree === "undefined" || tree.length === 0) {
+                $scope.noBookmarks = true;
+                return
+            }
+
+            $scope.bookmarks.splice(0, $scope.bookmarks.length);
+            $scope.bookmarks = tree[0].children;
+
         });
-
-        $scope.fetchAllBookmarks = function() {
-            $scope.$emit(
-                '$messageOutgoing',
-                angular.toJson({
-                    target: "BookmarksManager",
-                    intent: "fetch",
-                    payload: {}
-                })
-            );
-            // console.log("called fetchAllBookmarks.");
-        };
-
-        $scope.fetchAllBookmarks();
     };
 
     app.controller("BookmarkController", ['$scope', BookmarkController]);

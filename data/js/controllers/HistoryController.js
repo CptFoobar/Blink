@@ -8,39 +8,53 @@
         $scope.noHistory = false;
         var TAG = "HistoryController";
 
-        $scope.$root.$on('$messageIncoming', function(event, data) {
-            data = angular.fromJson(data);
-            if (data.target == "HistoryController") {
-                // console.log(TAG + "message for HC");
-                switch (data.intent) {
-                    case "history":
-                        $scope.history = data.payload.history;
-                        $scope.showProgressbar = false;
-                        $scope.noHistory = false;
-                        break;
-                    case "noHistory":
-                        $scope.showProgressbar = false;
-                        $scope.noHistory = true;
-                        break;
-                }
+        chrome.history.search({text: '', maxResults: 500}, function (history) {
+            $scope.showProgressbar = false;
+            if (chrome.runtime.lastError) {
+                log("Error: " + JSON.stringify(chrome.runtime.lastError));
+                return;
             }
+
+            if (history == "undefined" ||
+              typeof history === "undefined" || history.length === 0) {
+                $scope.noHistory = true;
+                return
+            }
+            $scope.history = sortHistory(history);
         });
 
-        $scope.fetchHistory = function() {
-            $scope.$emit(
-                '$messageOutgoing',
-                angular.toJson({
-                    target: "HistoryManager",
-                    intent: "fetch",
-                    payload: {}
-                })
-            );
-            // console.log("called fetchHistory.");
-        };
-
-        $scope.fetchHistory();
-
-
+        function sortHistory(history) {
+            var now = new Date().getTime();
+            var today = [];
+            var lastWeek = [];
+            var lastMonth = [];
+            var older = [];
+            for (var i = 0; i < history.length; i++) {
+                if (!history[i].title)
+                    continue;
+                var diff = (now - history[i].lastVisitTime) / 1000;
+                if (diff <= 86400)
+                    today.push(history[i]);
+                else if (diff > 86400 && diff <= 604800)
+                    lastWeek.push(history[i]);
+                else if (diff > 604800 && diff <= 18144000)
+                    lastMonth.push(history[i]);
+                else older.push(history[i]);
+            }
+            return [{
+                title: "Today",
+                children: today
+            }, {
+                title: "Last Week",
+                children: lastWeek
+            }, {
+                title: "Last Month",
+                children: lastMonth
+            }, {
+                title: "Older",
+                children: older
+            }];
+        }
 
     }
 

@@ -46,6 +46,7 @@
 
 .bm-link {
     color: rgba(255, 255, 255, 0.85);
+    text-overflow: ellipsis;
 }
 
 .bm-link:hover, .bm-link:active, .bm-link:focus {

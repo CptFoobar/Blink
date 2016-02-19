@@ -16,18 +16,129 @@
                 <i class="fa fa-minus-square-o fa-fw fa-lg"></i>
             </button>
         </div>
-        <v-accordion class="vAccordion--default col-md-8" multiple control="accordion">
+        <!--
+            HACK: This is probably the worst way to handle a tree with v-accoridon,
+            but it's late night and this is all I can think of.
+            This supports bookmarks folders upto 6 levels. For more than that,
+            the user should see a psychiatrist.
+        -->
+        <v-accordion class="vAccordion--default col-md-9" multiple control="accordion">
             <v-pane ng-repeat="pane in bookmarks">
                 <v-pane-header>
                     <i class="fa fa-folder fa-lg fa-fw"></i>{{ pane.title }}
                 </v-pane-header>
                 <v-pane-content>
-                    <div ng-repeat="child in pane.children" class="bookmark-wrapper">
-                    <img ng-src="http://www.google.com/s2/favicons?domain={{ child.url }}" class="bm-favicon">
-                    <a ng-href="{{ child.url }}" class="bm-link">{{ child.title }}</a>
+                    <div ng-repeat="child0 in pane.children" class="bookmark-wrapper">
+                        <!-- Show bookmark if it is indeed a bookmark -->
+                        <img ng-src="http://www.google.com/s2/favicons?domain={{ child0.url }}" class="bm-favicon" ng-if="child0.url">
+                        <a ng-href="{{ child0.url }}" class="bm-link" ng-if="child0.url">{{ child0.title }}</a>
                     </div>
+                    <span ng-repeat="child0 in pane.children">
+                        <v-accordion class="vAccordion--default col-md-12" multiple ng-if="!child0.url">
+                            <v-pane>
+                                <v-pane-header>
+                                    <i class="fa fa-folder fa-lg fa-fw"></i>{{ child0.title }}
+                                </v-pane-header>
+                                <v-pane-content>
+                                    <div ng-repeat="child1 in child0.children" class="bookmark-wrapper">
+                                        <img ng-src="http://www.google.com/s2/favicons?domain={{ child1.url }}" class="bm-favicon" ng-if="child1.url">
+                                        <a ng-href="{{ child1.url }}" class="bm-link" ng-if="child1.url">{{ child1.title }}</a>
+                                    </div>
+                                    <span ng-repeat="child1 in child0.children">
+                                        <v-accordion class="vAccordion--default col-md-12" multiple ng-if="!child1.url">
+                                            <v-pane>
+                                                <v-pane-header>
+                                                    <i class="fa fa-folder fa-lg fa-fw"></i>{{ child1.title }}
+                                                </v-pane-header>
+                                                <v-pane-content>
+                                                    <div ng-repeat="child2 in child1.children" class="bookmark-wrapper">
+                                                        <img ng-src="http://www.google.com/s2/favicons?domain={{ child2.url }}" class="bm-favicon" ng-if="child2.url">
+                                                        <a ng-href="{{ child2.url }}" class="bm-link" ng-if="child2.url">{{ child2.title }}</a>
+                                                    </div>
+                                                    <span ng-repeat="child2 in child1.children">
+                                                        <v-accordion class="vAccordion--default col-md-12" multiple ng-if="!child2.url">
+                                                            <v-pane>
+                                                                <v-pane-header>
+                                                                    <i class="fa fa-folder fa-lg fa-fw"></i>{{ child2.title }}
+                                                                </v-pane-header>
+                                                                <v-pane-content>
+                                                                    <div ng-repeat="child3 in child2.children" class="bookmark-wrapper">
+                                                                        <img ng-src="http://www.google.com/s2/favicons?domain={{ child3.url }}" class="bm-favicon" ng-if="child3.url">
+                                                                        <a ng-href="{{ child3.url }}" class="bm-link" ng-if="child3.url">{{ child3.title }}</a>
+                                                                    </div>
+                                                                    <span  ng-repeat="child3 in child2.children">
+                                                                        <v-accordion class="vAccordion--default col-md-12" multiple ng-if="!child3.url">
+                                                                            <v-pane>
+                                                                                <v-pane-header>
+                                                                                    <i class="fa fa-folder fa-lg fa-fw"></i>{{ child3.title }}
+                                                                                </v-pane-header>
+                                                                                <v-pane-content>
+                                                                                    <div ng-repeat="child4 in child3.children" class="bookmark-wrapper">
+                                                                                        <img ng-src="http://www.google.com/s2/favicons?domain={{ child4.url }}" class="bm-favicon" ng-if="child4.url">
+                                                                                        <a ng-href="{{ child4.url }}" class="bm-link" ng-if="child4.url">{{ child4.title }}</a>
+                                                                                    </div>
+                                                                                    <span  ng-repeat="child4 in child3.children">
+                                                                                        <v-accordion class="vAccordion--default col-md-12" multiple ng-if="!child4.url">
+                                                                                            <v-pane>
+                                                                                                <v-pane-header>
+                                                                                                    <i class="fa fa-folder fa-lg fa-fw"></i>{{ child4.title }}
+                                                                                                </v-pane-header>
+                                                                                                <v-pane-content>
+                                                                                                    <div ng-repeat="child5 in child4.children" class="bookmark-wrapper">
+                                                                                                        <img ng-src="http://www.google.com/s2/favicons?domain={{ child5.url }}" class="bm-favicon" ng-if="child5.url">
+                                                                                                        <a ng-href="{{ child5.url }}" class="bm-link" ng-if="child5.url">{{ child5.title }}</a>
+                                                                                                    </div>
+                                                                                                    <span  ng-repeat="child5 in child4.children">
+                                                                                                        <v-accordion class="vAccordion--default col-md-12" multiple ng-if="!child5.url">
+                                                                                                            <v-pane>
+                                                                                                                <v-pane-header>
+                                                                                                                    <i class="fa fa-folder fa-lg fa-fw"></i>{{ child5.title }}
+                                                                                                                </v-pane-header>
+                                                                                                                <v-pane-content>
+                                                                                                                    <div ng-repeat="child6 in child5.children" class="bookmark-wrapper">
+                                                                                                                        <img ng-src="http://www.google.com/s2/favicons?domain={{ child6.url }}" class="bm-favicon" ng-if="child6.url">
+                                                                                                                        <a ng-href="{{ child6.url }}" class="bm-link" ng-if="child6.url">{{ child6.title }}</a>
+                                                                                                                    </div>
+                                                                                                                </v-pane-content>
+                                                                                                            </v-pane>
+                                                                                                        </v-accordion>
+                                                                                                    </span>
+                                                                                                </v-pane-content>
+                                                                                            </v-pane>
+                                                                                        </v-accordion>
+                                                                                    </span>
+                                                                                </v-pane-content>
+                                                                            </v-pane>
+                                                                        </v-accordion>
+                                                                    </span>
+                                                                </v-pane-content>
+                                                            </v-pane>
+                                                        </v-accordion>
+                                                    </span>
+                                                </v-pane-content>
+                                            </v-pane>
+                                        </v-accordion>
+                                    </span>
+                                </v-pane-content>
+                            </v-pane>
+                        </v-accordion>
+                    </span>
                 </v-pane-content>
             </v-pane>
         </v-accordion>
     </div>
 </div>
+<!--
+
+<v-accordion ng-if="!child.url">
+    <v-pane ng-repeat="subpane in child.children">
+        <v-pane-header>
+            {{ subpane.title }}
+        </v-pane-header>
+        <v-pane-content>
+            {{ subpane.url }}
+        </v-pane-content>
+    </v-pane>
+</v-accordion>
+
+ -->
