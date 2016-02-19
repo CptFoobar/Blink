@@ -1,5 +1,5 @@
 // Set to false for prod
-const debugMode = true;
+const debugMode = false;
 
 chrome.runtime.onInstalled.addListener(function(details) {
     if ((details.reason == "install" || details.reason == "update") && !debugMode)
