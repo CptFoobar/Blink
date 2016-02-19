@@ -15,7 +15,7 @@
     <div class="row" ng-if="!emptyContentList">
         <div class="row" ng-repeat="j in [] | range:getRowCount()">
             <div class="column col-xs-8 col-sm-3 col-md-2 col-md-push-1 content-wrapper" ng-repeat="i in [] | range:getColumnCount()">
-                <div class="item-container noselect" ng-repeat="src in items track by $index| orderBy:'title' | unique:'title'" ng-if="$index === i + getColumnCount()*j">
+                <div class="item-container noselect" ng-repeat="src in items | orderBy:'title' | unique:'title'" ng-if="$index === i + getColumnCount()*j">
                     <span>
                         <h5><span class="delete-button" ng-click="promptDelete(src)"><i class="fa fa-trash fa-fw fa-lg"></i></span></h5>
                     <img ng-src="{{ src.icon }}" class="feed-icon" />

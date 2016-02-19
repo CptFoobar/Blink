@@ -34,6 +34,11 @@
                     <label class="btn btn-success" ng-model="feedType" uib-btn-radio="'t'">Trending news only</label>
                 </div>
             </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="shuffleFeed"> Shuffle news items </input>
+                </label>
+            </div>
         </form>
     </div>
     <button class="btn btn-primary save-button" ng-click="saveConfig()"><i class="fa fa-floppy-o fa-fw fa-2x"></i></button>

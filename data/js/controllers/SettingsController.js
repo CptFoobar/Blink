@@ -8,6 +8,7 @@
         $scope.showGreeting = true;
         $scope.userName = "User";
         $scope.feedType = 'b';
+        $scope.shuffleFeed = true;
         $scope.alerts = [];
 
         $scope.closeAlert = function(index) {
@@ -18,7 +19,8 @@
             var userSettings = {
                 showGreeting: $scope.showGreeting,
                 userName: $scope.userName,
-                feedType: $scope.feedType
+                feedType: $scope.feedType,
+                shuffleFeed: $scope.shuffleFeed
             };
 
             chrome.storage.sync.set({ "userSettings": userSettings },
@@ -48,7 +50,8 @@
             $scope.showGreeting = settings.userSettings.showGreeting;
             $scope.userName = settings.userSettings.userName;
             $scope.feedType = settings.userSettings.feedType;
-
+            $scope.shuffleFeed = settings.userSettings.shuffleFeed;
+            
         });
 
     };

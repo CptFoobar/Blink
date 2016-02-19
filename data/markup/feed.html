@@ -46,7 +46,7 @@
                     </div>
                     <div class="bl-content">
                         <span>
-                            <a ng-href="{{ feedMap[entry.sourceHash].siteUrl }}" alt="{{ feedMap[entry.sourceHash].title }}" class="source"> {{ feedMap[entry.sourceHash].title }} </a>
+                            <a ng-href="{{ entry.feedSourceSiteUrl }}" alt="{{ entry.feedSourceTitle }}" class="source"> {{ entry.feedSourceTitle }} </a>
                             <span class="feed-time"> {{ getPublishedTime(entry.timestamp) }} </span>
                         </span>
                         <div class="title">{{ entry.entryTitle }}</div>
