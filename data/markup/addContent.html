@@ -8,8 +8,8 @@
         <div class="form-group col-md-10 col-md-push-1">
             <input ng-model="asyncSelected" uib-typeahead="suggestion as suggestion.title for suggestion in getSourceSuggestions($viewValue)"
               type="text" class="form-control" placeholder="Search for feeds..." ng-keyup="$event.keyCode == 13 && addSource(asyncSelected)"
-              typeahead-on-select="addSource(asyncSelected)" typeahead-popup-template-url="resource://blink/data/markup/autoSuggestSource.html"
-              typeahead-template-url="resource://blink/data/markup/suggestedSource.html" autofocus/>
+              typeahead-on-select="addSource(asyncSelected)" typeahead-popup-template-url="markup/autoSuggestSource.html"
+              typeahead-template-url="markup/suggestedSource.html" autofocus/>
             <uib-progressbar class="progress-striped active" value="dynamic" type="success" ng-show="showProgressbar"></uib-progressbar>
         </div>
     </form>
