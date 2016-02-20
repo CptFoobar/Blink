@@ -3,7 +3,7 @@
 
     "name": "Blink New Tab",
     "short_name": "Blink",
-    "description": "Replaces New Tab page an elegant one, with news feeds from your favorite blogs and websites.",
+    "description": "Replaces New Tab page with an elegant one, with news feeds from your favorite blogs and websites just a click away.",
     "version": "1.0.0",
     "icons": {
         "48": "data/img/blink-48.png",
