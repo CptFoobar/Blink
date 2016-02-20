@@ -51,7 +51,7 @@
             $scope.userName = settings.userSettings.userName;
             $scope.feedType = settings.userSettings.feedType;
             $scope.shuffleFeed = settings.userSettings.shuffleFeed;
-            
+
         });
 
     };

@@ -25,5 +25,6 @@
         "tabs",
         "https://cloud.feedly.com/",
         "http://suggestqueries.google.com/"
-    ]
+    ],
+    "options_page": "data/blink_shell.html#/blink/settings"
 }
