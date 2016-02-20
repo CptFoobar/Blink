@@ -1,9 +1,10 @@
 /* Shell Styling */
 
 body, h1, h2, h3, h4, h5, h6 {
-    background-color: #493D60;
+    background-color: #49366a;
     color: #efefef;
 }
+
 body {
     margin-top: 75px;
     margin-left: 1vw;
@@ -42,8 +43,8 @@ nav.navbar.navbar-transparent {
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: 1px solid #5B5070;
-    background-color: rgba(73, 61, 96, 0.975);
+    border-bottom: 1px solid #5c4881;
+    background-color: rgba(73, 54, 106, 0.975);
     color: #efefef;
     font-size: 1.2em;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.175);
