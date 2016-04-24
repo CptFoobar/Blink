@@ -1,6 +1,7 @@
 (function(){
 
     var app = angular.module('blink');
+    const storage = require('electron-json-storage');
 
     var SettingsController = function($scope) {
 
@@ -22,29 +23,40 @@
                 feedType: $scope.feedType,
                 shuffleFeed: $scope.shuffleFeed
             };
+            storage.get("blinkSettings", function(error, settings) {
+                // Fail silently for now
+                if (error)
+                    return;
 
-            chrome.storage.sync.set({ "userSettings": userSettings },
-              function() {
-                console.log("Saved settings");
-                if (chrome.runtime.lastError)
-                    $scope.$apply(function(){
-                        $scope.alerts.push({type: "danger", msg: "Failed to save " +
-                            "settings. Please reload the page and try again."})
-                    });
-                else
-                    $scope.$apply(function(){
-                        $scope.alerts.push({type: "success", msg: "Settings saved"})
-                    });
+                if (settings.userSettings == "undefined" ||
+                    typeof settings.userSettings === "undefined")
+                    return;
+
+                storage.set("blinkSettings", {
+                    "userSettings": JSON.stringify(userSettings),
+                    "feedList": JSON.stringify(settings.feedList)
+                }, function() {
+                    if (!error) {
+                        $scope.$apply(function(){
+                            $scope.alerts.push({type: "success", msg: "Settings saved"})
+                        });
+                    } else {
+                        $scope.$apply(function(){
+                            $scope.alerts.push({type: "danger", msg: "Failed to save " +
+                                "settings. Please reload the page and try again."})
+                        });
+                    }
+                });
             });
         }
 
-        chrome.storage.sync.get("userSettings", function(settings) {
-            $scope.showProgressbar = false;
-            if (settings.userSettings == "undefined" ||
-              typeof settings.userSettings === "undefined") {
-                $scope.alerts.push({type: "danger", msg: "Failed to load " +
-                    "settings. Please reload the page and try again."});
-                return;
+            storage.get("userSettings", function(settings) {
+                $scope.showProgressbar = false;
+                if (settings.userSettings == "undefined" ||
+                  typeof settings.userSettings === "undefined") {
+                    $scope.alerts.push({type: "danger", msg: "Failed to load " +
+                        "settings. Please reload the page and try again."});
+                    return;
             }
 
             $scope.showGreeting = settings.userSettings.showGreeting;

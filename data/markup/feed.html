@@ -1,5 +1,11 @@
 <uib-progressbar class="progress-striped active" value="dynamic" type="success" ng-show="showProgressbar" style="border-radius: 5px; height: 10px"></uib-progressbar>
 <div class="container" scroll>
+    <div class="row text-center" ng-show="loader">
+        <div class="space"></div>
+        <div class="col-md-8 col-md-push-2 noselect" style="cursor: default;">
+            <h1 class="time" style="font-family: lovers_quarrelregular; font-size: 15em;"> Blink </h1>
+        </div>
+    </div>
     <div class="row text-center noselect" ng-if="emptyFeedList && !timedOut" style="cursor: default">
         <span class="no-items">
             <br />

@@ -1,25 +1,12 @@
 (function() {
 
     var app = angular.module('blink', ['duScroll', 'ngAnimate',
-        'ngRoute', 'ui.bootstrap', 'vAccordion'
-    ]);
+        'ngRoute', 'ui.bootstrap']);
 
     var routingTable = [{
-        target: "/home",
-        url: "markup/home.html",
-        controller: "HomeController"
-    }, {
         target: "/feed",
         url: "markup/feed.html",
         controller: "FeedController"
-    }, {
-        target: "/recent",
-        url: "markup/history.html",
-        controller: "HistoryController"
-    }, {
-        target: "/bookmarks",
-        url: "markup/bookmarks.html",
-        controller: "BookmarkController"
     }, {
         target: "/blink/settings",
         url: "markup/settings.html",
@@ -48,7 +35,7 @@
 
         /* Default route */
         $routeProvider.otherwise({
-            redirectTo: "/home"
+            redirectTo: "/feed"
         });
 
     });

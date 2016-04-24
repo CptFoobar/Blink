@@ -1,7 +1,7 @@
 (function() {
 
     var app = angular.module('blink');
-    var TAG = "BLINK: ";
+    const storage = require('electron-json-storage');
 
     var FeedController = function($scope, $document, $timeout, $http) {
         $scope.entryList = [];
@@ -12,6 +12,7 @@
         $scope.timedOut = false;
         $scope.pendingRequest = false;
         $scope.feedRatio = 'b';
+        $scope.loader = true;
         var feedSourceList = [];
         var streamUrlPrefix = "https://cloud.feedly.com/v3/streams/contents?streamId=";
         // Mix in some trending news
@@ -26,9 +27,9 @@
         var shuffleFeed = true;
 
         // Get feed ratio
-        chrome.storage.sync.get("userSettings", function(settings) {
+        storage.get("blinkSettings", function(error, settings) {
             // Fail silently for now
-            if (chrome.runtime.lastError)
+            if (error)
                 return;
 
             if (settings.userSettings == "undefined" ||
@@ -37,24 +38,20 @@
 
             $scope.feedRatio = settings.userSettings.feedType;
             shuffleFeed = settings.userSettings.shuffleFeed;
-        });
-
-        // Get feed list
-        chrome.storage.sync.get("feedList", function(feedList) {
-            if (chrome.runtime.lastError || feedList.feedList == "undefined" ||
-                typeof feedList.feedList === "undefined" ||
-                feedList.feedList.length === 0) {
+            if (settings.feedList == "undefined" ||
+                typeof settings.feedList === "undefined" ||
+                settings.feedList.length === 0) {
                 $scope.showProgressbar = false;
                 $scope.emptyFeedList = true;
                 $scope.timedOut = false;
                 $scope.pendingRequest = false;
             }
-
-            feedSourceList = feedList.feedList;
+            feedSourceList = settings.feedList;
             minEntryThreshold = feedSourceList.length * 13;
             // Fetch feed items
             fetchAllFeed();
         });
+
 
 
         function fetchAllFeed() {
@@ -68,6 +65,7 @@
                 }
             }, 10 * 1000);
             feedSourceList.forEach(function(feedSource, index, _) {
+
                 if (feedSource.wanted) {
                     // Make requests at random intervals to minimize 429s
                     $timeout(function() {
@@ -92,7 +90,7 @@
                                 break;
                         }
                     }, Math.random() * 25 + 100);
-                } else minEntryThreshold -= 13;
+                } else minEntryThreshold -= 15;
             });
         };
 
@@ -199,6 +197,7 @@
 
         var addEntries = function(entries) {
             $scope.entryList.push.apply($scope.entryList, entries);
+            if ($scope.loader) $scope.loader = false;
             if (shuffleFeed)
                 $scope.entryList = shuffle($scope.entryList);
             $scope.timedOut = false;

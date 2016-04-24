@@ -11,7 +11,6 @@
 
     <!-- 3rd Party Libraries -->
     <link rel="stylesheet" href="libs/bootswatch_bootstrap_paper/bootstrap.min.css" />
-    <link rel="stylesheet" href="libs/v-accordion/v-accordion.min.css">
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
 
     <script src="libs/angular/angular.min.js"></script>
@@ -19,16 +18,13 @@
     <script src="libs/angular-route/angular-route.min.js"></script>
     <script src="libs/angular-animate/angular-animate.min.js"></script>
     <script src="libs/angular-scroll/angular-scroll.min.js"></script>
-    <script src="libs/v-accordion/v-accordion.min.js" charset="utf-8"></script>
 
     <!-- Blink resources -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/fonts.css">
 
     <script src="js/app.js" charset="utf-8"></script>
-    <script src="js/controllers/BookmarksController.js" charset="utf-8"></script>
     <script src="js/controllers/FeedController.js" charset="utf-8"></script>
-    <script src="js/controllers/HistoryController.js" charset="utf-8"></script>
     <script src="js/controllers/HomeController.js" charset="utf-8"></script>
     <script src="js/controllers/NavController.js" charset="utf-8"></script>
     <script src="js/controllers/ContentController.js" charset="utf-8"></script>
@@ -47,34 +43,25 @@
                 <span class="icon-bar add-border"></span>
                 <span class="icon-bar add-border"></span>
             </button>
-            <a class="navbar-brand" href="#/home">B</a>
+            <a class="navbar-brand" href="#/feed">B</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-collapse-transparent responsive-bg" ng-class="!navCollapsed && 'in'">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="#/feed">
+                    <a href="#/blink/content">
                         <span class="text-center" style="display: inline-flex;">
-                            <i class="fa fa-rss fa-fw fa-lg nav-icon" style="color: #ff9900;"></i>
-                            <span class="visible-xs">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Feed
+                            <i class="fa fa-pencil fa-fw fa-lg nav-icon" style="color: #71f5ed;"></i>
+                            <span class="visible-xs">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Content
                             </span>
                         </span>
                     </a>
                 </li>
                 <li>
-                    <a href="#/bookmarks">
+                    <a href="#/blink/settings">
                         <span class="text-center" style="display: inline-flex;">
-                            <i class="fa fa-bookmark fa-fw fa-lg nav-icon" style="color: #ccfc49;"></i>
-                            <span class="visible-xs">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bookmarks
-                            </span>
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#/recent">
-                        <span class="text-center" style="display: inline-flex;">
-                            <i class="fa fa-clock-o fa-fw fa-lg nav-icon" style="color: #1cfffb;"></i>
-                            <span class="visible-xs" style="display;/* display: inline-block; */">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; History
+                            <i class="fa fa-cogs fa-fw fa-lg nav-icon" style="color: #cdcdcd;"></i>
+                            <span class="visible-xs">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Settings
                             </span>
                         </span>
                     </a>
@@ -88,16 +75,6 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                            <a href="#/blink/content">
-                                <i class="fa fa-pencil fa-fw fa-lg"></i>       Content
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#/blink/settings">
-                                <i class="fa fa-cog fa-fw fa-lg"></i>       Settings
-                            </a>
-                        </li>
                         <li>
                             <a href="#/blink/help">
                                 <i class="fa fa-question fa-fw fa-lg"></i>       Help
@@ -116,7 +93,7 @@
                     </ul>
                 </li>
             </ul>
-            <form class="navbar-form navbar-right" role="search" style="cursor: pointer" ng-click="toggleSearchbar()">
+            <!-- <form class="navbar-form navbar-right" role="search" style="cursor: pointer" ng-click="toggleSearchbar()">
                 <button type="submit" class="btn btn-search" ng-mouseover="searchbarOpen=true" ng-class="{btnActive: searchbarOpen}"></button>
                 <span class="text-center responsive-search">
                     <div class="form-group searchbar" ng-show="searchbarOpen">
@@ -128,7 +105,7 @@
                     <span class="visible-xs noselect" ng-hide="searchbarOpen" style="cursor: pointer">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Google Search
                     </span>
                 </span>
-            </form>
+            </form> -->
         </div>
         <!-- /.navbar-collapse -->
     </nav>

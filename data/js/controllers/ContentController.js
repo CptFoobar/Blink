@@ -2,6 +2,7 @@
     'use strict'
 
     var app = angular.module('blink');
+    const storage = require('electron-json-storage');
 
     var ContentController = function($scope, $uibModal, $http) {
 
@@ -12,18 +13,16 @@
         $scope.showProgressbar = true;
         $scope.emptyContentList = false;
 
-        var TAG = "ContentController";
-
-        chrome.storage.sync.get("feedList", function(feedList) {
+        storage.get("blinkSettings", function(error, settings) {
             $scope.showProgressbar = false;
-            if (chrome.runtime.lastError || feedList.feedList == "undefined" ||
-                typeof feedList.feedList === "undefined" ||
-                feedList.feedList.length === 0) {
+            if (error || settings.feedList == "undefined" ||
+                typeof settings.feedList === "undefined" ||
+                settings.feedList.length === 0) {
                 $scope.emptyContentList = true;
                 return;
             } else {
                 $scope.items.splice(0, $scope.items.length);
-                $scope.items = feedList.feedList;
+                $scope.items = settings.feedList;
             }
         });
 
@@ -32,19 +31,30 @@
         };
 
         $scope.updatePrefs = function(successAlert, failureAlert) {
-            chrome.storage.sync.set({
-                "feedList": $scope.items
-            }, function() {
-                if (chrome.runtime.lastError) {
-                    if (successAlert)
-                        $scope.alerts.push(successAlert);
+            storage.get("blinkSettings", function(error, settings) {
+                // Fail silently for now
+                if (error)
                     return;
-                } else {
-                    if (failureAlert)
+
+                if (settings.userSettings == "undefined" ||
+                    typeof settings.userSettings === "undefined")
+                    return;
+
+                storage.set("blinkSettings", {
+                    "userSettings": settings.userSettings,
+                    "feedList": $scope.items
+                }, function() {
+                    if (error) {
+                        if (failureAlert)
                         $scope.alerts.push(failureAlert)
-                }
+                    } else {
+                        if (successAlert)
+                        $scope.alerts.push(successAlert);
+                        return;
+                    }
+                });
             });
-        };
+        }
 
         $scope.toggleItem = function() {
             $scope.updatePrefs(null, null);
@@ -55,12 +65,12 @@
             var index = indexOf(item);
             if (index >= 0) {
                 $scope.items.splice(index, 1);
-                $scope.updatePrefs({
-                    type: "danger",
-                    msg: "Failed to delete " + item.title + " from your feed list."
-                }, {
+                $scope.updatePrefs( {
                     type: "danger",
                     msg: "Deleted '" + item.title + "' from your feed list."
+                }, {
+                    type: "danger",
+                    msg: "Failed to delete " + item.title + " from your feed list."
                 });
                 if ($scope.items.length === 0) $scope.emptyContentList = true;
             }
@@ -87,11 +97,11 @@
                 $scope.items.push(newFeedItem);
 
                 $scope.updatePrefs({
-                    type: "danger",
-                    msg: "Failed to add " + newFeedItem.title + " to your feed list."
-                }, {
                     type: "success",
                     msg: newFeedItem.title + " has been added to your feed list."
+                }, {
+                    type: "danger",
+                    msg: "Failed to add " + newFeedItem.title + " to your feed list."
                 });
 
                 if ($scope.emptyContentList) $scope.emptyContentList = false;
@@ -186,7 +196,7 @@
         };
     };
 
-    var AddContentController = function($scope, $uibModalInstance, $q, $http) {
+    var AddContentController = function($scope, $uibModalInstance, $http) {
 
         $scope.showProgressbar = false;
 
@@ -195,7 +205,6 @@
         };
 
         $scope.getSourceSuggestions = function(query) {
-            // console.log("Querying for: " + query);
             // Show progressbar
             $scope.showProgressbar = true;
             var url = 'https://cloud.feedly.com/v3/search/feeds?q=';
@@ -222,7 +231,7 @@
     app.controller('ContentController', ['$scope', '$uibModal', '$http',
         ContentController
     ]);
-    app.controller('AddContentController', ['$scope', '$uibModalInstance', '$q',
+    app.controller('AddContentController', ['$scope', '$uibModalInstance',
         '$http', AddContentController
     ]);
     app.controller('DeleteModalController', ['$scope', '$uibModalInstance',

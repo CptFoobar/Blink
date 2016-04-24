@@ -1,23 +1,63 @@
 // Set to false for prod
-const debugMode = false;
+const debugMode = true;
 
-chrome.runtime.onInstalled.addListener(function(details) {
-    if ((details.reason == "install" || details.reason == "update") && !debugMode)
-        chrome.tabs.create({
-            url: chrome.extension.getURL("data/blink_shell.html#/blink/help")
-        });
+const electron = require('electron');
+const app = electron.app; // Module to control application life.
+const BrowserWindow = electron.BrowserWindow;
+const storage = require('electron-json-storage');
+const storagePath = app.getPath("userData");
+
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+var mainWindow = null;
+
+// Quit when all windows are closed.
+app.on('window-all-closed', function() {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform != 'darwin') {
+        app.quit();
+    }
 });
 
-// Use sync instead of local, since it falls back to local in case sync is not set
-chrome.storage.sync.get(null, function(defaults) {
-    // Return on error
-    if (chrome.runtime.lastError) {
-        log("Error: " + JSON.stringify(chrome.runtime.lastError))
-        return;
+// Quit when all windows are closed.
+app.on('window-all-closed', function() {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform != 'darwin') {
+        app.quit();
     }
+});
 
-    if (defaults.userSettings == "undefined" ||
-        typeof defaults.userSettings === "undefined") {
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+app.on('ready', function() {
+    // Create the browser window.
+    mainWindow = new BrowserWindow({
+        width: 1200,
+        height: 600
+    });
+
+    // and load the index.html of the app.
+    mainWindow.loadURL('file://' + __dirname + '/data/blink_shell.html');
+
+    if (debugMode) mainWindow.webContents.openDevTools();
+
+    // Emitted when the window is closed.
+    mainWindow.on('closed', function() {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        mainWindow = null;
+    });
+});
+
+// Set up defaults if no settings
+storage.has("blinkSettings", function(error, defaultsSet) {
+    if (error) {
+        // Fail silently
+    }
+    if (!defaultsSet) {
         // Set defaults for the extension
         defaults = {
             "userSettings": {
@@ -28,18 +68,17 @@ chrome.storage.sync.get(null, function(defaults) {
             },
             "feedList": []
         };
-        chrome.storage.sync.set(defaults, function() {
-            chrome.storage.sync.get(["userSettings", "feedList"], function(data) {
-                log(JSON.stringify(data));
-            });
-            log("Defaults set");
+        storage.set("blinkSettings", defaults, function(error) {
+            if (error) throw error;
         });
-    } else log("Data retrieved: " + JSON.stringify(defaults));
-
+    }
 });
 
 /* Util to log if extension is in debug mode */
 function log(logMessage) {
-    if (debugMode)
-        console.log(logMessage);
+    if (debugMode) {
+        var d = new Date;
+        var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+        console.log("blink@" + t + ":: " + logMessage);
+    }
 }
