@@ -24,6 +24,7 @@
                 $scope.items.splice(0, $scope.items.length);
                 $scope.items = settings.feedList;
             }
+            $scope.showProgressbar = false;
         });
 
         $scope.closeAlert = function(index) {

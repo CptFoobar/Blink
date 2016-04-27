@@ -4,7 +4,7 @@
   "description": "A port of Blink to Electron",
   "main": "background.js",
   "scripts": {
-    "start": "electron background.js.js"
+    "start": "electron background.js"
   },
   "repository": {
     "type": "git",
@@ -20,8 +20,5 @@
   "bugs": {
     "url": "https://github.com/tigerkid001/blink/issues"
   },
-  "homepage": "https://github.com/tigerkid001/blink",
-  "devDependencies": {
-    "electron-prebuilt": "^0.37.0"
-  }
+  "homepage": "https://github.com/tigerkid001/blink"
 }

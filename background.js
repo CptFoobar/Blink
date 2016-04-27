@@ -1,5 +1,5 @@
 // Set to false for prod
-const debugMode = true;
+const debugMode = false;
 
 const electron = require('electron');
 const app = electron.app; // Module to control application life.
