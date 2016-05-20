@@ -2,7 +2,7 @@
 
     var app = angular.module('blink');
 
-    var HomeController = function($scope, $interval) {
+    var HomeController = function($scope, $interval, $location) {
 
         var greetingFor = function(hours) {
             if (hours > 3 && hours < 12) return "Morning";
@@ -24,9 +24,12 @@
               typeof settings.userSettings === "undefined")
                 return;
 
-            $scope.username = settings.userSettings.userName;
-            $scope.showGreeting = settings.userSettings.showGreeting;
-
+            if (settings.userSettings.justFeed) {
+                $location.path("/feed");
+            } else {
+                $scope.username = settings.userSettings.userName;
+                $scope.showGreeting = settings.userSettings.showGreeting;
+            }
         });
 
         $scope.clocky = function() {
@@ -40,6 +43,6 @@
 
     };
 
-    app.controller('HomeController', ['$scope', '$interval', HomeController]);
+    app.controller('HomeController', ['$scope', '$interval', '$location', HomeController]);
 
 }());

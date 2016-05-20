@@ -20,6 +20,11 @@
                 <label for="userName">Greet by name:&nbsp;&nbsp;</label>
                 <input type="text" class="form-control" id="userName" ng-model="userName" placeholder="{{ userName }}" ng-disabled="!showGreeting" style="color: #eee">
             </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="justFeed"> Make Feed as New Tab page</input>
+                </label>
+            </div>
         </form>
     </div>
     <div class="row">

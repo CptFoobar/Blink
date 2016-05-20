@@ -4,6 +4,25 @@
         'ngRoute', 'ui.bootstrap', 'vAccordion'
     ]);
 
+    // var homePath = "markup/home.html";
+    // var HomeController = "HomeController";
+    //
+    // chrome.storage.sync.get("userSettings", function(settings) {
+    //     // It's safe to fail silently if there is error retrieving settings
+    //     if (chrome.runtime.lastError)
+    //         return;
+    //
+    //     if (settings.userSettings == "undefined" ||
+    //       typeof settings.userSettings === "undefined")
+    //         return;
+    //
+    //     if (settings.userSettings.justFeed) {
+    //         homePath = "markup/feed.html";
+    //         HomeController = "FeedController";
+    //     }
+    //
+    // });
+
     var routingTable = [{
         target: "/home",
         url: "markup/home.html",

@@ -24,7 +24,8 @@ chrome.storage.sync.get(null, function(defaults) {
                 "showGreeting": true,
                 "userName": "User",
                 "feedType": "b",
-                "shuffleFeed": true
+                "shuffleFeed": true,
+                "justFeed": false
             },
             "feedList": []
         };

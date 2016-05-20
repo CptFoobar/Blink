@@ -6,6 +6,7 @@
 
         $scope.showProgressbar = true;
         $scope.showGreeting = true;
+        $scope.justFeed = false;
         $scope.userName = "User";
         $scope.feedType = 'b';
         $scope.shuffleFeed = true;
@@ -20,7 +21,8 @@
                 showGreeting: $scope.showGreeting,
                 userName: $scope.userName,
                 feedType: $scope.feedType,
-                shuffleFeed: $scope.shuffleFeed
+                shuffleFeed: $scope.shuffleFeed,
+                justFeed: $scope.justFeed
             };
 
             chrome.storage.sync.set({ "userSettings": userSettings },
@@ -51,6 +53,7 @@
             $scope.userName = settings.userSettings.userName;
             $scope.feedType = settings.userSettings.feedType;
             $scope.shuffleFeed = settings.userSettings.shuffleFeed;
+            $scope.justFeed = settings.userSettings.justFeed;
 
         });
 
