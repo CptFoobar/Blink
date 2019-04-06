@@ -6,12 +6,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
+import { FeedComponent } from './components/feed/feed.component';
+import { WindowScrollComponent } from './components/window-scroll/window-scroll.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    HomeComponent
+    HomeComponent,
+    FeedComponent,
+    WindowScrollComponent
   ],
   imports: [
     BrowserModule,

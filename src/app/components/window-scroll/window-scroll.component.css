@@ -1,0 +1,37 @@
+
+.btn-to-top {
+    background-color: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.65) !important;
+    height: 2em;
+    width: 2em;
+    padding: 0;
+    opacity: 1;
+    cursor: pointer;
+}
+
+.btn-to-top:hover, .btn-to-top:active, .btn-to-top:focus, .btn-to-top:hover:active {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: rgba(255, 255, 255, 1) !important;
+    background-image: none;
+    box-shadow: none;
+    opacity: 1;
+}
+
+.btn-to-top.hide,
+.scroller.hide {
+    opacity: 0;
+}
+
+.scroller {
+    z-index: 300;
+    position: fixed;
+    top: 92.5%;
+    right: 2.5%;
+    opacity: 1;
+    transition: opacity 0.4s;
+    -webkit-transition: opacity 0.4s;
+    -moz-transition: opacity 0.4s;
+}
