@@ -107,12 +107,13 @@ nav.navbar.navbar-transparent {
     background-color: transparent;
     background-image: url("../../../assets/img/google_g.png");
     background-repeat: no-repeat;
-    background-size: auto 100%;
+    background-size: auto 90%;
     filter: grayscale(75%);
-    -webkit-filter: grayscale(75%);
+    -webkit-filter: grayscale(60%);
     -webkit-transition: all ease-out 0.65s;
     transition: all ease-out 0.65s;
     height: 23px;
+    width: 25px;
     padding-right: 5px;
     border: none;
 }
@@ -123,12 +124,15 @@ nav.navbar.navbar-transparent {
     -webkit-filter: grayscale(0%);
     outline: none;
 }
-.btn-search:hover {
+.btn-search:hover,
+.btn-search:active,
+.btn-search:focus {
     background-color: transparent;
     border: none;
     filter: grayscale(0%);
     -webkit-filter: grayscale(0%);
     outline: none;
+    box-shadow: none;
 }
 .custom-popup-wrapper {
     max-width: 300px;

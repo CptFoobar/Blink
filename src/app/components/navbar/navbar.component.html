@@ -8,7 +8,21 @@
   </button>
 
   <div class="collapse navbar-collapse navbar-collapse-transparent responsive-bg" id="navbarSupportedContent" [ngbCollapse]="navbarCollapsed">
-    <ul class="nav navbar-nav ml-auto">
+    <form class="navbar-form ml-auto d-flex form-inline" role="search" style="cursor: pointer" >
+        <button type="submit" class="btn btn-search" ng-mouseover="searchbarOpen=true" [ngClass]="{'btnActive': searchbaropen}" (click)="toggleSearchbar()"></button>
+        <!-- TODO: Searchbar -->
+        <span class="responsive-search" style="display: none">
+            <div class="form-group searchbar" [hidden]="!searchbarOpen">
+                <input ng-model="asyncSelected" uib-typeahead="suggestion for suggestion in getSuggestions($viewValue)" type="text" class="form-control"
+                 placeholder="Google Search..." focus-me="searchbarOpen" ng-keyup="$event.keyCode == 13 && google($viewValue, asyncSelected)"
+                 typeahead-on-select="google($viewValue, asyncSelected)" typeahead-focus-first="false"
+                 typeahead-popup-template-url="markup/autoSuggest.html" style="width: 300px" />
+            </div>
+            <span class="d-block d-md-none noselect" ng-hide="searchbarOpen" style="cursor: pointer">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Google Search
+            </span>
+        </span>
+    </form>
+    <ul class="nav navbar-nav">
       <li class="nav-item">
           <a href="#/feed" class="nav-link">
             <span class="text-center" style="display: inline-flex;">

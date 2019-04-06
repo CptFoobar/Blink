@@ -8,15 +8,20 @@ import { Component, OnInit } from '@angular/core';
 export class NavbarComponent implements OnInit {
 
   navbarCollapsed: boolean;
+  searchbarOpen: boolean;
 
   constructor() { }
 
   ngOnInit() {
     this.navbarCollapsed = true;
+    this.searchbarOpen = false;
   }
 
   showYourLove(): void {
     
   }
+  toggleSearchbar(): void {
+    this.searchbarOpen = true;
+   }
 
 }
