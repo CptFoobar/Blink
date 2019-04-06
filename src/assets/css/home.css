@@ -1,0 +1,18 @@
+.clocky {
+    font-family: work_sans_thin, 'Helvetica', serif;
+    font-size: 2.25vmin;
+}
+
+.clocky .time {
+    font-size: 10em;
+    font-family: work_sans_hairline;
+}
+
+.clocky .day {
+    font-size: 2.25em;
+}
+
+
+.clocky .greeting {
+    font-size: 3em;
+}

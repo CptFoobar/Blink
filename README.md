@@ -1,37 +1,27 @@
-# Blink
+# BlinkNxt
 
-![Blink Home](http://4.bp.blogspot.com/-qUMUKb4pV0M/VnADAxZGpaI/AAAAAAAAAHg/htlI3F35jeQ/s1600/blink_home_mockup.jpg)
-<br />
-<br />
-![Blink Home](http://1.bp.blogspot.com/-Sa_rP__ZYbw/VnAC0635uOI/AAAAAAAAAHQ/efePc7eCvK0/s1600/blink_feed.png)
-<br />
-<br />
-![Blink Home](http://1.bp.blogspot.com/-71y3qacL4qI/VnAC3Sz_zuI/AAAAAAAAAHY/oyL6UKwoYNQ/s1600/blink_content.png)
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
 
-----------------------------
+## Development server
 
-## What is it?
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Blink makes your 'New Tab' page more useful, productive and inspiring by replacing it with an elegant and beautiful alternative homescreen. It keeps you up-to-date with latest stories of topics of your choice, from around the world. Not just that, Blink also puts the Google search, your bookmarks and recent history just one click away.
+## Code scaffolding
 
-## Content
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-Blink lets you choose exactly what you see in your feed. Powered by **[Feedly](https://feedly.com)** API, Blink lets you catch up on news from any of the feed sources (indexed by feedly) of your choice.
+## Build
 
-## Features
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-* Simple and clean design
-* Minimal homescreen
-* Handy Google searchbar with dropdown suggestions
-* Comfortable and clean card layout of news feed
-* Search for content sources
-* Share link on Facebook, Twitter or Google+ in one click
-* Quick access to history and bookmarks
+## Running unit tests
 
-## Contributing to Blink
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-There are a bunch of ways you can help with the development of Blink.
+## Running end-to-end tests
 
-* Support development using PayPal (see the Support section of the addon)
-* Suggest new features, report bugs [here](https://github.com/TigerKid001/Blink/issues)
-* [Contribute code](https://github.com/TigerKid001/Blink/blob/master/CONTRIBUTING.md) (fix bugs, implement features)
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
