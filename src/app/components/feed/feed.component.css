@@ -3,6 +3,16 @@
     max-width: 90%;
 }
 
+@media screen and (max-width: 992px) {
+    .container .bl-cardbox {
+        max-width: 95%;
+    }
+}
+
+.bl-cardbox-compact {
+    max-width: 100%;
+}
+
 .bl-card {
     display: block;
     overflow: auto;
@@ -16,8 +26,7 @@
     position: relative;
 }
 
-.bl-banner:hover > .banner-button,
-.bl-banner:hover > .blur-filter {
+.bl-banner:hover>.banner-button, .bl-banner:hover>.blur-filter {
     opacity: 1;
 }
 
@@ -111,6 +120,8 @@
     top: 15px;
     left: 15px;
     cursor: default;
+    padding: 6px;
+    border-radius: 6px;
 }
 
 .banner-hover-button {
@@ -125,22 +136,21 @@
     font-size: 0.9em
 }
 
-.share-buttons > .btn-group > .btn-group > .btn {
+.share-buttons>.btn-group>div>.btn {
     border-radius: 0;
     border: none;
+    padding: 10px 0;
 }
 
-.share-buttons > .btn-group > .btn-group > .btn:active,
-.share-buttons > .btn-group > .btn-group > .btn:focus,
-.share-buttons > .btn-group > .btn-group > .btn:hover:active {
+.share-buttons>.btn-group>div>.btn:active, .share-buttons>.btn-group>div>.btn:focus, .share-buttons>.btn-group>div>.btn:hover:active {
     border-radius: 0;
     border: none;
-    -webkit-box-shadow: 0px 2px 2px rgba(0,0,0,0.3);
-    box-shadow: 0px 2px 2px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
 .share-buttons {
-    top: calc(100% - 25px);
+    top: calc(100% - 30px);
     left: 0;
 }
 
@@ -164,12 +174,22 @@
     color: #00aced;
 }
 
-.share-google-plus {
-    background-color: #d34836;
+.share-reddit {
+    background-color: #ff4500;
     color: #fdfdfd;
 }
 
-.share-google-plus:hover, .share-google-plus:active, .share-google-plus:focus, .share-google-plus:hover:active {
+.share-reddit:hover, .share-reddit:active, .share-reddit:focus, .share-reddit:hover:active {
+    background-color: #fdfdfd;
+    color: #ff4500;
+}
+
+.share-pocket {
+    background-color: #ef4056;
+    color: #fdfdfd;
+}
+
+.share-pocket:hover, .share-pocket:active, .share-pocket:focus, .share-pocket:hover:active {
     background-color: #fdfdfd;
     color: #d34836;
 }
