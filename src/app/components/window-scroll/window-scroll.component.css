@@ -28,8 +28,8 @@
 .scroller {
     z-index: 300;
     position: fixed;
-    top: 92.5%;
-    right: 2.5%;
+    top: 93.35%;
+    right: 2.15%;
     opacity: 1;
     transition: opacity 0.4s;
     -webkit-transition: opacity 0.4s;

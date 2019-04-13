@@ -1,125 +1,72 @@
+import { FeedComponent } from './../components/feed/feed.component';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { catchError, delay, mergeMap, tap, map } from 'rxjs/operators';
+import { Observable, from, of, empty } from 'rxjs';
+
+const httpOptions = {
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET',
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeedService {
 
-  feed: any[];
-  constructor() { }
+  static readonly FEED_BALANCE_LATEST = 0;
+  static readonly FEED_BALANCE_MIX = 1;
+  static readonly FEED_BALANCE_TRENDING = 2;
 
-  getFeed(): any[] {
-    return [
-      {
-        "entryTitle": "Facebook, Google and Twitter will join a hearing on tech censorship next week",
-        "entryUrl": "https://www.engadget.com/2019/04/05/facebook-google-twitter-tech-censorship-hearing/",
-        "timestamp": 1554495120000,
-        "coverUrl": "https://o.aolcdn.com/images/dims?crop=5567%2C3712%2C0%2C0&quality=85&format=jpg&resize=1600%2C1067&image_uri=https%3A%2F%2Fs.yimg.com%2Fos%2Fcreatr-images%2F2019-04%2Fbeaf5740-57da-11e9-bffc-0ede685bc329&client=a1acac3e1b3290917d92&signature=e5475f5e6bd9da41f758d06ed5f385b2a858022e",
-        "contentSnippet": "Facebook, Google and Twitter will reportedly participate in a congressional hearing on tech censorship next week. The \"Stiffling Free Speech: Technological Censorship and the Public Discourse\" hearing is scheduled for April 10th",
-        "flames": 2,
-        "feedSourceTitle": "Engadget",
-        "feedSourceSiteUrl": "http://www.engadget.com"
-      },
-      {
-        "entryTitle": "Facebook, Google and Twitter will join a hearing on tech censorship next week",
-        "entryUrl": "https://www.engadget.com/2019/04/05/facebook-google-twitter-tech-censorship-hearing/",
-        "timestamp": 1554495120000,
-        "coverUrl": "https://o.aolcdn.com/images/dims?crop=5567%2C3712%2C0%2C0&quality=85&format=jpg&resize=1600%2C1067&image_uri=https%3A%2F%2Fs.yimg.com%2Fos%2Fcreatr-images%2F2019-04%2Fbeaf5740-57da-11e9-bffc-0ede685bc329&client=a1acac3e1b3290917d92&signature=e5475f5e6bd9da41f758d06ed5f385b2a858022e",
-        "contentSnippet": "Facebook, Google and Twitter will reportedly participate in a congressional hearing on tech censorship next week. The \"Stiffling Free Speech: Technological Censorship and the Public Discourse\" hearing is scheduled for April 10th",
-        "flames": 1,
-        "feedSourceTitle": "Engadget",
-        "feedSourceSiteUrl": "http://www.engadget.com"
-      }
-      , {
-        "entryTitle": "Facebook, Google and Twitter will join a hearing on tech censorship next week",
-        "entryUrl": "https://www.engadget.com/2019/04/05/facebook-google-twitter-tech-censorship-hearing/",
-        "timestamp": 1554495120000,
-        "coverUrl": "https://o.aolcdn.com/images/dims?crop=5567%2C3712%2C0%2C0&quality=85&format=jpg&resize=1600%2C1067&image_uri=https%3A%2F%2Fs.yimg.com%2Fos%2Fcreatr-images%2F2019-04%2Fbeaf5740-57da-11e9-bffc-0ede685bc329&client=a1acac3e1b3290917d92&signature=e5475f5e6bd9da41f758d06ed5f385b2a858022e",
-        "contentSnippet": "Facebook, Google and Twitter will reportedly participate in a congressional hearing on tech censorship next week. The \"Stiffling Free Speech: Technological Censorship and the Public Discourse\" hearing is scheduled for April 10th",
-        "flames": 0,
-        "feedSourceTitle": "Engadget",
-        "feedSourceSiteUrl": "http://www.engadget.com"
-      }
-      , {
-        "entryTitle": "Facebook, Google and Twitter will join a hearing on tech censorship next week",
-        "entryUrl": "https://www.engadget.com/2019/04/05/facebook-google-twitter-tech-censorship-hearing/",
-        "timestamp": 1554495120000,
-        "coverUrl": "https://o.aolcdn.com/images/dims?crop=5567%2C3712%2C0%2C0&quality=85&format=jpg&resize=1600%2C1067&image_uri=https%3A%2F%2Fs.yimg.com%2Fos%2Fcreatr-images%2F2019-04%2Fbeaf5740-57da-11e9-bffc-0ede685bc329&client=a1acac3e1b3290917d92&signature=e5475f5e6bd9da41f758d06ed5f385b2a858022e",
-        "contentSnippet": "Facebook, Google and Twitter will reportedly participate in a congressional hearing on tech censorship next week. The \"Stiffling Free Speech: Technological Censorship and the Public Discourse\" hearing is scheduled for April 10th",
-        "flames": 2,
-        "feedSourceTitle": "Engadget",
-        "feedSourceSiteUrl": "http://www.engadget.com"
-      }
-      , {
-        "entryTitle": "Facebook, Google and Twitter will join a hearing on tech censorship next week",
-        "entryUrl": "https://www.engadget.com/2019/04/05/facebook-google-twitter-tech-censorship-hearing/",
-        "timestamp": 1554495120000,
-        "coverUrl": "https://o.aolcdn.com/images/dims?crop=5567%2C3712%2C0%2C0&quality=85&format=jpg&resize=1600%2C1067&image_uri=https%3A%2F%2Fs.yimg.com%2Fos%2Fcreatr-images%2F2019-04%2Fbeaf5740-57da-11e9-bffc-0ede685bc329&client=a1acac3e1b3290917d92&signature=e5475f5e6bd9da41f758d06ed5f385b2a858022e",
-        "contentSnippet": "Facebook, Google and Twitter will reportedly participate in a congressional hearing on tech censorship next week. The \"Stiffling Free Speech: Technological Censorship and the Public Discourse\" hearing is scheduled for April 10th",
-        "flames": 2,
-        "feedSourceTitle": "Engadget",
-        "feedSourceSiteUrl": "http://www.engadget.com"
-      }
-      , {
-        "entryTitle": "Facebook, Google and Twitter will join a hearing on tech censorship next week",
-        "entryUrl": "https://www.engadget.com/2019/04/05/facebook-google-twitter-tech-censorship-hearing/",
-        "timestamp": 1554495120000,
-        "coverUrl": "https://o.aolcdn.com/images/dims?crop=5567%2C3712%2C0%2C0&quality=85&format=jpg&resize=1600%2C1067&image_uri=https%3A%2F%2Fs.yimg.com%2Fos%2Fcreatr-images%2F2019-04%2Fbeaf5740-57da-11e9-bffc-0ede685bc329&client=a1acac3e1b3290917d92&signature=e5475f5e6bd9da41f758d06ed5f385b2a858022e",
-        "contentSnippet": "Facebook, Google and Twitter will reportedly participate in a congressional hearing on tech censorship next week. The \"Stiffling Free Speech: Technological Censorship and the Public Discourse\" hearing is scheduled for April 10th",
-        "flames": 2,
-        "feedSourceTitle": "Engadget",
-        "feedSourceSiteUrl": "http://www.engadget.com"
-      }
-      , {
-        "entryTitle": "Facebook, Google and Twitter will join a hearing on tech censorship next week",
-        "entryUrl": "https://www.engadget.com/2019/04/05/facebook-google-twitter-tech-censorship-hearing/",
-        "timestamp": 1554495120000,
-        "coverUrl": "https://o.aolcdn.com/images/dims?crop=5567%2C3712%2C0%2C0&quality=85&format=jpg&resize=1600%2C1067&image_uri=https%3A%2F%2Fs.yimg.com%2Fos%2Fcreatr-images%2F2019-04%2Fbeaf5740-57da-11e9-bffc-0ede685bc329&client=a1acac3e1b3290917d92&signature=e5475f5e6bd9da41f758d06ed5f385b2a858022e",
-        "contentSnippet": "Facebook, Google and Twitter will reportedly participate in a congressional hearing on tech censorship next week. The \"Stiffling Free Speech: Technological Censorship and the Public Discourse\" hearing is scheduled for April 10th",
-        "flames": 2,
-        "feedSourceTitle": "Engadget",
-        "feedSourceSiteUrl": "http://www.engadget.com"
-      }
-      , {
-        "entryTitle": "Facebook, Google and Twitter will join a hearing on tech censorship next week",
-        "entryUrl": "https://www.engadget.com/2019/04/05/facebook-google-twitter-tech-censorship-hearing/",
-        "timestamp": 1554495120000,
-        "coverUrl": "https://o.aolcdn.com/images/dims?crop=5567%2C3712%2C0%2C0&quality=85&format=jpg&resize=1600%2C1067&image_uri=https%3A%2F%2Fs.yimg.com%2Fos%2Fcreatr-images%2F2019-04%2Fbeaf5740-57da-11e9-bffc-0ede685bc329&client=a1acac3e1b3290917d92&signature=e5475f5e6bd9da41f758d06ed5f385b2a858022e",
-        "contentSnippet": "Facebook, Google and Twitter will reportedly participate in a congressional hearing on tech censorship next week. The \"Stiffling Free Speech: Technological Censorship and the Public Discourse\" hearing is scheduled for April 10th",
-        "flames": 2,
-        "feedSourceTitle": "Engadget",
-        "feedSourceSiteUrl": "http://www.engadget.com"
-      }
-      , {
-        "entryTitle": "Facebook, Google and Twitter will join a hearing on tech censorship next week",
-        "entryUrl": "https://www.engadget.com/2019/04/05/facebook-google-twitter-tech-censorship-hearing/",
-        "timestamp": 1554495120000,
-        "coverUrl": "https://o.aolcdn.com/images/dims?crop=5567%2C3712%2C0%2C0&quality=85&format=jpg&resize=1600%2C1067&image_uri=https%3A%2F%2Fs.yimg.com%2Fos%2Fcreatr-images%2F2019-04%2Fbeaf5740-57da-11e9-bffc-0ede685bc329&client=a1acac3e1b3290917d92&signature=e5475f5e6bd9da41f758d06ed5f385b2a858022e",
-        "contentSnippet": "Facebook, Google and Twitter will reportedly participate in a congressional hearing on tech censorship next week. The \"Stiffling Free Speech: Technological Censorship and the Public Discourse\" hearing is scheduled for April 10th",
-        "flames": 2,
-        "feedSourceTitle": "Engadget",
-        "feedSourceSiteUrl": "http://www.engadget.com"
-      }
-      , {
-        "entryTitle": "Facebook, Google and Twitter will join a hearing on tech censorship next week",
-        "entryUrl": "https://www.engadget.com/2019/04/05/facebook-google-twitter-tech-censorship-hearing/",
-        "timestamp": 1554495120000,
-        "coverUrl": "https://o.aolcdn.com/images/dims?crop=5567%2C3712%2C0%2C0&quality=85&format=jpg&resize=1600%2C1067&image_uri=https%3A%2F%2Fs.yimg.com%2Fos%2Fcreatr-images%2F2019-04%2Fbeaf5740-57da-11e9-bffc-0ede685bc329&client=a1acac3e1b3290917d92&signature=e5475f5e6bd9da41f758d06ed5f385b2a858022e",
-        "contentSnippet": "Facebook, Google and Twitter will reportedly participate in a congressional hearing on tech censorship next week. The \"Stiffling Free Speech: Technological Censorship and the Public Discourse\" hearing is scheduled for April 10th",
-        "flames": 2,
-        "feedSourceTitle": "Engadget",
-        "feedSourceSiteUrl": "http://www.engadget.com"
-      }
-      , {
-        "entryTitle": "Facebook, Google and Twitter will join a hearing on tech censorship next week",
-        "entryUrl": "https://www.engadget.com/2019/04/05/facebook-google-twitter-tech-censorship-hearing/",
-        "timestamp": 1554495120000,
-        "coverUrl": "https://o.aolcdn.com/images/dims?crop=5567%2C3712%2C0%2C0&quality=85&format=jpg&resize=1600%2C1067&image_uri=https%3A%2F%2Fs.yimg.com%2Fos%2Fcreatr-images%2F2019-04%2Fbeaf5740-57da-11e9-bffc-0ede685bc329&client=a1acac3e1b3290917d92&signature=e5475f5e6bd9da41f758d06ed5f385b2a858022e",
-        "contentSnippet": "Facebook, Google and Twitter will reportedly participate in a congressional hearing on tech censorship next week. The \"Stiffling Free Speech: Technological Censorship and the Public Discourse\" hearing is scheduled for April 10th",
-        "flames": 2,
-        "feedSourceTitle": "Engadget",
-        "feedSourceSiteUrl": "http://www.engadget.com"
-      }
-    ]
+  private readonly streamUrlPrefix = 'https://cloud.feedly.com/v3/streams/contents?streamId=';
+  // Mix in some trending news
+  private readonly trendingUrlPrefix = 'https://cloud.feedly.com/v3/mixes/contents?streamId=';
+  private readonly count15 = '&count=15';
+  private readonly count7 = '&count=7';
+  private readonly count8 = '&count=8';
+  private readonly fbPrefix = 'https://www.facebook.com/sharer/sharer.php?u=';
+  private readonly twitterPrefix = 'https://twitter.com/intent/tweet?status=';
+  private readonly googleplusPrefix = 'https://plus.google.com/share?url=';
+
+  constructor(private http: HttpClient) { }
+
+  getURL(url: string): Observable<any> {
+    return this.http.get(url, httpOptions).pipe(
+      catchError(err => {
+        return of(new Error('HTTP Error: ' + err));
+      })
+    );
   }
+
+  getStream(streamID: string, balance: number, randomDelay: number = 100): Observable<any> {
+    let urls: string[] = [];
+    switch (balance) {
+      case FeedService.FEED_BALANCE_LATEST:
+        urls.push(this.streamUrlPrefix + streamID + this.count15);
+        break;
+      case FeedService.FEED_BALANCE_TRENDING:
+        urls.push(this.trendingUrlPrefix + streamID + this.count15);
+        break;
+      case FeedService.FEED_BALANCE_MIX:
+        urls.push(this.streamUrlPrefix + streamID + this.count8);
+        urls.push(this.trendingUrlPrefix + streamID + this.count7);
+        break;
+      default:
+        urls.push(this.streamUrlPrefix + streamID + this.count8);
+        urls.push(this.trendingUrlPrefix + streamID + this.count7);
+        break;
+    }
+    return from(urls).pipe(
+      tap(url => console.log(`getting ${url}`)),
+      delay(Math.floor(Math.random() * randomDelay) + 50),
+      mergeMap(url => this.getURL(url).pipe(
+        catchError((err) => { console.log('asdf', err); return of(new Error('Streams Error: ' +  err)); })
+      ))
+    );
+  }
+
 }

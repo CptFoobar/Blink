@@ -1,13 +1,13 @@
 import { Observable, Subscription } from 'rxjs';
 import { ClockService } from './../../services/clock.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   clock: Date;
   clockSubscription: Subscription;

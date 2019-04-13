@@ -4,18 +4,19 @@
     "name": "Blink New Tab",
     "short_name": "Blink",
     "description": "Replaces New Tab page with an elegant one, with news feeds from your favorite blogs and websites just a click away.",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "icons": {
-        "48": "data/img/blink-48.png",
-        "64": "data/img/blink-64.png",
-        "128": "data/img/blink-128.png"
+        "48": "assets/img/blink-48.png",
+        "64": "assets/img/blink-64.png",
+        "128": "assets/img/blink-128.png"
     },
     "author": "Sidhant Sharma [:tk]",
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "chrome_url_overrides": {
-        "newtab": "data/blink_shell.html"
+        "newtab": "index.html#/home"
     },
     "background": {
-        "scripts": ["background.js"],
+        "page": "index.html",
         "persistent": false
     },
     "permissions": [
@@ -25,6 +26,7 @@
         "tabs",
         "https://cloud.feedly.com/",
         "http://suggestqueries.google.com/"
-    ],
-    "options_page": "data/blink_shell.html#/blink/settings"
+    ]
+    // ,
+    // "options_page": "data/blink_shell.html#/blink/settings"
 }

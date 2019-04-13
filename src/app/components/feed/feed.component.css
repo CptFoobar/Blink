@@ -10,7 +10,8 @@
 }
 
 .bl-cardbox-compact {
-    max-width: 100%;
+    max-width: 95%;
+    margin-right: 2rem;
 }
 
 .bl-card {
