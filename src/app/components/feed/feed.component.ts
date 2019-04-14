@@ -1,3 +1,4 @@
+import { StorageService } from './../../services/storage.service';
 import { FeedService } from './../../services/feed.service';
 import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
@@ -30,7 +31,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   // The active media query (xs | sm | md | lg | xl)
   activeMediaQuery: string;
 
-  constructor(private feedService: FeedService, private mediaObserver: MediaObserver) { }
+  constructor(private feedService: FeedService, private mediaObserver: MediaObserver, private storage: StorageService) { }
 
   ngOnInit() {
     this.entryList = [];
@@ -44,26 +45,62 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     this.adjustContainer = false;
     this.viewCompact = false;
     this.feedRatio = FeedService.FEED_BALANCE_MIX;
-    let sources = ['feed/http://www.theverge.com/rss/full.xml',
-                    'feed/http://www.engadget.com/rss-full.xml',
-                    'feed/http://feeds.gawker.com/lifehacker/vip'];
-    this.fetchAllFeed(sources).pipe(
-      timeout(10 * 1000),
-      catchError((err) => of(new Error('FeedTimeoutError: ' +  err)))
-      ).subscribe(feed => {
-        this.addEntries(this.parseFeed(feed, {title: 'The Purge', icon: 'favicon.ico', websiteUrl: 'https://example.com'}))
-      },
-      (err) => {
-        // show error to user if no requests have returned for 10s or if all requests failed and there is nothing to show
-        if (this.allRequestsPending || (this.minEntryThreshold <= 0 && this.entryList.length === 0)) {
-          this.showProgressbar = false;
-          this.timedOut = true;
-          this.emptyFeedList = true;
-          this.allRequestsPending = false;
-        }
-    }, () => {
-      this.allRequestsPending = false;
-      this.timedOut = false;
+
+    let feedList = [];
+    this.storage.get().subscribe((settings) => {
+      console.log('fc', settings);
+      if (settings instanceof Error) {
+        // TODO: do something?
+        console.log('Error getting settings', settings);
+        this.emptyFeedList = true;
+        this.showProgressbar = false;
+        this.timedOut = false;
+        this.allRequestsPending = false;
+        return;
+      }
+      feedList = settings.get('feedList') || [];
+      this.shuffleFeed = settings.get('userSettings').shuffleFeed;
+      switch (settings.get('userSettings').feedType) {
+        case 'l':
+          this.feedRatio = FeedService.FEED_BALANCE_LATEST;
+          break;
+        case 'b':
+          this.feedRatio = FeedService.FEED_BALANCE_MIX;
+          break;
+        case 't':
+          this.feedRatio = FeedService.FEED_BALANCE_TRENDING;
+          break;
+        default:
+          this.feedRatio = FeedService.FEED_BALANCE_MIX;
+          break;
+      }
+
+      if (feedList.length === 0) {
+        this.emptyFeedList = true;
+        this.showProgressbar = false;
+        this.timedOut = false;
+        this.allRequestsPending = false;
+        return;
+      }
+
+      this.fetchAllFeed(feedList).pipe(
+        timeout(10 * 1000),
+        catchError((err) => of(new Error('FeedTimeoutError: ' +  err)))
+        ).subscribe((feed: {feedItems: any, feedMeta: any}) => {
+          this.addEntries(this.parseFeed(feed.feedItems, feed.feedMeta));
+        },
+        (err) => {
+          // show error to user if no requests have returned for 10s or if all requests failed and there is nothing to show
+          if (this.allRequestsPending || (this.minEntryThreshold <= 0 && this.entryList.length === 0)) {
+            this.showProgressbar = false;
+            this.timedOut = true;
+            this.emptyFeedList = true;
+            this.allRequestsPending = false;
+          }
+      }, () => {
+        this.allRequestsPending = false;
+        this.timedOut = false;
+      });
     });
   }
 
@@ -83,17 +120,18 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mediaQuery$.unsubscribe();
   }
 
-  fetchAllFeed(streams: string[]): Observable<any> {
+  fetchAllFeed(streams: any[]): Observable<any> {
     this.allRequestsPending = true;
     return from(streams).pipe(
       tap(stream => `getting from ${stream}`),
-      // filter(stream => {
-      //   if (!stream.wanted) {
-      //     this.minEntryThreshold -= 13;
-      //   }
-      //   return stream.wanted;
-      // }),
-      mergeMap(stream => this.feedService.getStream(stream, this.feedRatio)),
+      filter(stream => {
+        if (!stream.wanted) {
+          this.minEntryThreshold -= 13;
+        }
+        return stream.wanted;
+      }),
+      tap(stream => `actually getting from ${stream}`),
+      mergeMap(stream => this.feedService.getStream(stream.streamId, this.feedRatio)),
       catchError((err) => {
         console.log('Error getting stream:', err);
         this.minEntryThreshold -= 13;
@@ -137,9 +175,12 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addEntries(entries: Array<any>) {
-    // if (entries.length === 0) {
-    //   return;
-    // }
+    if (entries.length === 0) {
+      if (this.entryList.length >= this.minEntryThreshold) {
+        this.showProgressbar = false;
+      }
+      return;
+    }
     this.entryList.push.apply(this.entryList, entries);
     if (this.shuffleFeed) {
       this.entryList = this.shuffle(this.entryList);
