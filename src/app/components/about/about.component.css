@@ -1,0 +1,13 @@
+.about>a:hover, .about>a:focus {
+    text-decoration: none;
+    color: #075490;
+}
+
+.about {
+    font-size: 1.23rem;
+    line-height: 2.15rem;
+}
+
+.jumbotron {
+    padding: 3.75rem 3.5rem;
+}
