@@ -26,7 +26,7 @@ import { UniquePipe } from './pipes/unique.pipe';
     NgbModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [UniquePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

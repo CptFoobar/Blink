@@ -45,16 +45,16 @@
                             <span class="banner-button share-buttons w-100">
                                 <div class="btn-group d-flex w-100" role="group" aria-label="Share">
                                     <div class="w-100" role="group">
-                                        <button type="button" class="btn btn-default share-fb w-100" ng-click="popup('f', entry.entryUrl)"><i class="fab fa-facebook-f fa-lg"></i></button>
+                                        <button type="button" class="btn btn-default share-fb w-100" (click)="popup('f', entry.entryUrl)"><i class="fab fa-facebook-f fa-lg"></i></button>
                                     </div>
                                     <div class="w-100" role="group">
-                                        <button type="button" class="btn btn-default share-twitter w-100" ng-click="popup('t', entry.entryTitle + '+' + entry.entryUrl)"><i class="fab fa-twitter fa-lg"></i></button>
+                                        <button type="button" class="btn btn-default share-twitter w-100" (click)="popup('t', entry.entryTitle + '+' + entry.entryUrl)"><i class="fab fa-twitter fa-lg"></i></button>
                                     </div>
                                     <div class="w-100" role="group">
-                                        <button type="button" class="btn btn-default share-reddit w-100" ng-click="popup('g', entry.entryUrl)"><i class="fab fa-reddit-alien fa-lg"></i></button>
+                                        <button type="button" class="btn btn-default share-reddit w-100" (click)="popup('r', entry.entryUrl + '&title=' + entry.entryTitle)"><i class="fab fa-reddit-alien fa-lg"></i></button>
                                     </div>
                                     <div class="w-100" role="group">
-                                        <button type="button" class="btn btn-default share-pocket w-100" ng-click="popup('g', entry.entryUrl)"><i class="fab fa-get-pocket fa-lg"></i></button>
+                                        <button type="button" class="btn btn-default share-pocket w-100" (click)="popup('p', entry.entryUrl)"><i class="fab fa-get-pocket fa-lg"></i></button>
                                     </div>
                                 </div>
                             </span>

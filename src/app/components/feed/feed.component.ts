@@ -1,3 +1,4 @@
+import { UniquePipe } from './../../pipes/unique.pipe';
 import { StorageService } from './../../services/storage.service';
 import { FeedService } from './../../services/feed.service';
 import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
@@ -31,7 +32,13 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   // The active media query (xs | sm | md | lg | xl)
   activeMediaQuery: string;
 
-  constructor(private feedService: FeedService, private mediaObserver: MediaObserver, private storage: StorageService) { }
+  private readonly fbPrefixURL = 'https://www.facebook.com/sharer/sharer.php?u=';
+  private readonly twitterPrefixURL = 'https://twitter.com/intent/tweet?status=';
+  private readonly redditPrefixURL = 'https://www.reddit.com/submit?url=';
+  private readonly pocketPrefixURL = 'https://getpocket.com/edit?url=';
+
+  constructor(private feedService: FeedService, private mediaObserver: MediaObserver, 
+                private storage: StorageService, private uniquePipe: UniquePipe) { }
 
   ngOnInit() {
     this.entryList = [];
@@ -48,7 +55,6 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let feedList = [];
     this.storage.get().subscribe((settings) => {
-      console.log('fc', settings);
       if (settings instanceof Error) {
         // TODO: do something?
         console.log('Error getting settings', settings);
@@ -86,7 +92,13 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       this.fetchAllFeed(feedList).pipe(
         timeout(10 * 1000),
         catchError((err) => of(new Error('FeedTimeoutError: ' +  err)))
-        ).subscribe((feed: {feedItems: any, feedMeta: any}) => {
+        ).subscribe((feed?: {feedItems: any, feedMeta: any}) => {
+          if (!feed) {
+            this.minEntryThreshold -= 13;
+            console.log('feed empty');
+            return;
+          }
+
           this.addEntries(this.parseFeed(feed.feedItems, feed.feedMeta));
         },
         (err) => {
@@ -123,20 +135,19 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   fetchAllFeed(streams: any[]): Observable<any> {
     this.allRequestsPending = true;
     return from(streams).pipe(
-      tap(stream => `getting from ${stream}`),
       filter(stream => {
         if (!stream.wanted) {
           this.minEntryThreshold -= 13;
         }
         return stream.wanted;
       }),
-      tap(stream => `actually getting from ${stream}`),
-      mergeMap(stream => this.feedService.getStream(stream.streamId, this.feedRatio)),
+      mergeMap(stream => this.feedService.getStream(stream.streamId, this.feedRatio).pipe(
+        map(resp => ({ feedItems: resp, feedMeta: stream }))
+      )),
       catchError((err) => {
         console.log('Error getting stream:', err);
-        this.minEntryThreshold -= 13;
         // tell the user?
-        return of({items: []});
+        return of(null);
       })
     );
   }
@@ -155,7 +166,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     let entries = [];
 
     for (let item of feedObject.items) {
-        var contentSnippet = this.getContentSnippet(item.summary, item.content);
+        let contentSnippet = this.getContentSnippet(item.summary, item.content);
         if (this.isUsefulEntry(item.title, contentSnippet)) {
             entries.push({
                 entryTitle: item.title,
@@ -180,6 +191,13 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         this.showProgressbar = false;
       }
       return;
+    }
+    let initialEntryCount = entries.length;
+    entries = this.uniquePipe.transform(entries);
+    let uniqueEntryCount = entries.length;
+    if (uniqueEntryCount < initialEntryCount) {
+      console.log('removed ', initialEntryCount - uniqueEntryCount);
+      this.minEntryThreshold -= (initialEntryCount - uniqueEntryCount);
     }
     this.entryList.push.apply(this.entryList, entries);
     if (this.shuffleFeed) {
@@ -207,9 +225,9 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       snippet = summary.content;
     }
     // Remove HTML tags
-    snippet = snippet.replace(/(<([^>]+)>)/ig, "");
+    snippet = snippet.replace(/(<([^>]+)>)/ig, '');
     // Remove \r and \n occurences
-    snippet = snippet.replace(/\r?\n/g, "");
+    snippet = snippet.replace(/\r?\n/g, '');
     // Replace &quot; with ""
     snippet = snippet.replace(/&quot;/g, '"');
     // Replace all occurences of 'Read More'
@@ -312,6 +330,37 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
   range(n: number): Array<number> {
     return new Array<number>(n).fill(0).map((_, i) => i);
+  }
+
+  popup(sharePoint: string, suffix: string) {
+    let url;
+    let title;
+    switch (sharePoint) {
+        case 'f':
+            url = this.fbPrefixURL;
+            title = 'Share on Facebook';
+            break;
+        case 't':
+            url = this.twitterPrefixURL;
+            title = 'Share on Twitter';
+            break;
+        case 'r':
+            url = this.redditPrefixURL;
+            title = 'Share on Reddit';
+            break;
+        case 'p':
+            url = this.pocketPrefixURL;
+            title = 'Save to Pocket';
+            break;
+    }
+    url = url + suffix;
+    let h = 500;
+    let w = 500;
+    let left = (screen.width / 2) - (w / 2);
+    let top = (screen.height / 2) - (h / 2);
+    return window.open(url, title,
+          'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + 
+            ', height=' + h + ', top=' + top + ', left=' + left);
   }
 
 }

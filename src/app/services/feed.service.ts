@@ -28,10 +28,6 @@ export class FeedService {
   private readonly count15 = '&count=15';
   private readonly count7 = '&count=7';
   private readonly count8 = '&count=8';
-  private readonly fbPrefix = 'https://www.facebook.com/sharer/sharer.php?u=';
-  private readonly twitterPrefix = 'https://twitter.com/intent/tweet?status=';
-  private readonly googleplusPrefix = 'https://plus.google.com/share?url=';
-
   constructor(private http: HttpClient) { }
 
   getURL(url: string): Observable<any> {
