@@ -1,0 +1,26 @@
+.progress {
+    border-radius: 5px;
+    height: 0.75rem;
+}
+
+@-webkit-keyframes progress-bar-stripes {
+    from {
+        background-position: 2rem 0
+    }
+    to {
+        background-position: 0 0
+    }
+}
+
+@keyframes progress-bar-stripes {
+    from {
+        background-position: 2rem 0
+    }
+    to {
+        background-position: 0 0
+    }
+}
+
+.progress-bar-striped {
+    background-size: 1rem 1rem;
+}

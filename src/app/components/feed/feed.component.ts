@@ -50,7 +50,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     this.allRequestsPending = false;
     this.minEntryThreshold = 0;
     this.adjustContainer = false;
-    this.viewCompact = false;
+    this.viewCompact = true;
     this.feedRatio = FeedService.FEED_BALANCE_MIX;
 
     let feedList = [];
@@ -291,7 +291,9 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
   columns(): number {
     let w = window.innerWidth;
-    if (w > 1200) {
+    if (w > 1600) {
+      return 4;
+    } else if (w > 1200 && w < 1600) {
       if (this.viewCompact) {
         return 4;
       } else {

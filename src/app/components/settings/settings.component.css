@@ -1,0 +1,17 @@
+.settings-container {
+    font-family: 'Helvetica', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+.save-button {
+
+    border-radius: 50%;
+    padding: 8px 4px 6px 6px;
+    position: fixed;
+    top: 85%;
+    right: 5%;
+
+}
+
+input[type="text"]:disabled {
+    color: blue;
+}
