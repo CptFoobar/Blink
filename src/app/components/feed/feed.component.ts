@@ -15,7 +15,6 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
   entryList: Array<any>;
 
-  showScroller: boolean;
   emptyFeedList: boolean;
   showProgressbar: boolean;
   timedOut: boolean;
@@ -38,12 +37,11 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly pocketPrefixURL = 'https://getpocket.com/edit?url=';
   private readonly thresholdModifier = 13;
 
-  constructor(private feedService: FeedService, private mediaObserver: MediaObserver, 
-                private storage: StorageService, private uniquePipe: UniquePipe) { }
+  constructor(private feedService: FeedService, private mediaObserver: MediaObserver,
+              private storage: StorageService, private uniquePipe: UniquePipe) { }
 
   ngOnInit() {
     this.entryList = [];
-    this.showScroller = false;
     this.emptyFeedList = false;
     this.timedOut = false;
     this.showProgressbar = true;
@@ -200,13 +198,13 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     // add new entries remove any duplicates. use 'entryTitle' as key
     this.entryList.push.apply(this.entryList, entries);
     let initialEntryCount = this.entryList.length;
-    this.entryList = this.uniquePipe.transform(this.entryList, "entryTitle");
+    this.entryList = this.uniquePipe.transform(this.entryList, 'entryTitle');
     let uniqueEntryCount = this.entryList.length;
     if (uniqueEntryCount < initialEntryCount) {
       console.log('removed ', initialEntryCount - uniqueEntryCount);
       this.minEntryThreshold -= (initialEntryCount - uniqueEntryCount);
     }
-    
+
     if (this.shuffleFeed) {
       this.entryList = this.shuffle(this.entryList);
     }
@@ -296,8 +294,9 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // TODO: Move this and other screen-related utils to a service
   columns(): number {
-    let w = window.innerWidth;
+    const w = window.innerWidth;
     if (w > 1600) {
       return 4;
     } else if (w > 1200 && w < 1600) {
@@ -337,6 +336,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     return items;
   }
 
+  // TODO: Move this to utils
   range(n: number): Array<number> {
     return new Array<number>(n).fill(0).map((_, i) => i);
   }

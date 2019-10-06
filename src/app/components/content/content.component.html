@@ -1,3 +1,36 @@
-<p>
-  content works!
-</p>
+<app-progressbar [hidden]="!showProgressbar"></app-progressbar>
+
+<div class="container">
+  <!-- Message when no content source is added -->
+  <div class="row d-flex justify-content-center text-center noselect" *ngIf="emptyContentList" style="cursor: default">
+    <span class="no-items">
+      <br />
+      <i class="fa fa-exclamation fa-3x"></i><br /><br />
+      Hmmm... It's quite lonely here.. <br />
+      Let's add some content to your news feed. <br /><br />
+      <p class="tip">Click the 'Add Content' on the bottom-right of the page to get started</p>
+    </span>
+  </div>
+
+<!-- Content sources -->
+  <div class="row d-flex" [hidden]="emptyContentList">
+    <div class="col-8 col-sm-6 col-md-3 col-lg-2 col-xl-2 content-wrapper" *ngFor="let i of range(columns())">
+      <div *ngFor="let entry of contentList; let entryIndex = index;">
+        <div class="item-container noselect" *ngIf="entryIndex % columns() === i">
+          <span>
+            <h5><span class="delete-button" (click)="promptDelete(entry)"><i class="fa fa-trash-alt fa-fw fa-lg"></i></span>
+            </h5>
+            <img [src]="entry.icon" class="feed-icon" />
+            <p class="text-center">
+              <input type="checkbox" style="margin-right: 5px" [(ngModel)]="entry.wanted" (change)="toggleItem(entry)" name="srcChk-{{entryIndex}}">
+              <!-- <label for="srcChk-{{entryIndex}}" class="custom-control-label">  -->
+              <a [href]="entry.websiteUrl">{{ entry.title }}</a>
+              <!-- </label> -->
+              </p>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-window-scroll-button></app-window-scroll-button>

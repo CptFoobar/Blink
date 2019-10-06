@@ -25,10 +25,10 @@
             </span>
         </div>
     
-    <!-- fEeD -->
+    <!-- Feed -->
+    <!-- TODO: Optimize column rendering -->
     <div class="row d-flex" [hidden]="emptyFeedList">
         <div class="offset-sm-0 col-sm-6 col-md-4" [ngClass]="{'col-xl-3': viewCompact}" *ngFor="let i of range(columns())">
-            <!-- TODO: Unique -->
             <div *ngFor="let entry of entryList; let entryIndex = index;">
                 <div *ngIf="entryIndex % columns() === i" class="bl-cardbox" [ngClass]="{'bl-cardbox-compact': viewCompact}">
                     <div class="bl-card">
