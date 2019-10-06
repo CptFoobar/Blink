@@ -36,6 +36,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly twitterPrefixURL = 'https://twitter.com/intent/tweet?status=';
   private readonly redditPrefixURL = 'https://www.reddit.com/submit?url=';
   private readonly pocketPrefixURL = 'https://getpocket.com/edit?url=';
+  private readonly thresholdModifier = 13;
 
   constructor(private feedService: FeedService, private mediaObserver: MediaObserver, 
                 private storage: StorageService, private uniquePipe: UniquePipe) { }
@@ -94,7 +95,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         catchError((err) => of(new Error('FeedTimeoutError: ' +  err)))
         ).subscribe((feed?: {feedItems: any, feedMeta: any}) => {
           if (!feed) {
-            this.minEntryThreshold -= 13;
+            this.minEntryThreshold -= this.thresholdModifier;
             console.log('feed empty');
             return;
           }
@@ -137,7 +138,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     return from(streams).pipe(
       filter(stream => {
         if (!stream.wanted) {
-          this.minEntryThreshold -= 13;
+          this.minEntryThreshold -= this.thresholdModifier;
         }
         return stream.wanted;
       }),
@@ -185,6 +186,10 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     return entries;
   }
 
+  /**
+   * Add entries to show
+   * @param entries New entries
+   */
   addEntries(entries: Array<any>) {
     if (entries.length === 0) {
       if (this.entryList.length >= this.minEntryThreshold) {
@@ -192,14 +197,16 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       return;
     }
-    let initialEntryCount = entries.length;
-    entries = this.uniquePipe.transform(entries);
-    let uniqueEntryCount = entries.length;
+    // add new entries remove any duplicates. use 'entryTitle' as key
+    this.entryList.push.apply(this.entryList, entries);
+    let initialEntryCount = this.entryList.length;
+    this.entryList = this.uniquePipe.transform(this.entryList, "entryTitle");
+    let uniqueEntryCount = this.entryList.length;
     if (uniqueEntryCount < initialEntryCount) {
       console.log('removed ', initialEntryCount - uniqueEntryCount);
       this.minEntryThreshold -= (initialEntryCount - uniqueEntryCount);
     }
-    this.entryList.push.apply(this.entryList, entries);
+    
     if (this.shuffleFeed) {
       this.entryList = this.shuffle(this.entryList);
     }

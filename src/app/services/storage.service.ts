@@ -10,7 +10,6 @@ export class StorageService {
   constructor() { }
 
   get(key?: string): Observable<Map<string, any> | Error> {
-    console.log('here');
     return defer(() => {
       return browser.storage.sync.get(key).then((settings) => {
         if (browser.runtime.lastError) {
