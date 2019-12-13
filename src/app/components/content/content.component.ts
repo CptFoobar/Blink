@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/services/storage.service';
 import { browser } from 'protractor';
+import { Logger, LoggingService } from 'src/app/services/logging.service';
 
 @Component({
   selector: 'app-content',
@@ -9,13 +10,16 @@ import { browser } from 'protractor';
 })
 export class ContentComponent implements OnInit {
 
+  logger: Logger;
   showProgressbar: boolean;
   emptyContentList: boolean;
   contentList: Array<any>;
 
   private readonly fieldListKey = 'feedList';
 
-  constructor(private storage: StorageService) { }
+  constructor(private storage: StorageService, private loggingService: LoggingService) {
+    this.logger = loggingService.getLogger('ContentComponent', Logger.Level.Info);
+   }
 
   ngOnInit() {
     this.showProgressbar = true;
@@ -26,7 +30,7 @@ export class ContentComponent implements OnInit {
         this.showProgressbar = false;
         this.emptyContentList = true;
         // TODO: Add alert
-        console.log('failed to get settings', settings);
+        this.logger.error('failed to get settings', settings);
         return;
       }
       this.showProgressbar = false;
@@ -38,11 +42,11 @@ export class ContentComponent implements OnInit {
   }
 
   promptDelete(contentSrc) {
-    console.log('deleting', contentSrc);
+    this.logger.debug('deleting', contentSrc);
   }
 
   toggleItem(contentSrc) {
-    console.log('saving: ', contentSrc.wanted);
+    this.logger.debug('saving: ', contentSrc.wanted);
   }
 
   // TODO: Move this and other screen-related utils to a service

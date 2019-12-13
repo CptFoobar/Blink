@@ -1,7 +1,6 @@
 <!-- Loader bar -->
 <app-progressbar [hidden]="!showProgressbar"></app-progressbar>
-    
-<div [ngClass]="{'container-fluid': viewCompact || adjustContainer, 'container': !viewCompact && !adjustContainer}">
+<div [ngClass]="{'container-fluid': viewCompact || adjustContainer, 'container': !viewCompact && !adjustContainer, 'padding-50': viewCompact}">
     <!-- Message when no content source is added -->
     <div class="row d-flex justify-content-center text-center noselect" *ngIf="emptyFeedList && !timedOut" style="cursor: default">
         <span class="no-items">

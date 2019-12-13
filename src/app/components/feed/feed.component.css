@@ -230,3 +230,7 @@
     -webkit-transition: opacity 0.4s;
     -moz-transition: opacity 0.4s;
 }
+
+.padding-50 {
+    padding: 50px;
+}

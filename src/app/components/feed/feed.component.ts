@@ -48,7 +48,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     this.shuffleFeed = true;
     this.allRequestsPending = false;
     this.minEntryThreshold = 0;
-    this.adjustContainer = false;
+    this.adjustContainer = true;
     this.viewCompact = true;
     this.feedRatio = FeedService.FEED_BALANCE_MIX;
 
@@ -284,7 +284,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getVisualUrl(img: any, icon: string): string{
+  getVisualUrl(img: any, icon: string): string {
     if (typeof img === 'undefined' || img === 'none') {
         return icon;
     } else if (typeof img.url === 'undefined' || img.url === 'none') {
@@ -298,7 +298,11 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   columns(): number {
     const w = window.innerWidth;
     if (w > 1600) {
-      return 4;
+      if (this.viewCompact) {
+        return 4;
+      } else {
+        return 3;
+      }
     } else if (w > 1200 && w < 1600) {
       if (this.viewCompact) {
         return 4;
