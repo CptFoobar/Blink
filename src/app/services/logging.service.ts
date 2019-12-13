@@ -22,25 +22,25 @@ export class Logger {
 
   debug(...message: any[]) {
     if (this.level >= Level.Debug) {
-      this.log('DEBUG', message);
+      this.log('DEBUG', ...message);
     }
   }
 
   info(...message: any[]) {
     if (this.level >= Level.Debug) {
-      this.log('INFO', message);
+      this.log('INFO', ...message);
     }
   }
 
   warn(...message: any[]) {
     if (this.level >= Level.Debug) {
-      this.log('WARN', message);
+      this.log('WARN', ...message);
     }
   }
 
   error(...message: any[]) {
     if (this.level >= Level.Debug) {
-      this.log('ERROR', message);
+      this.log('ERROR', ...message);
     }
   }
 }

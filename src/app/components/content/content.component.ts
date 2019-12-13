@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/services/storage.service';
 import { browser } from 'protractor';
 import { Logger, LoggingService } from 'src/app/services/logging.service';
+import { Settings } from 'src/app/settings';
 
 @Component({
   selector: 'app-content',
@@ -15,10 +16,8 @@ export class ContentComponent implements OnInit {
   emptyContentList: boolean;
   contentList: Array<any>;
 
-  private readonly fieldListKey = 'feedList';
-
-  constructor(private storage: StorageService, private loggingService: LoggingService) {
-    this.logger = loggingService.getLogger('ContentComponent', Logger.Level.Info);
+  constructor(private storage: StorageService, private logging: LoggingService) {
+    this.logger = logging.getLogger('ContentComponent', Logger.Level.Info);
    }
 
   ngOnInit() {
@@ -34,7 +33,7 @@ export class ContentComponent implements OnInit {
         return;
       }
       this.showProgressbar = false;
-      this.contentList = settings.get('feedList') || [];
+      this.contentList = settings.get(Settings.feedList) || [];
       if (this.contentList.length === 0) {
         this.emptyContentList = true;
       }
@@ -43,10 +42,29 @@ export class ContentComponent implements OnInit {
 
   promptDelete(contentSrc) {
     this.logger.debug('deleting', contentSrc);
+    // add confirmation dialog here
+    // simulating confirmation
+    this.deleteItem(contentSrc);
   }
 
   toggleItem(contentSrc) {
-    this.logger.debug('saving: ', contentSrc.wanted);
+    this.storage.set(new Map([[ Settings.feedList, this.contentList ]])).subscribe(
+      _ => this.logger.info(`updated ${contentSrc.title}::${contentSrc.wanted}`)
+    );
+  }
+
+  deleteItem(toDelete) {
+    const index = this.indexOf(toDelete);
+    if (index > -1) {
+      this.contentList.splice(index, 1);
+      this.storage.set(new Map([[ Settings.feedList, this.contentList ]])).subscribe(
+        _ => this.logger.info('deleted', toDelete)
+      );
+      if (this.contentList.length === 0) {
+        this.emptyContentList = true;
+      }
+    }
+
   }
 
   // TODO: Move this and other screen-related utils to a service
@@ -68,4 +86,14 @@ export class ContentComponent implements OnInit {
     return new Array<number>(n).fill(0).map((_, i) => i);
   }
 
+  // TODO: Move this to utils
+  private indexOf(o) {
+    for (let i = 0; i < this.contentList.length; i++) {
+        if (this.contentList[i].title === o.title &&
+            this.contentList[i].websiteUrl === o.websiteUrl) {
+            return i;
+        }
+    }
+    return -1;
+  }
 }
