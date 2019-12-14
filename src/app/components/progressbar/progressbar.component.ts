@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { NgbProgressbarConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-progressbar',
@@ -6,8 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./progressbar.component.css']
 })
 export class ProgressbarComponent implements OnInit {
-
-  constructor() { }
+  @Input() barType;
+  constructor() {  }
 
   ngOnInit() {
   }

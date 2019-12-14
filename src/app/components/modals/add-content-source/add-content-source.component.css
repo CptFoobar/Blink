@@ -1,0 +1,12 @@
+.ac-modal-title {
+    color: #725177;
+    font-size: 2em;
+    width: 100%;
+    text-align: center;
+}
+
+.ac-modal-body {
+    color: #4e4e4e;
+    min-height: 200px;
+}
+

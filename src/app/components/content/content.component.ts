@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/services/storage.service';
-import { browser } from 'protractor';
 import { Logger, LoggingService } from 'src/app/services/logging.service';
 import { Settings } from 'src/app/settings';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteContentSourceComponent } from '../modals/delete-content-source/delete-content-source.component';
 import { ToastService } from 'src/app/services/toast.service';
-import { setInterval } from 'timers';
+import { AddContentSourceComponent } from '../modals/add-content-source/add-content-source.component';
 
 @Component({
   selector: 'app-content',
@@ -61,30 +60,44 @@ export class ContentComponent implements OnInit {
   }
 
   toggleItem(contentSrc) {
-    this.storage.set(new Map([[ Settings.feedList, this.contentList ]])).subscribe(
-      _ => this.logger.info(`updated ${contentSrc.title}::${contentSrc.wanted}`)
-    );
+    this.updateFeedlist();
   }
 
   deleteItem(toDelete) {
     const index = this.indexOf(toDelete);
     if (index > -1) {
       this.contentList.splice(index, 1);
-      this.storage.set(new Map([[ Settings.feedList, this.contentList ]])).subscribe(
-        error => {
-          if (error) {
-            // TODO: Toast deletion success
-            this.logger.error(`error deleting ${toDelete.title}`);
-          } else {
-            this.toastService.showSuccess(`Deleted '${toDelete.title}' from your feed`);
-          }
-        }
-      );
+      this.updateFeedlist(`Deleted '${toDelete.title}' from your feed`, `Failed to delete '${toDelete.title}' from your feed`);
       if (this.contentList.length === 0) {
         this.emptyContentList = true;
       }
     }
+  }
 
+  updateFeedlist(successToastMsg?: string, errToastMsg?: string) {
+    this.storage.set(new Map([[ Settings.feedList, this.contentList ]])).subscribe(
+      err => {
+        if (err) {
+          if (errToastMsg) {
+            this.toastService.showError(errToastMsg);
+          }
+          this.logger.error('An error occurred when updating feed list.', err);
+        } else {
+          if (successToastMsg) {
+            this.toastService.showSuccess(successToastMsg);
+          }
+        }
+      }
+    );
+  }
+
+  addContent() {
+    const modalRef = this.modalService.open(AddContentSourceComponent, { size: 'xl' });
+    modalRef.result.then((newSource) => {
+      this.logger.info('adding', newSource);
+    }, (dismissed) => {
+      this.logger.debug('added nothing');
+    });
   }
 
   // TODO: Move this and other screen-related utils to a service

@@ -77,19 +77,11 @@
     outline: none;
 }
 
-.ac-modal-title {
-    color: #725177;
-    font-size: 2em;
-    width: 100%;
-    text-align: center;
+/* Fix border radius of ripple-on-click effect */
+.add-content-button:after {
+    border-radius: 50%;
+
 }
-
-.ac-modal-body {
-    color: #4e4e4e;
-    min-height: 200px;
-}
-
-
 
 .content-popup-wrapper {
     max-width: 95%;

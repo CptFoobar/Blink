@@ -17,7 +17,7 @@ export class Logger {
   }
 
   private log(level: string, ...message: any[]) {
-    console.log(`${new Date().toISOString()} [${level.toUpperCase()}] -`, ...message);
+    console.log(`${new Date().toISOString()} [${level.toUpperCase()}] - ${this.tag}:`, ...message);
   }
 
   debug(...message: any[]) {

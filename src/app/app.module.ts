@@ -20,6 +20,7 @@ import { HistoryComponent } from './components/history/history.component';
 import { ProgressbarComponent } from './components/progressbar/progressbar.component';
 import { DeleteContentSourceComponent } from './components/modals/delete-content-source/delete-content-source.component';
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
+import { AddContentSourceComponent } from './components/modals/add-content-source/add-content-source.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ToastContainerComponent } from './components/toast-container/toast-cont
     HistoryComponent,
     ProgressbarComponent,
     DeleteContentSourceComponent,
-    ToastContainerComponent
+    ToastContainerComponent,
+    AddContentSourceComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,7 @@ import { ToastContainerComponent } from './components/toast-container/toast-cont
     FormsModule,
   ],
   providers: [UniquePipe],
-  entryComponents: [DeleteContentSourceComponent],
+  entryComponents: [AddContentSourceComponent, DeleteContentSourceComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
