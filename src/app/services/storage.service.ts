@@ -22,7 +22,7 @@ export class StorageService {
     });
   }
 
-  set(settings: Map<string, any>): Observable<boolean | Error> {
+  set(settings: Map<string, any>): Observable<null | Error> {
     const settingsObj = {};
     for (let [key, value] of settings) {
       settingsObj[key] = value;
@@ -32,7 +32,6 @@ export class StorageService {
         if (browser.runtime.lastError) {
           return new Error('StorageError: ' + browser.runtime.lastError);
         }
-        return true;
       }, (err) => {
           return Error('StorageError: ' + browser.runtime.lastError);
       });

@@ -1,0 +1,17 @@
+<!-- Delete confirmation modal -->
+<div class="modal-header">
+  <div class="modal-title delete-confirm-title col-12">
+      <span> Delete {{ title }} ? </span>
+      <img [src]="icon" class="src-img float-right"/>
+  </div>
+</div>
+<div class="modal-body delete-confirm-body p-4">
+  <p class="confirm-message">Are you sure you want to delete feed from {{ title }} ?
+      <br />
+  </p>
+  <p class="confirm-tip">You can always get it back by adding it using the 'Add Content' button on the bottom-right.</p>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" type="button" ngbAutofocus (click)="activeModal.dismiss()"><i class="fa fa-times fa-fw fa-2x"></i></button>
+  <button class="btn btn-danger" type="button" (click)="activeModal.close()"><i class="fa fa-trash fa-fw fa-2x"></i></button>
+</div>

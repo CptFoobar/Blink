@@ -3,6 +3,10 @@ import { StorageService } from 'src/app/services/storage.service';
 import { browser } from 'protractor';
 import { Logger, LoggingService } from 'src/app/services/logging.service';
 import { Settings } from 'src/app/settings';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteContentSourceComponent } from '../modals/delete-content-source/delete-content-source.component';
+import { ToastService } from 'src/app/services/toast.service';
+import { setInterval } from 'timers';
 
 @Component({
   selector: 'app-content',
@@ -15,8 +19,12 @@ export class ContentComponent implements OnInit {
   showProgressbar: boolean;
   emptyContentList: boolean;
   contentList: Array<any>;
+  closeResult: string;
 
-  constructor(private storage: StorageService, private logging: LoggingService) {
+  constructor(private storage: StorageService,
+              private logging: LoggingService,
+              private modalService: NgbModal,
+              public toastService: ToastService) {
     this.logger = logging.getLogger('ContentComponent', Logger.Level.Info);
    }
 
@@ -42,9 +50,14 @@ export class ContentComponent implements OnInit {
 
   promptDelete(contentSrc) {
     this.logger.debug('deleting', contentSrc);
-    // add confirmation dialog here
-    // simulating confirmation
-    this.deleteItem(contentSrc);
+    const modalRef = this.modalService.open(DeleteContentSourceComponent, { size: 'lg', windowClass: 'modal-lg-compact' });
+    modalRef.componentInstance.title = contentSrc.title;
+    modalRef.componentInstance.icon = contentSrc.icon;
+    modalRef.result.then((deleteConfirmed) => {
+      this.deleteItem(contentSrc);
+    }, (dismissed) => {
+      this.logger.debug(`Dismissed deleting ${contentSrc.title}`);
+    });
   }
 
   toggleItem(contentSrc) {
@@ -58,7 +71,14 @@ export class ContentComponent implements OnInit {
     if (index > -1) {
       this.contentList.splice(index, 1);
       this.storage.set(new Map([[ Settings.feedList, this.contentList ]])).subscribe(
-        _ => this.logger.info('deleted', toDelete)
+        error => {
+          if (error) {
+            // TODO: Toast deletion success
+            this.logger.error(`error deleting ${toDelete.title}`);
+          } else {
+            this.toastService.showSuccess(`Deleted '${toDelete.title}' from your feed`);
+          }
+        }
       );
       if (this.contentList.length === 0) {
         this.emptyContentList = true;

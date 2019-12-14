@@ -51,7 +51,7 @@
             </span>
         </a>
       </li> -->
-      <li class="nav-item dropdown" ngbDropdown>
+      <li class="nav-item dropdown" ngbDropdown display="dynamic">
         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" 
           aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
           <span class="text-center" style="display: inline-flex;">
@@ -61,6 +61,7 @@
           </span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown" ngbDropdownMenu>
+            <!-- TODO: Use ngbDropdownItem and fix css -->
             <li>
                 <a href="#/blink/content" class="nav-link">
                     <i class="fa fa-pencil-alt fa-fw fa-lg"></i>       Content

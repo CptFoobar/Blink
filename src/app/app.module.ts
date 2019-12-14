@@ -18,6 +18,8 @@ import { HelpComponent } from './components/help/help.component';
 import { BookmarksComponent } from './components/bookmarks/bookmarks.component';
 import { HistoryComponent } from './components/history/history.component';
 import { ProgressbarComponent } from './components/progressbar/progressbar.component';
+import { DeleteContentSourceComponent } from './components/modals/delete-content-source/delete-content-source.component';
+import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 
 @NgModule({
   declarations: [
@@ -33,16 +35,19 @@ import { ProgressbarComponent } from './components/progressbar/progressbar.compo
     HelpComponent,
     BookmarksComponent,
     HistoryComponent,
-    ProgressbarComponent
+    ProgressbarComponent,
+    DeleteContentSourceComponent,
+    ToastContainerComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [UniquePipe],
+  entryComponents: [DeleteContentSourceComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
