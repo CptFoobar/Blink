@@ -1,8 +1,8 @@
-import { FeedComponent } from './../components/feed/feed.component';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, delay, mergeMap, tap, map } from 'rxjs/operators';
 import { Observable, from, of, empty } from 'rxjs';
+import { LoggingService, Logger } from './logging.service';
 
 const httpOptions = {
   headers: {
@@ -18,17 +18,24 @@ const httpOptions = {
 })
 export class FeedService {
 
+  private static readonly TAG = 'FeedService';
   static readonly FEED_BALANCE_LATEST = 0;
   static readonly FEED_BALANCE_MIX = 1;
   static readonly FEED_BALANCE_TRENDING = 2;
 
   private readonly streamUrlPrefix = 'https://cloud.feedly.com/v3/streams/contents?streamId=';
-  // Mix in some trending news
   private readonly trendingUrlPrefix = 'https://cloud.feedly.com/v3/mixes/contents?streamId=';
-  private readonly count15 = '&count=15';
+  private readonly searchUrlPrefix = 'https://cloud.feedly.com/v3/search/feeds?q=';
+
   private readonly count7 = '&count=7';
   private readonly count8 = '&count=8';
-  constructor(private http: HttpClient) { }
+  private readonly count15 = '&count=15';
+
+  private logger: Logger;
+
+  constructor(private http: HttpClient, private loggingService: LoggingService) {
+    this.logger = this.loggingService.getLogger(FeedService.TAG, this.loggingService.Level.Debug);
+  }
 
   getURL(url: string): Observable<any> {
     return this.http.get(url, httpOptions).pipe(
@@ -57,11 +64,28 @@ export class FeedService {
         break;
     }
     return from(urls).pipe(
-      tap(url => console.log(`getting ${url}`)),
+      tap(url => this.logger.debug(`getting ${url}`)),
       delay(Math.floor(Math.random() * randomDelay) + 50),
       mergeMap(url => this.getURL(url).pipe(
-        catchError((err) => { console.log('asdf', err); return of(new Error('Streams Error: ' +  err)); })
+        catchError((err) => { this.logger.error('caught error when getting stream:', err); return of(new Error('Streams Error: ' + err)); })
       ))
+    );
+  }
+
+  searchStreams(keyword: string): Observable<any> {
+    this.logger.debug(`searching ${keyword}`);
+    if (keyword.trim().length === 0) {
+      return of([]);
+    }
+    const queryUrl = this.searchUrlPrefix + encodeURIComponent(keyword) + this.count8;
+    this.logger.debug(`searching ${queryUrl}`);
+    return this.getURL(queryUrl).pipe(
+      map(response => response.results),
+      tap(r => this.logger.debug(`search results for ${keyword}`, JSON.stringify(r, null, 2))),
+      catchError((err) => {
+        this.logger.error(`caught error when searching ${keyword}`, err);
+        return of(new Error('Search Streams Error: ' + err));
+      })
     );
   }
 

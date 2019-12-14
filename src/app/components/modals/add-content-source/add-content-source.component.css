@@ -10,3 +10,21 @@
     min-height: 200px;
 }
 
+.suggestion-title {
+    font-size: 1.4em
+}
+
+.suggestion-desc {
+    font-size: 1.15em;
+}
+
+.suggestion-icon {
+    width: 75px;
+}
+
+.dropdown-menu {
+    max-width: -webkit-fill-available;
+    max-width: -moz-available;
+    max-width: fill-available;
+
+}

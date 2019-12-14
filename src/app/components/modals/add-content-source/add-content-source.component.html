@@ -5,15 +5,33 @@
 <div class="modal-body ac-modal-body">
     <form class="form-horizontal" role="search">
         <div class="form-group col-md-10 offset-md-1">
-            <!-- <input ng-model="asyncSelected" uib-typeahead="suggestion as suggestion.title for suggestion in getSourceSuggestions($viewValue)"
-              type="text" class="form-control" placeholder="Search for feeds..." ng-keyup="$event.keyCode == 13 && addSource(asyncSelected)"
-              typeahead-on-select="addSource(asyncSelected)" typeahead-popup-template-url="markup/autoSuggestSource.html"
-              typeahead-template-url="markup/suggestedSource.html" autofocus/>
-            <uib-progressbar class="progress-striped active" value="dynamic" type="success" ng-show="showProgressbar"></uib-progressbar> -->
             <label for="add-content-input">Find feeds</label>
-            <input type="email" class="form-control" id="add-content-input" aria-describedby="add-content-help" placeholder='Try searching "TechCrunch" or "Politics"...'>
-            <!-- <small id="emailHelp" class="form-text text-muted"> </small> -->
+            <input id="add-content-input" type="text" class="form-control" name="add-content-input"
+                [(ngModel)]="model"
+                [ngbTypeahead]="searchFeeds"
+                placeholder='Try searching "TechCrunch" or "Politics"...'
+                [resultTemplate]="feedSuggestion"
+                [inputFormatter]="feedSourceTitleFormatter"
+                [editable]="false"
+                />
             <app-progressbar [hidden]="!showProgressbar" barType="info"></app-progressbar>
         </div>
     </form>
 </div>
+<!-- TODO: Remove after debugging -->
+<div class="modal-footer ac-modal-footer">
+    <pre>Model: {{ model | json }}</pre>
+</div>
+
+<ng-template #feedSuggestion let-result="result" class="testclass">
+        <div class="media">
+            <img class="media-object align-self-center mr-4 suggestion-icon" [src]="result.visualUrl" />
+            <div class="media-body text-wrap " style="cursor: pointer;">
+              <div class="mt-0 mb-1 suggestion-title">{{ result.title }}</div>
+              <div class="suggestion-desc">
+                    {{ result.description.trim().substring(0, 125) }}
+              </div>
+            </div>
+          </div>
+</ng-template>
+

@@ -27,19 +27,19 @@ export class Logger {
   }
 
   info(...message: any[]) {
-    if (this.level >= Level.Debug) {
+    if (this.level >= Level.Info) {
       this.log('INFO', ...message);
     }
   }
 
   warn(...message: any[]) {
-    if (this.level >= Level.Debug) {
+    if (this.level >= Level.Warn) {
       this.log('WARN', ...message);
     }
   }
 
   error(...message: any[]) {
-    if (this.level >= Level.Debug) {
+    if (this.level >= Level.Error) {
       this.log('ERROR', ...message);
     }
   }
