@@ -8,6 +8,7 @@
             <label for="add-content-input">Find feeds</label>
             <input id="add-content-input" type="text" class="form-control" name="add-content-input"
                 [(ngModel)]="model"
+                (ngModelChange)="closeIfSourceSelected()"
                 [ngbTypeahead]="searchFeeds"
                 placeholder='Try searching "TechCrunch" or "Politics"...'
                 [resultTemplate]="feedSuggestion"

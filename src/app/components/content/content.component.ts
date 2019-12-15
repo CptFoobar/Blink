@@ -16,6 +16,7 @@ export class ContentComponent implements OnInit {
 
   logger: Logger;
   showProgressbar: boolean;
+  // TODO: Can remove emptyContentList by simply using contentList.length()
   emptyContentList: boolean;
   contentList: Array<any>;
   closeResult: string;
@@ -95,8 +96,19 @@ export class ContentComponent implements OnInit {
     const modalRef = this.modalService.open(AddContentSourceComponent, { size: 'xl' });
     modalRef.result.then((newSource) => {
       this.logger.info('adding', newSource);
-    }, (dismissed) => {
-      this.logger.debug('added nothing');
+      const newFeedItem = {
+        title: newSource.title,
+        websiteUrl: newSource.website,
+        streamId: newSource.feedId,
+        icon: newSource.visualUrl,
+        description: newSource.description,
+        tags: newSource.deliciousTags,
+        wanted: true
+      };
+      if (this.indexOf(newFeedItem) === -1) {
+        this.contentList.push(newFeedItem);
+        this.updateFeedlist(`Added ${newFeedItem.title} to your feed!`, `Failed to add ${newFeedItem.title} to your feed.`);
+      }
     });
   }
 

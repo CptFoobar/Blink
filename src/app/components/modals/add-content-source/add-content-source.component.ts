@@ -56,4 +56,10 @@ export class AddContentSourceComponent {
 
     feedSourceTitleFormatter = (source: { title: string }): string => source.title.trim();
 
+    closeIfSourceSelected() {
+      if (this.model) {
+        this.activeModal.close(this.model);
+      }
+    }
+
 }
