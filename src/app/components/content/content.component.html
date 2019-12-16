@@ -13,10 +13,11 @@
   </div>
 
 <!-- Content sources -->
-  <div class="row d-flex" [hidden]="emptyContentList">
-    <div class="col-8 col-sm-6 col-md-3 col-lg-2 col-xl-2 content-wrapper" *ngFor="let i of range(columns())">
+  <div [hidden]="emptyContentList">
+    <div class="row" *ngFor="let j of range(rows())">
+    <div class="col col-8 col-sm-6 col-md-3 col-lg-2 col-xl-2 content-wrapper" *ngFor="let i of range(columns())">
       <div *ngFor="let entry of contentList; let entryIndex = index;">
-        <div class="item-container noselect" *ngIf="entryIndex % columns() === i">
+        <div class="item-container noselect" *ngIf="entryIndex === i + columns() * j">
           <span>
             <h5><span class="delete-button" (click)="promptDelete(entry)"><i class="fa fa-trash-alt fa-fw fa-lg"></i></span>
             </h5>
@@ -30,7 +31,7 @@
           </span>
         </div>
       </div>
-    </div>
+    </div></div>
   </div>
 
   <div class="add-content-wrapper">

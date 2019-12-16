@@ -126,6 +126,12 @@ export class ContentComponent implements OnInit {
     }
   }
 
+
+  rows(): number {
+    if (!this.contentList) { return 0; }
+    return Math.ceil((this.contentList.length) / this.columns());
+  }
+
   // TODO: Move this to utils
   range(n: number): Array<number> {
     return new Array<number>(n).fill(0).map((_, i) => i);
