@@ -1,4 +1,4 @@
 export enum Settings {
-    userSettings = 'feedList',
+    userSettings = 'userSettings',
     feedList = 'feedList',
 }

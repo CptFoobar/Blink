@@ -3,43 +3,65 @@
     <!-- <div class="row text-center alert-wrapper" ng-if="alerts[0]">
         <uib-alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)" dismiss-on-timeout="3500"> {{ alert.msg }} </uib-alert>
     </div> -->
+    <br />
     <div class="row text-center">
         <h2>Settings</h2>
     </div>
+    <hr>
+    <div class="row">
+        <h4 class="ml-5">Home</h4>
+    </div>
     <br />
     <div class="row">
-        <form class="col-xs-10 offset-xs-1 offset-md-2 col-md-8">
-            <h4>Home</h4>
-            <hr>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" [(ngModel)]="showGreeting" name="showGreetingInput"> Show Greeting
-                </label>
+        <br />
+        <form class="offset-1 col-10">
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" [(ngModel)]="showGreeting" id="showGreetingInput" name="showGreetingInput">
+                        <label class="custom-control-label" for="showGreetingInput">Show Greeting</label>
+                      </div>
+                </div>
             </div>
-            <div class="form-group form-inline">
-                <label for="userName">Greet by name:&nbsp;&nbsp;</label>
-                <input type="text" class="form-control" id="userName" [(ngModel)]="userName" placeholder="{{ userName }}" [attr.disabled]="!showGreeting" name="userNameInput" style="color: #eee">
+
+            <div class="form-row">
+                    <label for="userName">Greet by name:&nbsp;&nbsp;</label>
+                    <input id="userName" type="text" class="form-control setting-input pb-0" name="userName"
+                        [(ngModel)]="userName" placeholder='User' [attr.disabled] = "showGreeting ? null : ''" />
             </div>
         </form>
     </div>
-    <!-- <div class="row">
-        <form class="col-xs-10 col-xs-push-1 col-md-push-2 col-md-8">
-            <h4 style="font-family: 'Lobster'">Feed</h4>
-            <hr>
-            <div>
-                <h6>Feed content type:</h6>
-                <div class="btn-group">
-                    <label class="btn btn-success" ng-model="feedType" uib-btn-radio="'l'">Latest news only</label>
-                    <label class="btn btn-success" ng-model="feedType" uib-btn-radio="'b'">Balanced</label>
-                    <label class="btn btn-success" ng-model="feedType" uib-btn-radio="'t'">Trending news only</label>
+
+    <hr>
+    <div class="row">
+        <h4 class="ml-5">Feed</h4>
+    </div>
+    <br />
+    <div class="row">
+        <br />
+        <form class="offset-1 col-10">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" [(ngModel)]="shuffleFeed" id="shuffleFeedInput" name="shuffleFeedInput">
+                        <label class="custom-control-label" for="shuffleFeedInput">Shuffle feed</label>
+                      </div>
                 </div>
             </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" ng-model="shuffleFeed"> Shuffle news items </input>
-                </label>
+            <div class="form-row">
+                <div class="p-0 col-2 align-self-center text-align-left">Feed Content Type:</div>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-success" [ngClass]="{'active': feedType === 't'}" type="radio" name="feedType" (click)="setFeedPref('t')">Trending</button>
+                    <button class="btn btn-success" [ngClass]="{'active': feedType === 'b'}" type="radio" name="feedType" (click)="setFeedPref('b')">Balanced</button>
+                    <button class="btn btn-success" [ngClass]="{'active': feedType === 'l'}" type="radio" name="feedType" (click)="setFeedPref('l')">Latest</button>
+                </div>
             </div>
         </form>
-    </div> -->
-    <button class="btn btn-primary save-button" (click)="saveConfig()"><i class="far fa-save fa-fw fa-2x"></i></button>
+    </div>
+
+
+    <button class="btn btn-primary btn-lg save-button" (click)="saveConfig()">
+        <i class="far fa-save fa-fw fa-2x"></i>
+    </button>
 </div>

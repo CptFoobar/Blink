@@ -70,7 +70,7 @@ nav.navbar.navbar-transparent {
     font-family: lovers_quarrelregular,serif;
     font-weight: 400;
     line-height: 0.6em;
-    padding: 10px 0 0 0;
+    padding: 10px 0 0 5px;
 }
 .navbar-brand:hover {
     color: rgba(255, 255, 255, 1);

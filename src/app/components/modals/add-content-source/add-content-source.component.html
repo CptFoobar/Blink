@@ -5,8 +5,7 @@
 <div class="modal-body ac-modal-body">
     <form class="form-horizontal" role="search">
         <div class="form-group col-md-10 offset-md-1">
-            <label for="add-content-input">Find feeds</label>
-            <input id="add-content-input" type="text" class="form-control" name="add-content-input"
+            <input id="add-content-input" type="text" class="form-control add-content-input" name="add-content-input"
                 [(ngModel)]="model"
                 (ngModelChange)="closeIfSourceSelected()"
                 [ngbTypeahead]="searchFeeds"

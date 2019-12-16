@@ -23,7 +23,6 @@ const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'C
   encapsulation: ViewEncapsulation.None
 })
 export class AddContentSourceComponent {
-  private static readonly TAG = 'AddContentSourceComponent';
   showProgressbar: boolean;
   logger: Logger;
 
@@ -31,7 +30,7 @@ export class AddContentSourceComponent {
               private feedService: FeedService,
               private loggingService: LoggingService) {
     this.showProgressbar = false;
-    this.logger = this.loggingService.getLogger(AddContentSourceComponent.TAG, this.loggingService.Level.Debug);
+    this.logger = this.loggingService.getLogger(AddContentSourceComponent.name, this.loggingService.Level.Debug);
   }
 
   public model: any;

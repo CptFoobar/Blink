@@ -6,7 +6,6 @@ enum Level {
   Warn,
   Error
 }
-
 export class Logger {
   static readonly Level = Level;
   tag: string;
@@ -16,6 +15,7 @@ export class Logger {
     this.level = level;
   }
 
+  // TODO: Allow control for global level of logging for production builds
   private log(level: string, ...message: any[]) {
     console.log(`${new Date().toISOString()} [${level.toUpperCase()}] - ${this.tag}:`, ...message);
   }

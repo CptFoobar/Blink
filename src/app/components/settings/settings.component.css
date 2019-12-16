@@ -3,15 +3,44 @@
 }
 
 .save-button {
-
     border-radius: 50%;
     padding: 8px 4px 6px 6px;
     position: fixed;
     top: 85%;
     right: 5%;
+}
+
+/* Fix border radius of ripple-on-click effect */
+.save-button:after {
+    border-radius: 50%;
 
 }
 
 input[type="text"]:disabled {
-    color: blue;
+    color: #aaaaaa;
+
+}
+
+input[type="text"] {
+    color: #eaeaea;
+    font-size: 1em;
+}
+
+
+::-webkit-input-placeholder {
+    color: #bbbbbb;
+}
+
+
+:-ms-input-placeholder {
+    color: #bbbbbb;
+}
+
+
+::placeholder {
+    color: #bbbbbb;
+}
+
+hr {
+    box-shadow: 1px 1px #c3c3c33b;
 }

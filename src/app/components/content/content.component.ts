@@ -25,7 +25,7 @@ export class ContentComponent implements OnInit {
               private logging: LoggingService,
               private modalService: NgbModal,
               public toastService: ToastService) {
-    this.logger = logging.getLogger('ContentComponent', Logger.Level.Info);
+    this.logger = logging.getLogger(ContentComponent.name, Logger.Level.Info);
    }
 
   ngOnInit() {
@@ -128,6 +128,7 @@ export class ContentComponent implements OnInit {
 
 
   rows(): number {
+    this.logger.debug('rows', this.contentList);
     if (!this.contentList) { return 0; }
     return Math.ceil((this.contentList.length) / this.columns());
   }
