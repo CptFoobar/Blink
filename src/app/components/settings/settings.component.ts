@@ -11,16 +11,16 @@ import { LoggingService, Logger } from 'src/app/services/logging.service';
 })
 export class SettingsComponent implements OnInit {
 
-  private static readonly TAG = 'SettingsComponent';
   showProgressbar: boolean;
   showGreeting: boolean;
   userName: string;
   feedType: string;
+  feedViewCompact: boolean;
   shuffleFeed: boolean;
   logger: Logger;
 
   constructor(private storage: StorageService, private toastService: ToastService, private logging: LoggingService) {
-    this.logger = this.logging.getLogger(SettingsComponent.TAG, this.logging.Level.Debug);
+    this.logger = this.logging.getLogger(SettingsComponent.name, this.logging.Level.Debug);
   }
 
   ngOnInit() {
@@ -30,6 +30,7 @@ export class SettingsComponent implements OnInit {
     this.userName = 'User';
     this.shuffleFeed = false;
     this.feedType = 'b';
+    this.feedViewCompact = false;
     this.storage.get(Settings.userSettings).subscribe((settings) => {
       this.showProgressbar = false;
       if (settings instanceof Error) {
@@ -39,10 +40,11 @@ export class SettingsComponent implements OnInit {
         return;
       }
 
-      this.shuffleFeed = settings.get('userSettings').shuffleFeed;
-      this.feedType = settings.get('userSettings').feedType;
-      this.showGreeting = settings.get('userSettings').showGreeting;
-      this.userName = settings.get('userSettings').userName;
+      this.shuffleFeed = settings.get(Settings.userSettings).shuffleFeed;
+      this.feedType = settings.get(Settings.userSettings).feedType;
+      this.showGreeting = settings.get(Settings.userSettings).showGreeting;
+      this.userName = settings.get(Settings.userSettings).userName;
+      this.feedViewCompact = settings.get(Settings.userSettings).feedViewCompact;
     });
   }
 
@@ -51,7 +53,8 @@ export class SettingsComponent implements OnInit {
       showGreeting: this.showGreeting,
       userName: this.userName,
       feedType: this.feedType,
-      shuffleFeed: this.shuffleFeed
+      shuffleFeed: this.shuffleFeed,
+      feedViewCompact: this.feedViewCompact
     };
     this.logger.debug('saving config', updatedConfig);
     this.storage.set(new Map([[ Settings.userSettings, updatedConfig ]])).subscribe(
@@ -79,6 +82,20 @@ export class SettingsComponent implements OnInit {
         break;
       default:
         this.feedType = 'b';
+        break;
+    }
+  }
+
+  setFeedViewPref(preference: string) {
+    switch (preference) {
+      case 'compact':
+        this.feedViewCompact = true;
+        break;
+      case 'cozy':
+        this.feedViewCompact = false;
+        break;
+      default:
+        this.feedViewCompact = false;
         break;
     }
   }

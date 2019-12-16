@@ -49,7 +49,7 @@ export class ContentComponent implements OnInit {
   }
 
   promptDelete(contentSrc) {
-    this.logger.debug('deleting', contentSrc);
+    this.logger.debug('deleting', contentSrc.title);
     const modalRef = this.modalService.open(DeleteContentSourceComponent, { size: 'lg', windowClass: 'modal-lg-compact' });
     modalRef.componentInstance.title = contentSrc.title;
     modalRef.componentInstance.icon = contentSrc.icon;
@@ -95,7 +95,7 @@ export class ContentComponent implements OnInit {
   addContent() {
     const modalRef = this.modalService.open(AddContentSourceComponent, { size: 'xl' });
     modalRef.result.then((newSource) => {
-      this.logger.info('adding', newSource);
+      this.logger.info('adding', newSource.title);
       const newFeedItem = {
         title: newSource.title,
         websiteUrl: newSource.website,
@@ -128,7 +128,6 @@ export class ContentComponent implements OnInit {
 
 
   rows(): number {
-    this.logger.debug('rows', this.contentList);
     if (!this.contentList) { return 0; }
     return Math.ceil((this.contentList.length) / this.columns());
   }

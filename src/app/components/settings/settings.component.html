@@ -57,6 +57,14 @@
                     <button class="btn btn-success" [ngClass]="{'active': feedType === 'l'}" type="radio" name="feedType" (click)="setFeedPref('l')">Latest</button>
                 </div>
             </div>
+            <br/>
+            <div class="form-row">
+                <div class="p-0 col-2 align-self-center text-align-left">Feed Content View:</div>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-success" [ngClass]="{'active': feedViewCompact }" type="radio" name="feedView" (click)="setFeedViewPref('compact')">Compact</button>
+                    <button class="btn btn-success" [ngClass]="{'active': !feedViewCompact }" type="radio" name="feedView" (click)="setFeedViewPref('cozy')">Cozy</button>
+                </div>
+            </div>
         </form>
     </div>
 
@@ -65,3 +73,4 @@
         <i class="far fa-save fa-fw fa-2x"></i>
     </button>
 </div>
+<app-toast-container class="bl-toast-container"></app-toast-container>

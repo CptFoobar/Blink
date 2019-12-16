@@ -40,11 +40,9 @@ export class AddContentSourceComponent {
     debounceTime(300),
     distinctUntilChanged(),
     tap(() => this.showProgressbar = true),
-    tap((term) => this.logger.debug(`searching ${term}`)),
     switchMap(term =>
       this.feedService.searchStreams(term).pipe(
         tap(() => this.showProgressbar = false),
-        tap((result) => this.logger.debug(`result ${result}`)),
         catchError(() => {
           this.showProgressbar = true;
           return of([]);

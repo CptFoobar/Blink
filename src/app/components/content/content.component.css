@@ -49,12 +49,6 @@
     font-size: 0.75em;
 }
 
-.bl-toast-container {
-    bottom: 15px;
-    left: 15px;
-    top: auto;
-}
-
 .add-content-wrapper {
     position: fixed;
     bottom: 5%;

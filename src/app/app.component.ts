@@ -1,5 +1,6 @@
 import { StorageService } from './services/storage.service';
 import { Component, OnInit } from '@angular/core';
+import { Settings } from './settings';
 
 const DEFAULT_SETTINGS = {
   userSettings: {
@@ -29,7 +30,7 @@ export class AppComponent implements OnInit {
       }
       if (settings instanceof Map) {
         settings = settings as Map<string, any>;
-        if (!settings.has('userSettings') || !settings.has('feedList')) {
+        if (!settings.has(Settings.userSettings) || !settings.has(Settings.feedList)) {
           this.storage.set(new Map(Object.entries(DEFAULT_SETTINGS))).subscribe(_ => {
             this.storage.get().subscribe((data) => {
               console.log(JSON.stringify(data));

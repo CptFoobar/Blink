@@ -5,6 +5,7 @@ import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription, Observable, from, of } from 'rxjs';
 import { mergeMap, timeout, catchError, map, tap, filter } from 'rxjs/operators';
+import { Settings } from 'src/app/settings';
 
 @Component({
   selector: 'app-feed',
@@ -49,7 +50,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     this.allRequestsPending = false;
     this.minEntryThreshold = 0;
     this.adjustContainer = true;
-    this.viewCompact = true;
+    this.viewCompact = false;
     this.feedRatio = FeedService.FEED_BALANCE_MIX;
 
     let feedList = [];
@@ -63,9 +64,10 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         this.allRequestsPending = false;
         return;
       }
-      feedList = settings.get('feedList') || [];
-      this.shuffleFeed = settings.get('userSettings').shuffleFeed;
-      switch (settings.get('userSettings').feedType) {
+      feedList = settings.get(Settings.feedList) || [];
+      this.shuffleFeed = settings.get(Settings.userSettings).shuffleFeed;
+      this.viewCompact = settings.get(Settings.userSettings).feedViewCompact;
+      switch (settings.get(Settings.userSettings).feedType) {
         case 'l':
           this.feedRatio = FeedService.FEED_BALANCE_LATEST;
           break;
@@ -375,5 +377,6 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + 
             ', height=' + h + ', top=' + top + ', left=' + left);
   }
+
 
 }
