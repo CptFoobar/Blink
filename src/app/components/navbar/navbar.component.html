@@ -9,7 +9,7 @@
 
   <div class="collapse navbar-collapse navbar-collapse-transparent responsive-bg" id="navbarSupportedContent" [ngbCollapse]="navbarCollapsed">
     <form class="navbar-form ml-auto d-flex form-inline" role="search" style="cursor: pointer" >
-        <button type="submit" class="btn btn-search" ng-mouseover="searchbarOpen=true" [ngClass]="{'btnActive': searchbaropen}" (click)="toggleSearchbar()"></button>
+        <button type="submit" class="btn btn-search" (mouseenter)="searchbarOpen=true" (mouseleave)="searchbarOpen=false" [ngClass]="{'btnActive': searchbaropen}" (click)="toggleSearchbar()"></button>
         <!-- TODO: Searchbar -->
         <span class="responsive-search" style="display: none">
             <div class="form-group searchbar" [hidden]="!searchbarOpen">
@@ -33,7 +33,7 @@
         </a>
       </li>
       <!-- TODO: History and Bookmarks -->
-      <!-- <li class="nav-item">
+      <li class="nav-item">
           <a href="#/bookmarks" class="nav-link">
             <span class="text-center" style="display: inline-flex;">
                 <i class="fa fa-bookmark fa-fw fa-lg nav-icon" style="color: #ccfc49;"></i>
@@ -50,7 +50,7 @@
                 </span>
             </span>
         </a>
-      </li> -->
+      </li>
       <!-- DEBUG: Navbar dropdown doesn't close when item is selected -->
       <!-- DEBUG: Navbar icon not highlighted when dropdown active -->
       <li class="nav-item dropdown" ngbDropdown display="dynamic">

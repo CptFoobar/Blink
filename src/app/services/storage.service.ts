@@ -11,7 +11,7 @@ export class StorageService {
   logger: Logger;
 
   constructor(private logging: LoggingService) {
-    this.logger = this.logging.getLogger(StorageService.name, this.logging.Level.Debug);
+    this.logger = this.logging.getLogger(StorageService.name, LoggingService.Level.Debug);
   }
 
   get(key?: string): Observable<Map<string, any> | Error> {

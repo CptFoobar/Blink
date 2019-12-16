@@ -30,7 +30,7 @@ export class AddContentSourceComponent {
               private feedService: FeedService,
               private loggingService: LoggingService) {
     this.showProgressbar = false;
-    this.logger = this.loggingService.getLogger(AddContentSourceComponent.name, this.loggingService.Level.Debug);
+    this.logger = this.loggingService.getLogger(AddContentSourceComponent.name, LoggingService.Level.Debug);
   }
 
   public model: any;

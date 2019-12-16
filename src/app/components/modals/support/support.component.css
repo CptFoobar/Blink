@@ -1,0 +1,25 @@
+.support-title {
+    color: #444;
+    font-size: 2em;
+}
+
+.support-body {
+    color: #4e4e4e;
+}
+
+.support-message {
+    font-size: 1.25em;
+}
+
+.support-tip {
+    font-size: 1em;
+}
+
+.src-img {
+    width: 50px;
+    border-radius: 5px;
+}
+
+.paypal-form a:focus {
+    outline: none;
+}

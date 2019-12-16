@@ -20,7 +20,7 @@ export class SettingsComponent implements OnInit {
   logger: Logger;
 
   constructor(private storage: StorageService, private toastService: ToastService, private logging: LoggingService) {
-    this.logger = this.logging.getLogger(SettingsComponent.name, this.logging.Level.Debug);
+    this.logger = this.logging.getLogger(SettingsComponent.name, LoggingService.Level.Debug);
   }
 
   ngOnInit() {

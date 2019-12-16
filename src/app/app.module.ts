@@ -22,6 +22,7 @@ import { DeleteContentSourceComponent } from './components/modals/delete-content
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 import { AddContentSourceComponent } from './components/modals/add-content-source/add-content-source.component';
 import { LoggingService } from './services/logging.service';
+import { SupportComponent } from './components/modals/support/support.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { LoggingService } from './services/logging.service';
     ProgressbarComponent,
     DeleteContentSourceComponent,
     ToastContainerComponent,
-    AddContentSourceComponent
+    AddContentSourceComponent,
+    SupportComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +52,8 @@ import { LoggingService } from './services/logging.service';
     FormsModule,
   ],
   providers: [UniquePipe, LoggingService],
-  entryComponents: [AddContentSourceComponent, DeleteContentSourceComponent],
+  // load then modals
+  entryComponents: [AddContentSourceComponent, DeleteContentSourceComponent, SupportComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
