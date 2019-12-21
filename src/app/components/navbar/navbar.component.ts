@@ -11,7 +11,6 @@ import { SupportComponent } from '../modals/support/support.component';
 export class NavbarComponent implements OnInit {
 
   navbarCollapsed: boolean;
-  searchbarOpen: boolean;
   logger: Logger;
 
   constructor(private logging: LoggingService, private modalService: NgbModal) {
@@ -20,15 +19,10 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.navbarCollapsed = true;
-    this.searchbarOpen = false;
   }
 
   showYourLove(): void {
-    const modalRef = this.modalService.open(SupportComponent);
+    this.modalService.open(SupportComponent);
   }
-
-  toggleSearchbar(): void {
-    this.searchbarOpen = true;
-   }
 
 }

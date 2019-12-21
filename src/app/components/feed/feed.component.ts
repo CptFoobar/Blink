@@ -6,6 +6,8 @@ import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription, Observable, from, of } from 'rxjs';
 import { mergeMap, timeout, catchError, map, tap, filter } from 'rxjs/operators';
 import { Settings } from 'src/app/settings';
+import { LoggingService, Logger } from 'src/app/services/logging.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-feed',
@@ -31,6 +33,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   mediaQuery$: Subscription;
   // The active media query (xs | sm | md | lg | xl)
   activeMediaQuery: string;
+  logger: Logger;
 
   private readonly fbPrefixURL = 'https://www.facebook.com/sharer/sharer.php?u=';
   private readonly twitterPrefixURL = 'https://twitter.com/intent/tweet?status=';
@@ -39,7 +42,10 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly thresholdModifier = 13;
 
   constructor(private feedService: FeedService, private mediaObserver: MediaObserver,
-              private storage: StorageService, private uniquePipe: UniquePipe) { }
+              private storage: StorageService, private uniquePipe: UniquePipe,
+              private logging: LoggingService, private toastService: ToastService) {
+    this.logger = this.logging.getLogger(FeedComponent.name, LoggingService.Level.Debug);
+  }
 
   ngOnInit() {
     this.entryList = [];
@@ -57,11 +63,12 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     this.storage.get().subscribe((settings) => {
       if (settings instanceof Error) {
         // TODO: do something?
-        console.log('Error getting settings', settings);
+        this.logger.error('Error getting settings', settings);
         this.emptyFeedList = true;
         this.showProgressbar = false;
         this.timedOut = false;
         this.allRequestsPending = false;
+        this.toastService.showError('An error occurred when reading your settings.');
         return;
       }
       feedList = settings.get(Settings.feedList) || [];
@@ -90,13 +97,15 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         return;
       }
 
+      this.minEntryThreshold = feedList.length * 13;
+
       this.fetchAllFeed(feedList).pipe(
         timeout(10 * 1000),
         catchError((err) => of(new Error('FeedTimeoutError: ' +  err)))
         ).subscribe((feed?: {feedItems: any, feedMeta: any}) => {
           if (!feed) {
             this.minEntryThreshold -= this.thresholdModifier;
-            console.log('feed empty');
+            this.logger.info('feed empty');
             return;
           }
 
@@ -164,7 +173,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     };
 
-    let entries = [];
+    const entries = [];
 
     for (let item of feedObject.items) {
         let contentSnippet = this.getContentSnippet(item.summary, item.content);
@@ -199,12 +208,13 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     // add new entries remove any duplicates. use 'entryTitle' as key
     this.entryList.push.apply(this.entryList, entries);
-    let initialEntryCount = this.entryList.length;
+    const initialEntryCount = this.entryList.length;
     this.entryList = this.uniquePipe.transform(this.entryList, 'entryTitle');
-    let uniqueEntryCount = this.entryList.length;
+    const uniqueEntryCount = this.entryList.length;
     if (uniqueEntryCount < initialEntryCount) {
-      console.log('removed ', initialEntryCount - uniqueEntryCount);
+      this.logger.debug(`removed ${initialEntryCount - uniqueEntryCount} duplicates`);
       this.minEntryThreshold -= (initialEntryCount - uniqueEntryCount);
+      this.logger.debug('met', this.minEntryThreshold);
     }
 
     if (this.shuffleFeed) {

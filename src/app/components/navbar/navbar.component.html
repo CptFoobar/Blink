@@ -1,91 +1,51 @@
 
 <nav class="navbar navbar-transparent fixed-top noselect navbar-expand-md navbar-dark">
-  <a class="navbar-brand" href="#/home">B</a>
+  <a class="navbar-brand" [routerLink]="['/home']">B</a>
   <button class="navbar-toggler add-border" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" 
     (click)="navbarCollapsed = !navbarCollapsed" [attr.aria-expanded]="!navbarCollapsed"
     aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse navbar-collapse-transparent responsive-bg" id="navbarSupportedContent" [ngbCollapse]="navbarCollapsed">
-    <form class="navbar-form ml-auto d-flex form-inline" role="search" style="cursor: pointer" >
-        <button type="submit" class="btn btn-search" (mouseenter)="searchbarOpen=true" (mouseleave)="searchbarOpen=false" [ngClass]="{'btnActive': searchbaropen}" (click)="toggleSearchbar()"></button>
-        <!-- TODO: Searchbar -->
-        <span class="responsive-search" style="display: none">
-            <div class="form-group searchbar" [hidden]="!searchbarOpen">
-                <input ng-model="asyncSelected" uib-typeahead="suggestion for suggestion in getSuggestions($viewValue)" type="text" class="form-control"
-                 placeholder="Google Search..." focus-me="searchbarOpen" ng-keyup="$event.keyCode == 13 && google($viewValue, asyncSelected)"
-                 typeahead-on-select="google($viewValue, asyncSelected)" typeahead-focus-first="false"
-                 typeahead-popup-template-url="markup/autoSuggest.html" style="width: 300px" />
-            </div>
-            <span class="d-block d-md-none noselect" ng-hide="searchbarOpen" style="cursor: pointer">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Google Search
-            </span>
-        </span>
-    </form>
+  <div class="collapse navbar-collapse navbar-collapse-transparent responsive-bg justify-content-end" id="navbarSupportedContent" [ngbCollapse]="navbarCollapsed">
     <ul class="nav navbar-nav">
       <li class="nav-item">
-          <a href="#/feed" class="nav-link">
-            <span class="text-center" style="display: inline-flex;">
+          <a [routerLink]="['/feed']" class="nav-link">
                 <i class="fa fa-rss fa-fw fa-lg nav-icon" style="color: #ff9900;"></i>
                 <span class="d-block d-md-none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Feed
                 </span>
-            </span>
         </a>
       </li>
-      <!-- TODO: History and Bookmarks -->
-      <li class="nav-item">
-          <a href="#/bookmarks" class="nav-link">
-            <span class="text-center" style="display: inline-flex;">
-                <i class="fa fa-bookmark fa-fw fa-lg nav-icon" style="color: #ccfc49;"></i>
-                <span class="d-block d-md-none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bookmarks
-                </span>
-            </span>
-        </a>
-      </li>
-      <li class="nav-item">
-          <a href="#/recent" class="nav-link">
-            <span class="text-center" style="display: inline-flex;">
-                <i class="far fa-clock fa-fw fa-lg nav-icon" style="color: #1cfffb;"></i>
-                <span class="d-block d-md-none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; History
-                </span>
-            </span>
-        </a>
-      </li>
-      <!-- DEBUG: Navbar dropdown doesn't close when item is selected -->
-      <!-- DEBUG: Navbar icon not highlighted when dropdown active -->
       <li class="nav-item dropdown" ngbDropdown display="dynamic">
-        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" 
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" 
           aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
-          <span class="text-center" style="display: inline-flex;">
               <i class="fa fa-ellipsis-v fa-fw fa-lg"></i>
               <span class="d-block d-md-none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Options
               </span>
-          </span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown" ngbDropdownMenu>
-            <!-- TODO: Use ngbDropdownItem and fix css -->
             <li>
-                <a href="#/blink/content" class="nav-link">
+                <a [routerLink]="['/blink/content']" class="nav-link" ngbDropdownItem>
                     <i class="fa fa-pencil-alt fa-fw fa-lg"></i>       Content
                 </a>
             </li>
             <li>
-                <a href="#/blink/settings" class="nav-link">
+                <a [routerLink]="['/blink/settings']" class="nav-link" ngbDropdownItem>
                     <i class="fa fa-cog fa-fw fa-lg"></i>       Settings
                 </a>
             </li>
             <li>
-                <a href="#/blink/help" class="nav-link">
+                <a [routerLink]="['/blink/help']" class="nav-link" ngbDropdownItem>
                     <i class="fa fa-question fa-fw fa-lg"></i>       Help
                 </a>
             </li>
             <li>
-                <a href="#/blink/about" class="nav-link">
+                <a [routerLink]="['/blink/about']" class="nav-link" ngbDropdownItem>
                     <i class="fa fa-info fa-fw fa-lg"></i>       About
                 </a>
             </li>
             <li>
-                <a (click)="showYourLove()" style="cursor: pointer" class="nav-link">
+                <a (click)="showYourLove()" style="cursor: pointer" class="nav-link" ngbDropdownItem>
                     <i class="fa fa-heart fa-fw fa-lg"></i>       Support
                 </a>
             </li>

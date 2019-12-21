@@ -47,15 +47,19 @@ nav.navbar.navbar-transparent {
     background-color: rgba(255, 255, 255, 0.10);
     border: none;
     color: rgba(255, 255, 255, 1);
+    background-image: none;
 }
 .navbar-nav>.nav-item>.dropdown-menu>li>a:hover {
     background-color: rgba(255, 255, 255, 0.10);
     color: rgba(255, 255, 255, 1);
+    background-image: none;
 }
 .navbar-nav>.nav-item>.dropdown-menu>li>a:focus {
     background-color: rgba(255, 255, 255, 0.10);
     border: none;
     color: rgba(255, 255, 255, 1);
+    outline: none;
+    background-image: none;
 }
 .navbar-nav>.dropdown>.dropdown-toggle:after {
     display: none;
@@ -87,87 +91,9 @@ nav.navbar.navbar-transparent {
     filter: grayscale(30%);
     -webkit-filter: grayscale(30%);
 }
-.searchbar {
-    overflow: hidden;
-}
-.searchbar > input[type="text"], .searchbar > input[type="search"] {
-    color: #efefef;
-}
-.searchbar {
-    -webkit-transition: all ease-out 0.65s;
-    transition: all ease-out 0.65s;
-    width: 300px;
-    opacity: 1;
-}
-.searchbar.ng-hide {
-    opacity: 0;
-    width: 1px;
-}
-.btn-search {
-    background-color: transparent;
-    background-image: url("../../../assets/img/google_g.png");
-    background-repeat: no-repeat;
-    background-size: auto 90%;
-    filter: grayscale(75%);
-    -webkit-filter: grayscale(60%);
-    -webkit-transition: all ease-out 0.65s;
-    transition: all ease-out 0.65s;
-    height: 23px;
-    width: 25px;
-    padding-right: 5px;
-    border: none;
-}
-.btnActive {
-    background-color: transparent;
-    border: none;
-    filter: grayscale(0%);
-    -webkit-filter: grayscale(0%);
-    outline: none;
-}
-.btn-search:hover,
-.btn-search:active,
-.btn-search:focus {
-    background-color: transparent;
-    border: none;
-    filter: grayscale(0%);
-    -webkit-filter: grayscale(0%);
-    outline: none;
-    box-shadow: none;
-}
-.custom-popup-wrapper {
-    max-width: 300px;
-    position: absolute;
-    top: 100%;
-    z-index: 1000;
-    display: none;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    border: 1px solid #bbb;
-    padding: 0 0;
-}
-.custom-popup-wrapper > .dropdown-menu {
-    max-width: 300px;
-    position: static;
-    float: none;
-    display: block;
-    min-width: 160px;
-    background-color: #f9f9f9;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-}
-
 
 .navbar-collapse-transparent {
     max-height: 600px !important;
     float: right;
     min-width: 350px;
-}
-
-.responsive-search {}
-
-@media screen and (max-width: 768px) {
-    .responsive-search {
-        display: inline-block;
-    }
 }

@@ -78,10 +78,10 @@ export class FeedService {
       return of([]);
     }
     const queryUrl = this.searchUrlPrefix + encodeURIComponent(keyword) + this.count8;
-    this.logger.debug(`searching ${queryUrl}`);
+    this.logger.debug(`requesting ${queryUrl}`);
     return this.getURL(queryUrl).pipe(
-      map(response => response.results),
       tap(r => this.logger.debug(`search results for ${keyword}`, JSON.stringify(r, null, 2))),
+      map(response => response.results),
       catchError((err) => {
         this.logger.error(`caught error when searching ${keyword}`, err);
         return of(new Error('Search Streams Error: ' + err));

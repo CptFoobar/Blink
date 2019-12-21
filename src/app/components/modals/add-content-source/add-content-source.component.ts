@@ -25,15 +25,15 @@ const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'C
 export class AddContentSourceComponent {
   showProgressbar: boolean;
   logger: Logger;
+  public model: any;
 
   constructor(public activeModal: NgbActiveModal,
               private feedService: FeedService,
               private loggingService: LoggingService) {
+    this.model = null;
     this.showProgressbar = false;
     this.logger = this.loggingService.getLogger(AddContentSourceComponent.name, LoggingService.Level.Debug);
   }
-
-  public model: any;
 
   searchFeeds = (text$: Observable<string>) =>
     text$.pipe(

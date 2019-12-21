@@ -1,5 +1,4 @@
 <!-- Loader bar -->
-<!-- DEBUG: Progress bar hides as soon as first feed is fetched(?) Should show until minThreshold is reached. -->
 <app-progressbar [hidden]="!showProgressbar" barType="success"></app-progressbar>
 <div [ngClass]="{'container-fluid': viewCompact || adjustContainer, 'container': !viewCompact && !adjustContainer, 'padding-50': viewCompact}">
     <!-- Message when no content source is added -->

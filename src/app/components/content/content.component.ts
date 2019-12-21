@@ -20,6 +20,7 @@ export class ContentComponent implements OnInit {
   emptyContentList: boolean;
   contentList: Array<any>;
   closeResult: string;
+  orderByParam: string;
 
   constructor(private storage: StorageService,
               private logging: LoggingService,
@@ -31,6 +32,7 @@ export class ContentComponent implements OnInit {
   ngOnInit() {
     this.showProgressbar = true;
     this.emptyContentList = false;
+    this.orderByParam = 'title';
 
     this.storage.get().subscribe((settings) => {
       if (settings instanceof Error) {
@@ -41,7 +43,9 @@ export class ContentComponent implements OnInit {
         return;
       }
       this.showProgressbar = false;
-      this.contentList = settings.get(Settings.feedList) || [];
+      const contentList = settings.get(Settings.feedList);
+      this.orderBy(contentList, this.orderByParam);
+      this.contentList = contentList || [];
       if (this.contentList.length === 0) {
         this.emptyContentList = true;
       }
@@ -106,10 +110,28 @@ export class ContentComponent implements OnInit {
         wanted: true
       };
       if (this.indexOf(newFeedItem) === -1) {
-        this.contentList.push(newFeedItem);
+        this.insertInOrder(this.contentList, newFeedItem, this.orderByParam);
+        if (this.emptyContentList) {
+          this.emptyContentList = false;
+        }
         this.updateFeedlist(`Added ${newFeedItem.title} to your feed!`, `Failed to add ${newFeedItem.title} to your feed.`);
       }
     });
+  }
+
+
+  orderBy(array: Array<any>, field: string) {
+    array.sort((a, b) => a[field] < b[field] ? -1 : 1);
+  }
+
+  insertInOrder(array: Array<any>, item: any, orderByParam: string) {
+    let i: number;
+    for (i = 1; i < array.length; i++) {
+      if (item[orderByParam] < array[i][orderByParam] && item[orderByParam] >= array[i - 1][orderByParam]) {
+        break;
+      }
+    }
+    array.splice(i, 0, item);
   }
 
   // TODO: Move this and other screen-related utils to a service

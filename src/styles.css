@@ -5,3 +5,75 @@
     left: 15px !important;
     top: auto !important ;
 }
+
+body, h1, h2, h3, h4, h5, h6 {
+    background-color: #49366a;
+    color: #efefef;
+}
+
+body {
+    margin-top: 75px;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    font-size: 15px;
+}
+.btn {
+    -webkit-transition: all 0.55s;
+    -o-transition: all 0.55s;
+    transition: all 0.55s;
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.075);
+    outline: none;
+}
+.btn:focus, .btn:active {
+    border: none;
+    outline: none;
+}
+
+.add-border {
+    border: 1px solid rgba(255,255,255,0.5) !important;
+}
+
+.responsive-bg {}
+
+@media screen and (max-width: 768px) {
+    .responsive-bg {
+        background-color: rgba(73, 61, 96, 0.96);
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.175);
+        border: 1px solid rgba(91,80,112,1);
+    }
+
+    .responsive-bg > ul > li > a:hover {
+        background-color: #5B5070;
+    }
+
+    .responsive-bg > ul > li > .dropdown-menu > li {
+        padding-left: 25px;
+    }
+
+    .responsive-bg > form:hover {
+        background-color: #5B5070;
+    }
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.space {
+    height:  12.5vh;
+}
+
+.no-items {
+    font-size: 1.5em;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.no-items > .tip {
+    font-size: 0.75em;
+}
