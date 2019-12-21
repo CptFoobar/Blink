@@ -155,7 +155,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         map(resp => ({ feedItems: resp, feedMeta: stream }))
       )),
       catchError((err) => {
-        console.log('Error getting stream:', err);
+        this.logger.error('Error getting stream:', err);
         // tell the user?
         return of(null);
       })
@@ -214,7 +214,6 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     if (uniqueEntryCount < initialEntryCount) {
       this.logger.debug(`removed ${initialEntryCount - uniqueEntryCount} duplicates`);
       this.minEntryThreshold -= (initialEntryCount - uniqueEntryCount);
-      this.logger.debug('met', this.minEntryThreshold);
     }
 
     if (this.shuffleFeed) {

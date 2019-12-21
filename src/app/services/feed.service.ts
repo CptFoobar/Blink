@@ -38,6 +38,7 @@ export class FeedService {
   }
 
   getURL(url: string): Observable<any> {
+    // BUG: Doesn't catch ERR_INTERNET_DISCONNECTED
     return this.http.get(url, httpOptions).pipe(
       catchError(err => {
         return of(new Error('HTTP Error: ' + err));
@@ -45,7 +46,7 @@ export class FeedService {
     );
   }
 
-  getStream(streamID: string, balance: number, randomDelay: number = 100): Observable<any> {
+  getStream(streamID: string, balance: number, randomDelay: number = 50): Observable<any> {
     let urls: string[] = [];
     switch (balance) {
       case FeedService.FEED_BALANCE_LATEST:
@@ -65,7 +66,7 @@ export class FeedService {
     }
     return from(urls).pipe(
       tap(url => this.logger.debug(`getting ${url}`)),
-      delay(Math.floor(Math.random() * randomDelay) + 50),
+      delay(Math.floor(Math.random() * randomDelay) + 100),
       mergeMap(url => this.getURL(url).pipe(
         catchError((err) => { this.logger.error('caught error when getting stream:', err); return of(new Error('Streams Error: ' + err)); })
       ))

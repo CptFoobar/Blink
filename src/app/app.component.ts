@@ -1,6 +1,7 @@
 import { StorageService } from './services/storage.service';
 import { Component, OnInit } from '@angular/core';
 import { Settings } from './settings';
+import { LoggingService, Logger } from './services/logging.service';
 
 const DEFAULT_SETTINGS = {
   userSettings: {
@@ -18,24 +19,23 @@ const DEFAULT_SETTINGS = {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'blink-nxt';
+  logger: Logger;
 
-  constructor(private storage: StorageService) { }
+  constructor(private storage: StorageService, private loggingService: LoggingService) {
+    this.logger = this.loggingService.getLogger(AppComponent.name, LoggingService.Level.Debug);
+  }
 
   ngOnInit() {
     this.storage.get().subscribe((settings) => {
       if (settings instanceof Error) {
-        console.log('Uh Oh... let\'s just assume we\'re okay here', settings);
+        this.logger.error('Error getting settings', settings);
         return;
       }
       if (settings instanceof Map) {
         settings = settings as Map<string, any>;
         if (!settings.has(Settings.userSettings) || !settings.has(Settings.feedList)) {
           this.storage.set(new Map(Object.entries(DEFAULT_SETTINGS))).subscribe(_ => {
-            this.storage.get().subscribe((data) => {
-              console.log(JSON.stringify(data));
-            });
-            console.log('Defaults set');
+            this.logger.info('Defaults set');
           });
         }
       }

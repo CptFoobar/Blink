@@ -126,14 +126,19 @@ export class ContentComponent implements OnInit, OnDestroy {
 
 
   orderBy(array: Array<any>, field: string) {
-    array.sort((a, b) => a[field] < b[field] ? -1 : 1);
+    array.sort((a, b) => String(a[field]).toLowerCase() < String(b[field]).toLowerCase() ? -1 : 1);
   }
 
   insertInOrder(array: Array<any>, item: any, orderByParam: string) {
     let i: number;
-    for (i = 1; i < array.length; i++) {
-      if (item[orderByParam] < array[i][orderByParam] && item[orderByParam] >= array[i - 1][orderByParam]) {
-        break;
+    if (String(item[orderByParam]).toLowerCase() < String(array[0][orderByParam]).toLowerCase()) {
+      i = 0;
+    } else {
+      for (i = 1; i < array.length; i++) {
+        if (String(item[orderByParam]).toLowerCase() < String(array[i][orderByParam]).toLowerCase() &&
+            String(item[orderByParam]).toLowerCase() >= String(array[i - 1][orderByParam]).toLowerCase()) {
+          break;
+        }
       }
     }
     array.splice(i, 0, item);

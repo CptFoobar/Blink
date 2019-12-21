@@ -22,7 +22,6 @@ export class HelpComponent implements OnInit {
   scrollToElement(id: string) {
     let div = document.querySelector(id);
     let divOffset = this.elemOffset(div);
-    console.log(divOffset);
     try {
       window.scrollTo({ top: divOffset.top, left: divOffset.left, behavior: 'smooth' });
     } catch (e) {

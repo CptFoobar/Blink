@@ -3,6 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ClockService } from './../../services/clock.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Settings } from 'src/app/settings';
+import { LoggingService, Logger } from 'src/app/services/logging.service';
 
 @Component({
   selector: 'app-home',
@@ -16,8 +17,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   greeting: string;
   username: string;
   showGreeting: boolean;
-
-  constructor(private clockService: ClockService, private storage: StorageService) { }
+  logger: Logger;
+  constructor(private clockService: ClockService, private storage: StorageService, private loggingService: LoggingService) {
+    this.logger = this.loggingService.getLogger(HomeComponent.name, LoggingService.Level.Debug);
+  }
 
   ngOnInit() {
     this.clock = new Date();
@@ -31,7 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.storage.get(Settings.userSettings).subscribe(settings => {
       if (settings instanceof Error) {
-        console.log('failed getting user settings', settings);
+        this.logger.error('failed getting user settings', settings);
         return;
       }
       this.username = settings.get(Settings.userSettings).userName;
