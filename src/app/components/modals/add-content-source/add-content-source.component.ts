@@ -59,4 +59,11 @@ export class AddContentSourceComponent {
       }
     }
 
+    getTrimmedString(src: any, field: string,  length: number) {
+      if (src && src[field] && src[field].length > 0) {
+        return src[field].trim().substring(0, length);
+      }
+      return '';
+    }
+
 }

@@ -5,9 +5,37 @@
           <div class="card bg-secondary text-dark mb-3 offset-xs-1 col-xs-9 help-panel px-3" id="intro">
               <div class="card-header help-heading">Introduction</div>
               <div class="card-body help-body">
-                  Hi and welcome to Blink. You've probably come here to get things done fast, so we'll just get to the point and walk through main things you might want to do in Blink.
-              </div>
+                  Hi and welcome to Blink. 
+                  Blinks a clean and friendly New Tab replacement that brings your favorite feeds from all over the iternet right into your new tab page.
+                  Let's take a look at what you can do with it!
+                </div>
           </div>
+
+          <!-- Feed -->
+          <div class="card bg-light text-dark mb-3 offset-xs-1 col-xs-9 help-panel px-3" id="feed">
+            <div class="card-header help-heading">Feed</div>
+            <div class="card-body help-body">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <img class="embed-responsive-item" src="assets/img/blink_content.png" />
+                </div>
+                <div class="media mt-4">
+                    <!-- <div class="media-left media-middle"> -->
+                    <img class="mr-3" src="assets/img/blink_options_zoom.png" style="width: 200px; height: auto" />
+                    <!-- </div> -->
+                    <div class="media-body">
+                        <br /> The Feed section is where your news feed lives.
+                        <br /> You can reach it by clicking the <i class="fa fa-rss fa-fw"></i> icon on the top right of the screen.
+                        <br />
+                    </div>
+                </div>
+
+                <br />
+                
+            </div>
+            <br />
+        </div>
+
+
           <!-- Content -->
           <div class="card bg-light text-dark mb-3 offset-xs-1 col-xs-9 help-panel px-3" id="content">
               <div class="card-header help-heading">Content</div>
@@ -20,9 +48,10 @@
                       <img class="mr-3" src="assets/img/blink_options_zoom.png" style="width: 200px; height: auto" />
                       <!-- </div> -->
                       <div class="media-body">
-                          <br /> The Content section allows you to manage your feed sources and choose where you feed comes from. From here you can select your favorite rss feeds and blogs indexed by
-                          <a href="https://feedly.com" style="color: #333"> Feedly </a>
-                          <br /> You can find it under the Options menu (<i class="fa fa-ellipsis-v fa-fw"></i>) on the far right of the nav bar.
+                          <br /> The Content section allows you to manage your feed sources.
+                          From here you can select your favorite feeds and blogs indexed by
+                          <a href="https://feedly.com">Feedly</a>.
+                          <br /> You can find it under the Options menu (<i class="fa fa-ellipsis-v fa-fw"></i>) on the top right of the screen.
                           <br />
                       </div>
                   </div>
@@ -37,7 +66,10 @@
                           Click the Add Content button (<i class="fa fa-plus fa-fw"></i>) on the bottom-right of the Content page.
                       </li>
                       <li>
-                          In the dialog that opens, type in the feed you want to search for. A number of suggestions will be displayed
+                          In the dialog that opens, type in the feed you want to search for.
+                          <br/>
+                          You can search specific sources (like TechCrunch, HuffPost)
+                          or general topics (Politics, Science).
                       </li>
                       <li>
                           When you find something you like, just click it or hit enter after selecting it.
@@ -58,10 +90,7 @@
                           First, locate the feed source you want to remove in the content list.
                       </li>
                       <li>
-                          Click the small Delete button (<i class="fa fa-trash fa-fw"></i>) on the top-right of the source's icon.
-                      </li>
-                      <li>
-                          A confirmation modal will pop up. If you are sure you want to delete the source, click the delete button. Else, you can click the cancel button to cancel the operation.
+                          Click the small Delete button (<i class="fa fa-trash-alt fa-fw"></i>) on the top-right of the source's icon.
                       </li>
                   </ol>
                   If you accidentally delete a source, you can always get it back using the Add Content button.
@@ -70,17 +99,16 @@
                   <span class="help-body-title" id="disableContent">
                       Disable Content sources
                   </span>
-                  <hr class="help-panel px-3-divider" /> If you wish to temporarily disable feed from a particular source, without actually removing it from your list, you can do so in the following way:
+                  <hr class="help-panel px-3-divider" /> If you wish to temporarily disable feed from a particular source, without actually removing it from your list, here's what you can do:
                   <ol>
                       <li>
-                          First, locate the feed source you want to disable in the content list.
+                          locate the feed source you want to disable in the content list.
                       </li>
                       <li>
-                          Now uncheck the little checkbox (<i class="fa fa-check-square fa-fw"></i>) present before the source's name.
+                          Uncheck the little checkbox (<i class="fa fa-check-square fa-fw"></i>) present before the source's name.
                       </li>
                   </ol>
-                  And voilà, the feed is now hidden.
-                  <br /> If you want to enable a disabled feed, simply check the checkbox next to it.
+                  The feed will now remain hidden until you check this box again.
               </div>
               <br />
           </div>
@@ -99,18 +127,18 @@
                       <div class="media-body">
                           <br />
                           <br /> Settings section allow you to configure some general settings of the extension.
-                          <br />You can find it under the Options menu (<i class="fa fa-ellipsis-v fa-fw"></i>) on the far right of the nav bar.
+                          <br />You can find it under the Options menu (<i class="fa fa-ellipsis-v fa-fw"></i>) on the top right of the screen.
                           <br />
                       </div>
                   </div>
 
                   <br />
                   <span class="help-body-title" id="username">
-                      Changing Username
+                      Change Username
                   </span>
                   <hr class="help-panel px-3-divider" />
                   <p>
-                      To change the User name shown in the Greeting message, change the Greeting Name field in the Settings section.
+                      You can customize the name shown in the Greeting message by changing the "Greet by name" setting.
                   </p>
                   <span class="help-body-title" id="greeting">
                       Disable Home screen greeting
@@ -119,21 +147,37 @@
                   <p>
                       You can also disable the greeting message on the home screen by unchecking the 'Show Greeting' option in the settings.
                   </p>
+                  <span class="help-body-title" id="shuffle">
+                    Shuffling the feed
+                  </span>
+                  <hr class="help-panel px-3-divider" />
+                  <p>
+                      If you dont' want Blink to shuffle the news items on your feed page, uncheck the "Shuffle Feed" option.
+                  </p>
                   <span class="help-body-title" id="feedRatio">
                       Feed content ratio
                   </span>
-                  <hr class="help-panel px-3-divider" /> Blink gives you the option to choose the type of feed you want to see. You can choose from three modes,
+                  <hr class="help-panel px-3-divider" /> Blink gives you the option to choose the type of feed you want to see. You can choose one out of the three types,
                   <code>Latest</code>,
                   <code>Balanced</code> and
                   <code>Trending</code>.
                   <br />
                   <li>
-                      <code>Latest</code> populates your feed with the most recent items from your sources.</li>
+                      <code>Latest</code> populates your feed with the freshest content from your sources.</li>
                   <li>
                       <code>Trending</code> shows you only the hot topics of the day, so you can quickly catch up on the important headlines.
                   </li>
                   <li>
-                      <code>Balanced</code> gives you a nice blend of latest and trending news from your feed sources.</li>
+                      <code>Balanced</code> gives you a nice blend of latest and trending news from your feed sources.
+                  </li>
+                  <br />
+                  <span class="help-body-title" id="feedView">
+                    Change Feed view
+                  </span>
+                  <hr class="help-panel px-3-divider" /> Blink offers you the option to change how your news feed looks. You can choose from two modes:
+                  <code>Cozy</code> and
+                  <code>Compact</code>
+                  <br />
                   <br />
                   <div class="alert alert-info">
                       <p>
@@ -148,17 +192,21 @@
               <div class="card-header help-heading">Need Help?</div>
               <div class="card-body help-body">
                   Stuck on something? Found a bug? Want a feature? Open a ticket
-                  <a href="https://github.com/CptFoobar/Blink/issues" class="help-issues">here.</a>
+                  <a href="https://github.com/CptFoobar/Blink/issues" class="help-issues">here</a>
+                  or get in touch <a href="http://sidhant.io/get-in-touch.html" class="help-issues" target="_blank">here</a>.
               </div>
           </div>
 
       </div>
 
+      <!-- Navigation -->
       <div class="col col-md-3 help-nav d-xs-none">
           <a class="help-nav-link" (click)="scrollToElement('#intro')" duration="750" offset="75">
               Introduction</a>
           <br />
-
+          <a class="help-nav-link" (click)="scrollToElement('#feed')" duration="750" offset="75">
+              Feed</a>
+              <br />
           <a class="help-nav-link" (click)="scrollToElement('#content')" duration="750" offset="75">
               Content</a>
           <ul>
@@ -188,9 +236,17 @@
                   Disable Greeting</a>
               </li>
               <li>
+                <a class="help-nav-link" (click)="scrollToElement('#shuffle')" duration="750" offset="75">
+                Shuffling the Feed</a>
+              </li>
+              <li>
                   <a class="help-nav-link" (click)="scrollToElement('#feedRatio')" duration="750" offset="75">
                   Change Feed content type</a>
               </li>
+              <li>
+                <a class="help-nav-link" (click)="scrollToElement('#feedView')" duration="750" offset="75">
+                Change Feed View</a>
+            </li>
           </ul>
 
           <a class="help-nav-link" (click)="scrollToElement('#moreHelp')">

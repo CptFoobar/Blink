@@ -21,11 +21,12 @@
 
 <ng-template #feedSuggestion let-result="result" class="testclass">
         <div class="media">
+            <!-- TODO: Get visual url or use default -->
             <img class="media-object align-self-center mr-4 suggestion-icon" [src]="result.visualUrl" />
             <div class="media-body text-wrap " style="cursor: pointer;">
               <div class="mt-0 mb-1 suggestion-title">{{ result.title }}</div>
               <div class="suggestion-desc">
-                    {{ result.description.trim().substring(0, 125) }}
+                    {{ getTrimmedString(result, "description", 125) }}
               </div>
             </div>
           </div>

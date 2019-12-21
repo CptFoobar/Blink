@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { StorageService } from 'src/app/services/storage.service';
 import { Logger, LoggingService } from 'src/app/services/logging.service';
 import { Settings } from 'src/app/settings';
@@ -12,7 +12,7 @@ import { AddContentSourceComponent } from '../modals/add-content-source/add-cont
   templateUrl: './content.component.html',
   styleUrls: ['./content.component.css']
 })
-export class ContentComponent implements OnInit {
+export class ContentComponent implements OnInit, OnDestroy {
 
   logger: Logger;
   showProgressbar: boolean;
@@ -40,6 +40,7 @@ export class ContentComponent implements OnInit {
         this.emptyContentList = true;
         // TODO: Add alert
         this.logger.error('failed to get settings', settings);
+        this.toastService.showError('Failed to get your settings.')
         return;
       }
       this.showProgressbar = false;
@@ -50,6 +51,10 @@ export class ContentComponent implements OnInit {
         this.emptyContentList = true;
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.toastService.clear();
   }
 
   promptDelete(contentSrc) {

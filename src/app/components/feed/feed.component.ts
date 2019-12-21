@@ -62,7 +62,6 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     let feedList = [];
     this.storage.get().subscribe((settings) => {
       if (settings instanceof Error) {
-        // TODO: do something?
         this.logger.error('Error getting settings', settings);
         this.emptyFeedList = true;
         this.showProgressbar = false;
@@ -140,6 +139,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.mediaQuery$.unsubscribe();
+    this.toastService.clear();
   }
 
   fetchAllFeed(streams: any[]): Observable<any> {
@@ -264,7 +264,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getFlames(er: number) {
-    if (!er || er < 3.5) {
+    if (er == null || er < 3.5) {
       return 0;
     } else if (er > 3.5 && er < 8) {
       return 1;

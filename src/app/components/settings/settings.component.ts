@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { StorageService } from 'src/app/services/storage.service';
 import { Settings } from 'src/app/settings';
 import { ToastService } from 'src/app/services/toast.service';
@@ -9,7 +9,7 @@ import { LoggingService, Logger } from 'src/app/services/logging.service';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
 
   showProgressbar: boolean;
   showGreeting: boolean;
@@ -35,7 +35,6 @@ export class SettingsComponent implements OnInit {
       this.showProgressbar = false;
       if (settings instanceof Error) {
         this.toastService.showError('Error fetching settings');
-        // TODO: Add alert
         this.logger.error('failed to get settings', settings);
         return;
       }
@@ -46,6 +45,10 @@ export class SettingsComponent implements OnInit {
       this.userName = settings.get(Settings.userSettings).userName;
       this.feedViewCompact = settings.get(Settings.userSettings).feedViewCompact;
     });
+  }
+
+  ngOnDestroy() {
+    this.toastService.clear()
   }
 
   saveConfig() {
