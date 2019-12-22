@@ -8,6 +8,7 @@ import { mergeMap, timeout, catchError, map, tap, filter } from 'rxjs/operators'
 import { Settings } from 'src/app/settings';
 import { LoggingService, Logger } from 'src/app/services/logging.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { FeedData } from 'src/app/models/feed-data';
 
 @Component({
   selector: 'app-feed',
@@ -16,7 +17,7 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  entryList: Array<any>;
+  entryList: FeedData[];
 
   emptyFeedList: boolean;
   showProgressbar: boolean;
@@ -33,17 +34,17 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   mediaQuery$: Subscription;
   // The active media query (xs | sm | md | lg | xl)
   activeMediaQuery: string;
-  logger: Logger;
+  private logger: Logger;
 
   private readonly fbPrefixURL = 'https://www.facebook.com/sharer/sharer.php?u=';
   private readonly twitterPrefixURL = 'https://twitter.com/intent/tweet?status=';
   private readonly redditPrefixURL = 'https://www.reddit.com/submit?url=';
   private readonly pocketPrefixURL = 'https://getpocket.com/edit?url=';
   private readonly thresholdModifier = 13;
+  private readonly expectedFeedEntries = 15;
 
   constructor(private feedService: FeedService, private mediaObserver: MediaObserver,
-              private storage: StorageService, private uniquePipe: UniquePipe,
-              private logging: LoggingService, private toastService: ToastService) {
+              private storage: StorageService, private logging: LoggingService, private toastService: ToastService) {
     this.logger = this.logging.getLogger(FeedComponent.name, LoggingService.Level.Debug);
   }
 
@@ -60,7 +61,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     this.feedRatio = FeedService.FEED_BALANCE_MIX;
 
     let feedList = [];
-    this.storage.get().subscribe((settings) => {
+    this.storage.getSync().subscribe((settings) => {
       if (settings instanceof Error) {
         this.logger.error('Error getting settings', settings);
         this.emptyFeedList = true;
@@ -101,14 +102,9 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       this.fetchAllFeed(feedList).pipe(
         timeout(10 * 1000),
         catchError((err) => of(new Error('FeedTimeoutError: ' +  err)))
-        ).subscribe((feed?: {feedItems: any, feedMeta: any}) => {
-          if (!feed) {
-            this.minEntryThreshold -= this.thresholdModifier;
-            this.logger.info('feed empty');
-            return;
-          }
-
-          this.addEntries(this.parseFeed(feed.feedItems, feed.feedMeta));
+        ).subscribe((feed: FeedData) => {
+          this.logger.debug('got feed data', feed);
+          this.addEntries(feed);
         },
         (err) => {
           // show error to user if no requests have returned for 10s or if all requests failed and there is nothing to show
@@ -142,7 +138,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     this.toastService.clear();
   }
 
-  fetchAllFeed(streams: any[]): Observable<any> {
+  fetchAllFeed(streams: any[]): Observable<FeedData> {
     this.allRequestsPending = true;
     return from(streams).pipe(
       filter(stream => {
@@ -151,9 +147,9 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         return stream.wanted;
       }),
-      mergeMap(stream => this.feedService.getStream(stream.streamId, this.feedRatio).pipe(
-        map(resp => ({ feedItems: resp, feedMeta: stream }))
-      )),
+      mergeMap(stream =>
+        this.feedService.getStreamCached(stream, this.feedRatio)
+      ),
       catchError((err) => {
         this.logger.error('Error getting stream:', err);
         // tell the user?
@@ -162,59 +158,31 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  parseFeed(feedObject: any, feedMeta: any) {
-    // let feedObject = JSON.parse(feedJson);
-    let urlRegex = new RegExp('([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?');
-    let entryUrl = (link: string, alt: string): string => {
-        if (urlRegex.test(link)) {
-            return link;
-        } else {
-          return alt;
-        }
-    };
-
-    const entries = [];
-
-    for (let item of feedObject.items) {
-        let contentSnippet = this.getContentSnippet(item.summary, item.content);
-        if (this.isUsefulEntry(item.title, contentSnippet)) {
-            entries.push({
-                entryTitle: item.title,
-                entryUrl: entryUrl(item.originId,
-                    item.alternate[0].href),
-                timestamp: item.published,
-                coverUrl: this.getVisualUrl(item.visual, feedMeta.icon),
-                contentSnippet: contentSnippet,
-                flames: this.getFlames(item.engagementRate),
-                feedSourceTitle: feedMeta.title,
-                feedSourceSiteUrl: feedMeta.websiteUrl
-            });
-        }
-    }
-
-    return entries;
-  }
-
   /**
    * Add entries to show
    * @param entries New entries
    */
-  addEntries(entries: Array<any>) {
-    if (entries.length === 0) {
+  addEntries(feedData: FeedData) {
+    if (feedData.entries.length === 0) {
+      this.logger.info(`feed empty for ${feedData.feedTitle}`);
+      this.minEntryThreshold -= this.thresholdModifier;
       if (this.entryList.length >= this.minEntryThreshold) {
         this.showProgressbar = false;
       }
       return;
     }
     // add new entries remove any duplicates. use 'entryTitle' as key
-    this.entryList.push.apply(this.entryList, entries);
-    const initialEntryCount = this.entryList.length;
-    this.entryList = this.uniquePipe.transform(this.entryList, 'entryTitle');
-    const uniqueEntryCount = this.entryList.length;
-    if (uniqueEntryCount < initialEntryCount) {
-      this.logger.debug(`removed ${initialEntryCount - uniqueEntryCount} duplicates`);
-      this.minEntryThreshold -= (initialEntryCount - uniqueEntryCount);
-    }
+    this.entryList.push.apply(this.entryList, feedData.entries.map(e => ({
+        entryTitle: e.title,
+        entryUrl: e.url,
+        timestamp: e.timestamp,
+        coverUrl: e.cover,
+        contentSnippet: e.snippet,
+        flames: e.flames,
+        feedSourceTitle: feedData.feedTitle,
+        feedSourceSiteUrl: feedData.feedURL
+    })));
+    this.minEntryThreshold -= (this.expectedFeedEntries - feedData.entries.length);
 
     if (this.shuffleFeed) {
       this.entryList = this.shuffle(this.entryList);
@@ -227,62 +195,9 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getContentSnippet(summary: any, content: any): string {
-    // Some feed entries don't have a summary available, some don't have
-    // content. So pick whatever is available.
-    let snippet = '';
-    if (typeof summary === 'undefined') {
-      if (typeof content === 'undefined') {
-          return snippet;
-      } else {
-        snippet = content.content;
-      }
-    } else {
-      snippet = summary.content;
-    }
-    // Remove HTML tags
-    snippet = snippet.replace(/(<([^>]+)>)/ig, '');
-    // Remove \r and \n occurences
-    snippet = snippet.replace(/\r?\n/g, '');
-    // Replace &quot; with ""
-    snippet = snippet.replace(/&quot;/g, '"');
-    // Replace all occurences of 'Read More'
-    let regex = new RegExp('Read More', 'g');
-    snippet = snippet.replace(regex, '');
-    // Adding ellipsis
-    if (snippet.length > 150) {
-        snippet = snippet.substring(0, 150);
-        snippet = snippet.substring(0, snippet.lastIndexOf(' ') + 1);
-    }
-    if (snippet.length === 0) {
-        snippet = '';
-    } else {
-      snippet += '...';
-    }
-    return snippet;
-  }
-
-  getFlames(er: number) {
-    if (er == null || er < 3.5) {
-      return 0;
-    } else if (er > 3.5 && er < 8) {
-      return 1;
-    } else {
-      return 2;
-    }
-  }
-
-  isUsefulEntry(title: string, snippet: string): boolean {
-    if (title.length === 0 && snippet.length === 0) {
-        return false;
-    } else {
-      return true;
-    }
-  }
-
   getPublishedTime(time: number): string {
-    let diff = new Date().getTime() - time;
-    let t = diff / (60 * 60 * 1000); // Calculate hours
+    const diff = new Date().getTime() - time;
+    const t = diff / (60 * 60 * 1000); // Calculate hours
     if (t >= 1 && t < 24) {
       return Math.floor(t).toString() +
         (Math.floor(t) === 1 ? ' hr ago' : ' hrs ago');
@@ -292,16 +207,6 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       return Math.floor(t / 24).toString() +
         (Math.floor(t / 24) ? ' day ago' : ' days ago');
-    }
-  }
-
-  getVisualUrl(img: any, icon: string): string {
-    if (typeof img === 'undefined' || img === 'none') {
-        return icon;
-    } else if (typeof img.url === 'undefined' || img.url === 'none') {
-        return icon;
-    } else {
-      return img.url as string;
     }
   }
 
@@ -378,10 +283,10 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
             break;
     }
     url = url + suffix;
-    let h = 500;
-    let w = 500;
-    let left = (screen.width / 2) - (w / 2);
-    let top = (screen.height / 2) - (h / 2);
+    const h = 500;
+    const w = 500;
+    const left = (screen.width / 2) - (w / 2);
+    const top = (screen.height / 2) - (h / 2);
     return window.open(url, title,
           'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + 
             ', height=' + h + ', top=' + top + ', left=' + left);

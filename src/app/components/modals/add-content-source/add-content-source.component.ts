@@ -24,7 +24,7 @@ const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'C
 })
 export class AddContentSourceComponent {
   showProgressbar: boolean;
-  logger: Logger;
+  private logger: Logger;
   public model: any;
 
   constructor(public activeModal: NgbActiveModal,

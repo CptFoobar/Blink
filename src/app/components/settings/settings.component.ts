@@ -31,7 +31,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.shuffleFeed = false;
     this.feedType = 'b';
     this.feedViewCompact = false;
-    this.storage.get(Settings.userSettings).subscribe((settings) => {
+    this.storage.getSync(Settings.userSettings).subscribe((settings) => {
       this.showProgressbar = false;
       if (settings instanceof Error) {
         this.toastService.showError('Error fetching settings');
@@ -60,7 +60,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       feedViewCompact: this.feedViewCompact
     };
     this.logger.debug('saving config', updatedConfig);
-    this.storage.set(new Map([[ Settings.userSettings, updatedConfig ]])).subscribe(
+    this.storage.setSync(new Map([[ Settings.userSettings, updatedConfig ]])).subscribe(
       err => {
         if (err) {
           this.toastService.showError('An occurred when updating settings!');

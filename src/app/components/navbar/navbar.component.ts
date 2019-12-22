@@ -11,7 +11,7 @@ import { SupportComponent } from '../modals/support/support.component';
 export class NavbarComponent implements OnInit {
 
   navbarCollapsed: boolean;
-  logger: Logger;
+  private logger: Logger;
 
   constructor(private logging: LoggingService, private modalService: NgbModal) {
     this.logger = this.logging.getLogger(NavbarComponent.name, LoggingService.Level.Debug);

@@ -1,9 +1,11 @@
 import { StorageService } from './../../services/storage.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, from, of } from 'rxjs';
 import { ClockService } from './../../services/clock.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Settings } from 'src/app/settings';
 import { LoggingService, Logger } from 'src/app/services/logging.service';
+import { tap, delay, mergeMap, catchError, concatMap, combineAll, map, concatAll, mergeAll } from 'rxjs/operators';
+import { FeedService } from 'src/app/services/feed.service';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +19,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   greeting: string;
   username: string;
   showGreeting: boolean;
-  logger: Logger;
+  private logger: Logger;
   constructor(private clockService: ClockService, private storage: StorageService, private loggingService: LoggingService) {
     this.logger = this.loggingService.getLogger(HomeComponent.name, LoggingService.Level.Debug);
   }
@@ -32,7 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
     this.showGreeting = false;
 
-    this.storage.get(Settings.userSettings).subscribe(settings => {
+    this.storage.getSync(Settings.userSettings).subscribe(settings => {
       if (settings instanceof Error) {
         this.logger.error('failed getting user settings', settings);
         return;
@@ -48,9 +50,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   greetingFor(hours: number): string {
-    if (hours > 3 && hours < 12) { return 'Morning'; }
-    else if (hours >= 12 && hours < 16) { return 'Afternoon'; }
-    else { return 'Evening'; }
+    if (hours > 3 && hours < 12) {
+      return 'Morning';
+    } else if (hours >= 12 && hours < 16) {
+      return 'Afternoon';
+    } else {
+      return 'Evening';
+    }
   }
 
 }

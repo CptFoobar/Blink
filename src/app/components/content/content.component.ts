@@ -14,7 +14,7 @@ import { AddContentSourceComponent } from '../modals/add-content-source/add-cont
 })
 export class ContentComponent implements OnInit, OnDestroy {
 
-  logger: Logger;
+  private logger: Logger;
   showProgressbar: boolean;
   // TODO: Can remove emptyContentList by simply using contentList.length()
   emptyContentList: boolean;
@@ -34,7 +34,7 @@ export class ContentComponent implements OnInit, OnDestroy {
     this.emptyContentList = false;
     this.orderByParam = 'title';
 
-    this.storage.get().subscribe((settings) => {
+    this.storage.getSync().subscribe((settings) => {
       if (settings instanceof Error) {
         this.showProgressbar = false;
         this.emptyContentList = true;
@@ -85,7 +85,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   updateFeedlist(successToastMsg?: string, errToastMsg?: string) {
-    this.storage.set(new Map([[ Settings.feedList, this.contentList ]])).subscribe(
+    this.storage.setSync(new Map([[ Settings.feedList, this.contentList ]])).subscribe(
       err => {
         if (err) {
           if (errToastMsg) {
@@ -131,7 +131,9 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   insertInOrder(array: Array<any>, item: any, orderByParam: string) {
     let i: number;
-    if (String(item[orderByParam]).toLowerCase() < String(array[0][orderByParam]).toLowerCase()) {
+    if (array.length === 0) {
+      i = 0;
+    } else if (String(item[orderByParam]).toLowerCase() < String(array[0][orderByParam]).toLowerCase()) {
       i = 0;
     } else {
       for (i = 1; i < array.length; i++) {
@@ -142,6 +144,14 @@ export class ContentComponent implements OnInit, OnDestroy {
       }
     }
     array.splice(i, 0, item);
+  }
+
+  getTitle(entry) {
+    let title = entry.title;
+    if (title.length > 13) {
+      title = title.substring(0, 10) + '...';
+    }
+    return title;
   }
 
   // TODO: Move this and other screen-related utils to a service
