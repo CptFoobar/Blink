@@ -32,36 +32,3 @@ export class ToastService {
     this.toasts = [];
   }
 }
-
-
-// import { Injectable, TemplateRef } from '@angular/core';
-
-// interface IToast {
-//   message: string;
-//   options: any;
-// }
-
-// export class Toast implements IToast {
-//   message: string;
-//   options: any;
-//   constructor(message: string, delay: number = 5000, ...extraOpts: any) {
-//     this.message = message;
-//     this.options = {
-//       delay,
-//       ...extraOpts
-//     };
-//   }
-// }
-
-// @Injectable({ providedIn: 'root' })
-// export class ToastService {
-//   toasts: IToast[] = [];
-
-//   show(toast: IToast, options: any = {}) {
-//     this.toasts.push({ toast, ...options });
-//   }
-
-//   remove(toast) {
-//     this.toasts = this.toasts.filter(t => t !== toast);
-//   }
-// }

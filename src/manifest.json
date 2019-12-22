@@ -10,7 +10,7 @@
         "64": "assets/img/blink-64.png",
         "128": "assets/img/blink-128.png"
     },
-    "author": "Sidhant Sharma [:tk]",
+    "author": "Sidhant Sharma",
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "chrome_url_overrides": {
         "newtab": "index.html#/home"
@@ -20,13 +20,8 @@
         "persistent": false
     },
     "permissions": [
-        "bookmarks",
-        "history",
         "storage",
         "tabs",
-        "https://cloud.feedly.com/",
-        "http://suggestqueries.google.com/"
+        "https://cloud.feedly.com/"
     ]
-    // ,
-    // "options_page": "data/blink_shell.html#/blink/settings"
 }

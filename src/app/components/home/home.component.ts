@@ -39,6 +39,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.logger.error('failed getting user settings', settings);
         return;
       }
+      if (!settings.get(Settings.userSettings)) {
+        this.logger.error('settings not found');
+        return;
+      }
       this.username = settings.get(Settings.userSettings).userName;
       this.showGreeting = settings.get(Settings.userSettings).showGreeting;
     });

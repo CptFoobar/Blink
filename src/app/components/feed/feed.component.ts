@@ -1,4 +1,3 @@
-import { UniquePipe } from './../../pipes/unique.pipe';
 import { StorageService } from './../../services/storage.service';
 import { FeedService } from './../../services/feed.service';
 import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
@@ -164,7 +163,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   addEntries(feedData: FeedData) {
     if (feedData.entries.length === 0) {
-      this.logger.info(`feed empty for ${feedData.feedTitle}`);
+      this.logger.debug(`feed empty for ${feedData.feedTitle}`);
       this.minEntryThreshold -= this.thresholdModifier;
       if (this.entryList.length >= this.minEntryThreshold) {
         this.showProgressbar = false;

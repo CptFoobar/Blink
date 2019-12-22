@@ -3,7 +3,7 @@ import { LoggingService, Logger } from './logging.service';
 import { StorageService } from './storage.service';
 import { CacheData } from '../models/cache-data';
 import { Observable } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { FeedData } from '../models/feed-data';
 import { Settings } from '../settings';
 
@@ -40,7 +40,7 @@ export class CacheService {
               this.logger.debug(`cache expired for ${streamID}`);
               return null;
             }
-            this.logger.info(`found cache data for ${streamID}`);
+            this.logger.debug(`found cache data for ${streamID}`);
             return cachedFeed.feedData;
           }
         }

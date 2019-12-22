@@ -10,7 +10,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
 import { FeedComponent } from './components/feed/feed.component';
 import { WindowScrollComponent } from './components/window-scroll/window-scroll.component';
-import { UniquePipe } from './pipes/unique.pipe';
 import { ContentComponent } from './components/content/content.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AboutComponent } from './components/about/about.component';
@@ -31,7 +30,6 @@ import { SupportComponent } from './components/modals/support/support.component'
     HomeComponent,
     FeedComponent,
     WindowScrollComponent,
-    UniquePipe,
     ContentComponent,
     SettingsComponent,
     AboutComponent,
@@ -51,7 +49,7 @@ import { SupportComponent } from './components/modals/support/support.component'
     HttpClientModule,
     FormsModule,
   ],
-  providers: [UniquePipe, LoggingService],
+  providers: [LoggingService],
   // load then modals
   entryComponents: [AddContentSourceComponent, DeleteContentSourceComponent, SupportComponent],
   bootstrap: [AppComponent]

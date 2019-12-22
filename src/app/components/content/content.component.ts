@@ -40,7 +40,6 @@ export class ContentComponent implements OnInit, OnDestroy {
       if (settings instanceof Error) {
         this.showProgressbar = false;
         this.emptyContentList = true;
-        // TODO: Add alert
         this.logger.error('failed to get settings', settings);
         this.toastService.showError('Failed to get your settings.')
         return;
@@ -107,7 +106,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   addContent() {
     const modalRef = this.modalService.open(AddContentSourceComponent, { size: 'xl' });
     modalRef.result.then((newSource) => {
-      this.logger.info('adding', newSource.title);
+      this.logger.debug('adding', newSource.title);
       const newFeedItem = {
         title: newSource.title,
         websiteUrl: newSource.website,
