@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteContentSourceComponent } from '../modals/delete-content-source/delete-content-source.component';
 import { ToastService } from 'src/app/services/toast.service';
 import { AddContentSourceComponent } from '../modals/add-content-source/add-content-source.component';
+import { CacheService } from 'src/app/services/cache.service';
 
 @Component({
   selector: 'app-content',
@@ -25,8 +26,9 @@ export class ContentComponent implements OnInit, OnDestroy {
   constructor(private storage: StorageService,
               private logging: LoggingService,
               private modalService: NgbModal,
-              public toastService: ToastService) {
-    this.logger = logging.getLogger(ContentComponent.name, Logger.Level.Info);
+              public toastService: ToastService,
+              private cache: CacheService) {
+    this.logger = this.logging.getLogger(ContentComponent.name, Logger.Level.Info);
    }
 
   ngOnInit() {
@@ -64,6 +66,7 @@ export class ContentComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.icon = contentSrc.icon;
     modalRef.result.then((deleteConfirmed) => {
       this.deleteItem(contentSrc);
+      this.cache.unset(contentSrc.streamId).subscribe();
     }, (dismissed) => {
       this.logger.debug(`Dismissed deleting ${contentSrc.title}`);
     });

@@ -48,7 +48,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.toastService.clear()
+    this.toastService.clear();
   }
 
   saveConfig() {

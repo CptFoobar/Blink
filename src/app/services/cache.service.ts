@@ -28,8 +28,8 @@ export class CacheService {
           this.logger.error(`failed to get cache for ${streamID}`, cache);
           return null;
         }
-        const cacheValue = cache.get(Settings.cache);
-        if (!cacheValue) {
+        const cacheValue = cache.get(Settings.cache) || {};
+        if (Object.keys(cacheValue).length === 0) {
           return null;
         }
         for (const key of Object.keys(cacheValue)) {
@@ -62,6 +62,37 @@ export class CacheService {
         }
         const cacheValue = cache.get(Settings.cache) || {};
         cacheValue[cacheKey] = cacheEntry.toObject();
+        return cacheValue;
+      }),
+      mergeMap(
+        updatedCache =>  {
+          return this.storage.setLocal(new Map([[Settings.cache, updatedCache]]));
+        }
+      )
+    );
+  }
+
+  unset(streamID: string): Observable<null | Error> {
+    this.logger.debug('unsetting', streamID);
+    const cacheKey = CacheData.generateCacheKey(streamID);
+    return this.storage.getLocal('cache').pipe(
+      map((cache) => {
+        if (cache instanceof Error) {
+          this.logger.error(`failed to unset cache for ${streamID}`, cache);
+          return null;
+        }
+        const cacheValue = cache.get(Settings.cache);
+        this.logger.debug('cv', cacheValue);
+        if (!cacheValue) {
+          this.logger.debug('got nothing');
+          return null;
+        }
+        for (const key of Object.keys(cacheValue)) {
+          if (key === cacheKey) {
+            this.logger.debug(`cache hit for ${streamID}`, cacheValue);
+            delete cacheValue[cacheKey];
+          }
+        }
         return cacheValue;
       }),
       mergeMap(
