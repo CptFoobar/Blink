@@ -23,25 +23,25 @@ export class Logger {
   }
 
   debug(...message: any[]) {
-    if (this.level >= Level.Debug && !this.isProd) {
+    if (Level.Debug >= this.level && !this.isProd) {
       this.log('DEBUG', ...message);
     }
   }
 
   info(...message: any[]) {
-    if (this.level >= Level.Info) {
+    if (Level.Info >= this.level) {
       this.log('INFO', ...message);
     }
   }
 
   warn(...message: any[]) {
-    if (this.level >= Level.Warn) {
+    if (Level.Warn >= this.level) {
       this.log('WARN', ...message);
     }
   }
 
   error(...message: any[]) {
-    if (this.level >= Level.Error) {
+    if (Level.Error >= this.level) {
       this.log('ERROR', ...message);
     }
   }

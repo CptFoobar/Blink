@@ -3,7 +3,7 @@ import { FeedService } from './../../services/feed.service';
 import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { Subscription, Observable, from, of } from 'rxjs';
-import { mergeMap, timeout, catchError, map, tap, filter } from 'rxjs/operators';
+import { mergeMap, timeout, catchError, map, tap, filter, defaultIfEmpty } from 'rxjs/operators';
 import { Settings } from 'src/app/settings';
 import { LoggingService, Logger } from 'src/app/services/logging.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -88,7 +88,9 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           break;
       }
 
-      if (feedList.length === 0) {
+      const filteredFeedList = feedList.filter((f) => f.wanted);
+
+      if (filteredFeedList.length === 0) {
         this.emptyFeedList = true;
         this.showProgressbar = false;
         this.timedOut = false;
@@ -96,12 +98,19 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         return;
       }
 
-      this.minEntryThreshold = feedList.length * 13;
+      this.minEntryThreshold = filteredFeedList.length * 13;
 
-      this.fetchAllFeed(feedList).pipe(
+      this.fetchAllFeed(filteredFeedList).pipe(
         timeout(10 * 1000),
-        catchError((err) => of(new Error('FeedTimeoutError: ' +  err)))
+        catchError((err) => { throw new Error('FeedTimeoutError: ' +  err.message); })
         ).subscribe((feed: FeedData) => {
+          if (!feed) {
+            this.minEntryThreshold -= this.thresholdModifier;
+            if (this.entryList.length >= this.minEntryThreshold) {
+              this.showProgressbar = false;
+            }
+            return;
+          }
           this.logger.debug('got feed data', feed);
           this.addEntries(feed);
         },
@@ -140,15 +149,10 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   fetchAllFeed(streams: any[]): Observable<FeedData> {
     this.allRequestsPending = true;
     return from(streams).pipe(
-      filter(stream => {
-        if (!stream.wanted) {
-          this.minEntryThreshold -= this.thresholdModifier;
-        }
-        return stream.wanted;
-      }),
       mergeMap(stream =>
         this.feedService.getStreamCached(stream, this.feedRatio)
       ),
+      defaultIfEmpty(null),
       catchError((err) => {
         this.logger.error('Error getting stream:', err);
         // tell the user?

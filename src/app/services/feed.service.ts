@@ -22,7 +22,6 @@ const httpOptions = {
 })
 export class FeedService {
 
-  private static readonly TAG = 'FeedService';
   static readonly FEED_BALANCE_LATEST = 0;
   static readonly FEED_BALANCE_MIX = 1;
   static readonly FEED_BALANCE_TRENDING = 2;
@@ -40,14 +39,14 @@ export class FeedService {
   constructor(private http: HttpClient,
               private loggingService: LoggingService,
               private cacheService: CacheService) {
-    this.logger = this.loggingService.getLogger(FeedService.TAG, this.loggingService.Level.Debug);
+    this.logger = this.loggingService.getLogger(FeedService.name, LoggingService.Level.Debug);
   }
 
   private getURL(url: string): Observable<any> {
     // BUG: Doesn't catch ERR_INTERNET_DISCONNECTED
     return this.http.get(url, httpOptions).pipe(
       catchError(err => {
-        return of(new Error('HTTP Error: ' + err));
+        return of(new Error('HTTP Error: ' + err.message));
       })
     );
   }
@@ -70,9 +69,10 @@ export class FeedService {
         urls.push(this.trendingUrlPrefix + streamID + this.count7);
         break;
     }
+    // TODO: retry in case of 429 with backoff
     return from(urls).pipe(
       tap(url => this.logger.debug(`getting ${url}`)),
-      delay(Math.floor(Math.random() * randomDelay) + 100),
+      delay(Math.ceil(Math.random() * randomDelay) + 100),
       map(url => this.getURL(url).pipe(
         catchError((err) => { this.logger.error('caught error when getting stream:', err); return of(new Error('Streams Error: ' + err)); })
       )),
@@ -80,7 +80,7 @@ export class FeedService {
     );
   }
 
-  getStreamCached(stream: any, balance: number, randomDelay: number = 50): Observable<FeedData> {
+  getStreamCached(stream: any, balance: number, randomDelay: number = 100): Observable<FeedData> {
     const streamID = stream.streamId;
     this.logger.debug('getting stream', streamID);
     return this.cacheService.get(streamID).pipe(
@@ -88,7 +88,9 @@ export class FeedService {
       mergeMap((feedCache, _) => {
         if (feedCache === null) {
           this.logger.debug(`cache null for ${streamID}. fetching...`);
-          return this.fetchStream(streamID, balance, randomDelay).pipe(
+          return of(streamID).pipe(
+            delay(Math.ceil(Math.random() * randomDelay)),
+            mergeMap(s => this.fetchStream(s, balance, randomDelay)),
             tap(feed => this.logger.debug('fetched', feed)),
             map((fetchedFeeds) => {
               const entries = {};
@@ -103,8 +105,7 @@ export class FeedService {
               }
               return new FeedData(stream.streamId, stream.title, stream.websiteUrl, Object.values(entries));
             }),
-            tap(freshFeed => this.cacheService.set(streamID, freshFeed).subscribe())
-          );
+            tap(freshFeed => this.cacheService.set(streamID, freshFeed).subscribe()));
         }
         this.logger.debug(`got cache for ${streamID}`);
         return of(feedCache);
@@ -196,7 +197,7 @@ export class FeedService {
     };
 
     const isUsefulEntry = (title: string, snippet: string): boolean => {
-      if (title.length === 0 && snippet.length === 0) {
+      if (!(title && snippet) || (title.length === 0 && snippet.length === 0)) {
           return false;
       } else {
         return true;
@@ -206,22 +207,25 @@ export class FeedService {
     const entries = [];
 
     for (const item of feedObject.items) {
-      const contentSnippet = getContentSnippet(item.summary, item.content);
-      if (isUsefulEntry(item.title, contentSnippet)) {
-          entries.push(
-            new FeedEntry(item.title,
-                          entryUrl(item.originId,
-                            item.alternate[0].href),
-                          getVisualUrl(item.visual, feedMeta.icon),
-                          item.published,
-                          getFlames(item.engagementRate),
-                          contentSnippet,
-                          item.id
-            )
-          );
-        }
+      try {
+        const contentSnippet = getContentSnippet(item.summary, item.content);
+        if (isUsefulEntry(item.title, contentSnippet)) {
+            entries.push(
+              new FeedEntry(item.title,
+                            entryUrl(item.originId,
+                              item.alternate[0].href),
+                            getVisualUrl(item.visual, feedMeta.icon),
+                            item.published,
+                            getFlames(item.engagementRate),
+                            contentSnippet,
+                            item.id
+              )
+            );
+          }
+      } catch (e) {
+        this.logger.error('error parsing', item, e);
+      }
     }
-
     return entries;
   }
 }
