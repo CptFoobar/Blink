@@ -59,7 +59,7 @@ export class FeedService {
     // BUG: Doesn't catch ERR_INTERNET_DISCONNECTED
     return this.http.get(url, httpOptions).pipe(
       catchError(err => {
-        return of(new Error('HTTP Error: ' + err.message));
+        throw new Error('HTTP Error: ' + err.message);
       })
     );
   }

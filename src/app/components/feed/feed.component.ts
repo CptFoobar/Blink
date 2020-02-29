@@ -115,11 +115,16 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           this.addEntries(feed);
         },
         (err) => {
+          this.logger.debug('Error fetching some feeds:', err);
           // show error to user if no requests have returned for 10s or if all requests failed and there is nothing to show
           if (this.allRequestsPending || (this.minEntryThreshold <= 0 && this.entryList.length === 0)) {
             this.showProgressbar = false;
             this.timedOut = true;
             this.emptyFeedList = true;
+            this.allRequestsPending = false;
+          } else {
+            // some of the requests have returned with success.
+            this.showProgressbar = false;
             this.allRequestsPending = false;
           }
       }, () => {
