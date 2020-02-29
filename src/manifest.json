@@ -4,7 +4,7 @@
     "name": "Blink New Tab",
     "short_name": "Blink",
     "description": "Replaces New Tab page with an elegant one, with news feeds from your favorite blogs and websites just a click away.",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "icons": {
         "48": "assets/img/blink-48.png",
         "64": "assets/img/blink-64.png",
