@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, XhrFactory } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
 
@@ -22,6 +22,7 @@ import { ToastContainerComponent } from './components/toast-container/toast-cont
 import { AddContentSourceComponent } from './components/modals/add-content-source/add-content-source.component';
 import { LoggingService } from './services/logging.service';
 import { SupportComponent } from './components/modals/support/support.component';
+import { BrowserXhrFactory } from './services/feed.service';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,10 @@ import { SupportComponent } from './components/modals/support/support.component'
     HttpClientModule,
     FormsModule,
   ],
-  providers: [LoggingService],
+  providers: [LoggingService, {
+    provide: XhrFactory,
+    useClass: BrowserXhrFactory
+  }],
   // load then modals
   entryComponents: [AddContentSourceComponent, DeleteContentSourceComponent, SupportComponent],
   bootstrap: [AppComponent]

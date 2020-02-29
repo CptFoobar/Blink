@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, XhrFactory } from '@angular/common/http';
 import { catchError, delay, mergeMap, tap, map, concatAll, concatMap, combineAll, mergeAll, toArray, take } from 'rxjs/operators';
 import { Observable, from, of, empty, forkJoin, concat } from 'rxjs';
 import { LoggingService, Logger } from './logging.service';
@@ -16,6 +16,19 @@ const httpOptions = {
     Accept: 'application/json'
   }
 };
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class BrowserXhrFactory implements XhrFactory {
+  build(): XMLHttpRequest {
+    const request = (new XMLHttpRequest());
+    request.onabort = (ev) => { console.log('Request aborted '); return request.onerror && request.onerror(ev); };
+    return request;
+  }
+
+}
 
 @Injectable({
   providedIn: 'root'
